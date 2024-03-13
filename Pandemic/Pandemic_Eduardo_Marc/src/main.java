@@ -25,21 +25,19 @@ public class main {
 				ciudades = x[i].split(",");
 			}
 		}
-		System.out.println("Silco actúa en " + ciudad +" con los números "
+		
+		String valor2 = "Silco actúa en " + ciudad +" con los números "
 		+ coordenadas[0] +", "+ coordenadas[1] +" y "+ coordenadas[2] + " y cuyas ciudades "
-				+ "colindantes son " + ciudades[0]+", "+ ciudades[1]+", "+ ciudades[2]+" y "+ ciudades[3]);
-//		try {
-//			while() {
-//				
-//			}
-//		}catch (Exception e) {
-//
-//		}
-	}
-	
-	public static int valor() {
+				+ "colindantes son ";
 		
-		
-		return 0;
-	}
+		for (int i = 0; i < ciudades.length - 1; i++) {
+            valor2 += ciudades[i];
+            if (i < ciudades.length - 2) {
+                valor2 += ", ";
+            }
+        }
+
+        valor2 += " y " + ciudades[ciudades.length - 1];
+        System.out.println(valor2);
+        }
 }
