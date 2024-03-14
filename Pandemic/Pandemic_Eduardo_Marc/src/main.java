@@ -9,9 +9,8 @@ public class main {
     private static String nombreFichero = "ciudades.txt";
 
     public static void main(String[] args) throws InterruptedException {
-        try {
-            FileReader fileReader = new FileReader(nombreFichero);
-            BufferedReader bufferedReader = new BufferedReader(fileReader);
+        try ( FileReader fileReader = new FileReader(nombreFichero);
+                BufferedReader bufferedReader = new BufferedReader(fileReader);){
             String valor;
             while ((valor = bufferedReader.readLine()) != null) {
                 String[] x = valor.split(";");
@@ -44,10 +43,6 @@ public class main {
                 System.out.println(valor2);
                 Thread.sleep(30);
             }
-
-            bufferedReader.close();
-            fileReader.close();
-
         } catch (IOException e) {
             System.out.println("Ha habido un error al intentar abrir el fichero" + e);
         }
