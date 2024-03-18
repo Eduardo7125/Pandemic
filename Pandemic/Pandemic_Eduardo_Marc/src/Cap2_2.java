@@ -1,11 +1,11 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class Cap2_2 {
@@ -56,21 +56,22 @@ public class Cap2_2 {
             dataInputStream.close();
             fileInputStream.close();
 		}catch(EOFException e1) {
-			System.out.println("Fichero le�do correctamente");
+			System.out.println("Fichero leído correctamente");
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheor no encontrado " + e);
+			System.out.println("Fichero no encontrado " + e);
 		} catch (IOException e) {
 			System.out.println("Ha habido un error de lectura " + e);
 		}
         
-        //parte2
-        
         try {
             FileReader fileReader = new FileReader(nombreFichero);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
+            FileOutputStream fileOutputStream = new FileOutputStream(FicheroCiudadEnfermedad, false);
+            DataOutputStream dataOutputStream = new DataOutputStream(fileOutputStream);
             String valor;
             String ciudad = null;
             int enfermedad = 0;
+            
             while ((valor = bufferedReader.readLine()) != null) {
                 String[] x = valor.split(";");
                 for (int i = 0; i < x.length; i++) {
@@ -78,60 +79,49 @@ public class Cap2_2 {
                         ciudad = x[i];
                     } else if (i == 1) {
                     	enfermedad = Integer.parseInt(x[i]);
+                    	i = x.length+1;
                     }
-                    try {
-                    	boolean primera = true;
-            			FileWriter fileWriter = new FileWriter(FicheroCiudadEnfermedad, false);
-            			BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-            			
-            			if (primera == true) {
-            				primera = false;
-            			} else if (primera == false) { 
-            			bufferedWriter.newLine();
-            			}
-            			
-            			bufferedWriter.write(ciudad);
-            			bufferedWriter.newLine();
-            			
-            			bufferedWriter.write(enfermedades[enfermedad]);
-            			
-            			bufferedWriter.close();
-            			fileWriter.close();
-                    } catch (IOException e) {
-            			System.out.println("Ha habido un error de escritura: " + e);
-            		}
+                }
+                try {
+                	dataOutputStream.writeUTF(ciudad);
+                    dataOutputStream.writeUTF(enfermedades[enfermedad]);
+                } catch (IOException e) {
+                    System.out.println("Ha habido un error de escritura: " + e);
                 }
             }
-
+            
+            System.out.println("");
+            System.out.println("Fichero creado correctamente");
+            
+            dataOutputStream.close();
+            fileOutputStream.close();
             bufferedReader.close();
             fileReader.close();
+        } catch (FileNotFoundException e1) {
+            System.out.println("Fichero no encontrado " + e1); 
         } catch (IOException e) {
-            System.out.println("Ha habido un error al intentar abrir el fichero" + e);
+        	System.out.println("Ha habido un error al intentar abrir el fichero" + e);
         }
 		
-		try {
-            FileInputStream fileInputStream = new FileInputStream(FicheroEnfermedades);
+        try {
+            FileInputStream fileInputStream = new FileInputStream(FicheroCiudadEnfermedad);
             DataInputStream dataInputStream = new DataInputStream(fileInputStream);
             
-            String información = dataInputStream.readUTF();
-            System.out.println(información);
-            System.out.println("");
-            
             while (dataInputStream.available() > 0) {
-                String nombreEnfermedad = dataInputStream.readUTF();
-                System.out.println(nombreEnfermedad);
+            	String Ciudad = dataInputStream.readUTF();
+                String Enfermedad = dataInputStream.readUTF();
                 
-                int codigoEnfermedad = dataInputStream.readInt();
-                System.out.println(codigoEnfermedad);
                 System.out.println("");
+                
+                System.out.println("Ciudad: " + Ciudad);
+                System.out.println("Enfermedad: " + Enfermedad);
             }
-            
             dataInputStream.close();
             fileInputStream.close();
 		}catch(EOFException e1) {
-			System.out.println("Fichero le�do correctamente");
+			System.out.println("Fichero leído correctamente");
 		} catch (FileNotFoundException e) {
-			System.out.println("Ficheor no encontrado " + e);
+			System.out.println("Fichero no encontrado " + e);
 		} catch (IOException e) {
 			System.out.println("Ha habido un error de lectura " + e);
 		}	
