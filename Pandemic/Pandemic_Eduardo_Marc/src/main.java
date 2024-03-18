@@ -8,7 +8,7 @@ public class main {
     private static String[] ciudades;
     private static String nombreFichero = "ciudades.txt";
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         try (FileReader fileReader = new FileReader(nombreFichero);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);){
 
