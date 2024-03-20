@@ -4,8 +4,8 @@ Requisistos Funcionales:
 	-Fichas de brotes
 	-Cubos de enfermedades(Azul,Rojo,Amarillo,Negro)
 
+LIBRERIA SWIPE ==>INTERFAZ GRÁFICA
 
-Yasinne:
 	-Rango de edad(12-99)
 	-Mecanicas adicionales
 	-Diferentes idiomas
@@ -18,26 +18,36 @@ Yasinne:
 	-Cada ciudad si el nivel supera 3, sus ciudades adyacentes se propagan y se suma (+1 al contador de brotes)
 
 
+	Inicion:
+		-Al inicio de cada partida se inician las vacunas
+		-Al incio de cada partida se inician las ciudades
+		-NUM DE CIUDADES INFECTADAS AL INICIO DEL JUEGO SON UN PARAMETRO DE CONFIGURACION
+		-NUM DE CIUDADES INFECTADAS A CADA RONDA SON UN PARAMETRO DE CONFIGURACION
+		-NUM DE ENFERMEDADES SON UN PARAMETRO DE CONFIGURACION
+
 	Partidas:
-	-Num ronda
-	-Tendra una lista con todas las ciudades y se podran realizar acciones en ellas
-	-Tendra una lista con todas las vacunas y se podran realizar acciones en ellas(generar vacuna,aumentar%,...)
+		-Num ronda
+		-Tendra una lista con todas las ciudades y se podran realizar acciones en ellas
+		-Tendra una lista con todas las vacunas y se podran realizar acciones en ellas(generar vacuna,aumentar%,...)
 
 	Jugador:
-	-El jugador tendra 4 acciones por ronda
-	-Investigacion()
+		-El jugador tendra 4 acciones por ronda
+		-Investigacion()
 
 	Investigaciones:
-	-Cada vez que se realiza una investigacion el jugador gasta 4 acciones y se aumentara un % de la vacuna seleccionada
+		-Cada vez que se realiza una investigacion el jugador gasta 4 acciones y se aumentara un % de la vacuna seleccionada
 
 	Vacuna:
-	-4 partes (1 parte por investigacion)
+		-4 partes (1 parte por investigacion)
+		-1 vacuna por tipo de enfermead
+		-Tienen 1 nombre ,1 color y 1 % de desarrollo;
+		-Si ya estan desarrolladas al 100% se indica que ("El desarrollo ya esta completo")=>No gasta acciones
 	
 	Curar:
-	-Si al curar 1 ciudad infectada y no se tiene una vacuna desarrollada(100%) solo se reduce el nivel en -1
-	-Si al curar 1 ciudad infectada y esta al (100% de desarrollo la vacuna) se elimina totalmente la infección, pasa a 0
+		-Si al curar 1 ciudad infectada y no se tiene una vacuna desarrollada(100%) solo se reduce el nivel en -1
+		-Si al curar 1 ciudad infectada y esta al (100% de desarrollo la vacuna) se elimina totalmente la infección, pasa a 0
 
 	Finalizar:
-	-Cada ronda se comprueba si el jugador a ganado,ha perdido,o no se sabe
+		-Cada ronda se comprueba si el jugador a ganado,ha perdido,o no se sabe
 
 	
