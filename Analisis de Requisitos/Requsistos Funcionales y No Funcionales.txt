@@ -11,3 +11,33 @@ Yasinne:
 	-Diferentes idiomas
 	-Diseño libre.
 
+	-Cada ciudad tiene 1 nombre(x,y(enfermedad principal))
+	-Cada ciudad tiene diferentes niveles de infeccion
+	-Cada ciudad guardara sus ciudades adyacentes
+	-Cada ciudad si se vuelve a infectar su nivell de (infección +1)
+	-Cada ciudad si el nivel supera 3, sus ciudades adyacentes se propagan y se suma (+1 al contador de brotes)
+
+
+	Partidas:
+	-Num ronda
+	-Tendra una lista con todas las ciudades y se podran realizar acciones en ellas
+	-Tendra una lista con todas las vacunas y se podran realizar acciones en ellas(generar vacuna,aumentar%,...)
+
+	Jugador:
+	-El jugador tendra 4 acciones por ronda
+	-Investigacion()
+
+	Investigaciones:
+	-Cada vez que se realiza una investigacion el jugador gasta 4 acciones y se aumentara un % de la vacuna seleccionada
+
+	Vacuna:
+	-4 partes (1 parte por investigacion)
+	
+	Curar:
+	-Si al curar 1 ciudad infectada y no se tiene una vacuna desarrollada(100%) solo se reduce el nivel en -1
+	-Si al curar 1 ciudad infectada y esta al (100% de desarrollo la vacuna) se elimina totalmente la infección, pasa a 0
+
+	Finalizar:
+	-Cada ronda se comprueba si el jugador a ganado,ha perdido,o no se sabe
+
+	
