@@ -1,0 +1,13 @@
+Requisistos Funcionales:
+	-Fichas de centros de investigacion(total 6)
+	-Ficha de jugador(Solo 1)
+	-Fichas de brotes
+	-Cubos de enfermedades(Azul,Rojo,Amarillo,Negro)
+
+
+Yasinne:
+	-Rango de edad(12-99)
+	-Mecanicas adicionales
+	-Diferentes idiomas
+	-Diseño libre.
+
