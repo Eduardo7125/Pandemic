@@ -23,13 +23,8 @@ public class extra {
     private static double distancia;
     private static String valor;
     private static String nombreFichero = "ciudades.txt";
-    private static String nombreFichero_esc = "CiudadesRedactadas.txt";
-    
-    private static Double distancia_total = 0.0;
-    private static String ciudad_principal;
-    
-    private static String[][] cordenadas = new String[50][50];
-    
+    private static String nombreFichero_esc = "CiudadesRedactadas_v2.txt";
+    private static ciudad Ciudad;
     
 	public static void main(String[] args) {
 		try (FileReader fileReader = new FileReader(nombreFichero);
@@ -37,57 +32,37 @@ public class extra {
 					FileWriter fileWriter = new FileWriter(nombreFichero_esc);
         				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);){
 	            while ((valor = bufferedReader.readLine()) != null) {
-	                String[] x = valor.split(";");
-           
-          
-                	ciudad.put(indice,x[0]);
-                	ciudad_2.put(x[0],indice);
-           
-                	
-                	enfermedades.put(indice,Integer.parseInt(x[1]));
-         
+	                String[] x = valor.split(";");               
                 	
                     String[] parts = x[2].split(",");
-                    cord1.put(indice,Integer.parseInt(parts[0]));
-                    cord2.put(indice,Integer.parseInt(parts[1]));
-                    
-                    
+                                        
                     ciudades = x[3].split(",");
-                	array.add(ciudades);
                     
+                	Ciudad = new ciudad(indice, x[0], Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(x[1]));
 
                 	indice++;
 	            }
 
-		            for (int cityIndex : ciudad.keySet()) {
+		            for (int cityIndex : Ciudad) {
 		                calculo(cityIndex, bufferedWriter);
 		            }
 		            
 				} catch (IOException e) {
 					System.out.println("Ha habido un error al intentar abrir el fichero" + e);
 				}
-	            System.out.println("Archivo creado correctamente!!");
 	}
 	
 	public static void calculo(int cityIndex, BufferedWriter bufferedWriter) throws IOException {
-	    	x1 = cord1.get(cityIndex);
-	        y1 = cord2.get(cityIndex);
+	    	x1 = Ciudad.getCord1(cityIndex);
+	        y1 = Ciudad.getCord2(cityIndex);
 	        ciudades = array.get(cityIndex);
-	        
-	        ciudad_principal = ciudad.get(cityIndex);
-
-	        bufferedWriter.write("La ciudad "+ciudad.get(cityIndex)+" esta en las cordenadas ("+cord1.get(cityIndex)+","+cord2.get(cityIndex)+") sus ciudades colindantes son:\n");
+	        bufferedWriter.write("La ciudad "+Ciudad.getNombre(cityIndex)+" esta en las cordenadas ("+Ciudad.getCord1(cityIndex)+","+Ciudad.getCord2(cityIndex)+") sus ciudades colindantes son:\n");
 	        	for (String ciudadColindante : ciudades) {
 	                x2 = cord1.get(ciudad_2.get(ciudadColindante));
 	                y2 = cord2.get(ciudad_2.get(ciudadColindante));
 	                distancia = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-	                distancia_total += distancia;
 	                bufferedWriter.write(ciudadColindante+", que esta a una distancia de "+distancia);
+	                bufferedWriter.newLine();
 				}
-	}
-	
-	public static void recursividad() {
-
-
 	}
 }
