@@ -34,6 +34,7 @@ LIBRERIA SWIPE ==>INTERFAZ GRÁFICA
 	Jugador:
 		-El jugador tendra 4 acciones por ronda.
 		-Investigacion().
+		-Empieza el que tiene la carta de ciudad con mayor población
 
 	Investigaciones:
 		-Cada vez que se realiza una investigacion el jugador gasta 4 acciones y se aumentara un % de la vacuna seleccionada.
@@ -46,7 +47,7 @@ LIBRERIA SWIPE ==>INTERFAZ GRÁFICA
 	
 	Curar:
 		-Si al curar 1 ciudad infectada y no se tiene una vacuna desarrollada(100%) solo se reduce el nivel en -1.
-		-Si al curar 1 ciudad infectada y esta al (100% de desarrollo la vacuna) se elimina totalmente la infección, pasa a 0.
+		-Si al curar 1 ciudad infectada y esta al (100% de desarrollo la vacuna) se elimina totalmente la infección, pasa a 0.Pero solo en la posicion del jugador
 
 	Finalizar:
 		-Cada ronda se comprueba si el jugador a ganado,ha perdido,o no se sabe.
