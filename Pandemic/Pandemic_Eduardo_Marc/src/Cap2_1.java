@@ -31,25 +31,15 @@ public class Cap2_1 {
 					FileWriter fileWriter = new FileWriter(nombreFichero_esc);
         				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);){
 	            while ((valor = bufferedReader.readLine()) != null) {
-	                String[] x = valor.split(";");
-           
-          
+	                String[] x = valor.split(";");  
                 	ciudad.put(indice,x[0]);
-                	ciudad_2.put(x[0],indice);
-           
-                	
+                	ciudad_2.put(x[0],indice);              	
                 	enfermedades.put(indice,Integer.parseInt(x[1]));
-         
-                	
                     String[] parts = x[2].split(",");
                     cord1.put(indice,Integer.parseInt(parts[0]));
-                    cord2.put(indice,Integer.parseInt(parts[1]));
-                    
-                    
+                    cord2.put(indice,Integer.parseInt(parts[1]));        
                     ciudades = x[3].split(",");
                 	array.add(ciudades);
-                    
-
                 	indice++;
 	            }
 
