@@ -64,7 +64,6 @@ REQUISITOS FUNCIONALES:
 REQUISITOS NO FUNCIONALES:
 
 	-Rango de edad (12-99).
-	-Diferentes idiomas.
 	-Optimización.
 	-Ha de ser intuitivo para el usuario.
 	-Evitar bugs innecesarios.
@@ -75,3 +74,4 @@ REQUISITOS EXTRA:
 	-Diseño libre.
 	-Mecanicas adicionales.
 	-Añadir niveles de dificultad.
+	-Diferentes idiomas.
