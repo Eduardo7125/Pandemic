@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="Capitulo 2/Pandemic/Pandemic_Eduardo_Marc/src"/>
+	<classpathentry kind="src" path="Pandemic/Pandemic_Eduardo_Marc/src"/>
+	<classpathentry kind="output" path="Capitulo 2/Pandemic/Pandemic_Eduardo_Marc/bin"/>
+</classpath>
