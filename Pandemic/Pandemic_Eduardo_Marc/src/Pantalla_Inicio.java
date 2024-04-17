@@ -40,31 +40,31 @@ public class Pantalla_Inicio {
         panel.add(menuLabel);
 
         JButton nuevaPartidaButton = new JButton("Nueva Partida");
-        nuevaPartidaButton.setBounds(50, 150, 190, 30);
+        nuevaPartidaButton.setBounds(55, 150, 190, 30);
         panel.add(nuevaPartidaButton);
 
         JButton cargarPartidaButton = new JButton("Cargar Partida");
-        cargarPartidaButton.setBounds(50, 190, 190, 30);
+        cargarPartidaButton.setBounds(55, 190, 190, 30);
         panel.add(cargarPartidaButton);
 
         JButton informacionButton = new JButton("Información");
-        informacionButton.setBounds(50, 230, 190, 30);
+        informacionButton.setBounds(55, 230, 190, 30);
         panel.add(informacionButton);
 
         JButton resumenButton = new JButton("Resumen de puntuaciones");
-        resumenButton.setBounds(50, 270, 190, 30);
+        resumenButton.setBounds(55, 270, 190, 30);
         panel.add(resumenButton);
 
         JButton autoresButton = new JButton("Autores");
-        autoresButton.setBounds(50, 310, 190, 30);
+        autoresButton.setBounds(55, 310, 190, 30);
         panel.add(autoresButton);
 
         JButton versionButton = new JButton("Versión");
-        versionButton.setBounds(50, 350, 190, 30);
+        versionButton.setBounds(55, 350, 190, 30);
         panel.add(versionButton);
 
         JButton salirButton = new JButton("Salir");
-        salirButton.setBounds(50, 390, 190, 30);
+        salirButton.setBounds(55, 390, 190, 30);
         salirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
