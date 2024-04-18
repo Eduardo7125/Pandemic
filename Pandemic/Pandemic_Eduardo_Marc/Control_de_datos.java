@@ -101,9 +101,7 @@ public class Control_de_datos {
 	
 	public static String ModificarXML(String valor) {
 		while (true) {
-            System.out.print("Ingrese el nuevo valor para " + valor + " o presione Enter para mantener el valor existente:");
             System.out.print("Ingrese el valor nuevo o presione Enter para mantener el valor existente (" + valor + "): ");
-
             String variable1 = scan.nextLine();
 
             if (variable1.isEmpty()) {
