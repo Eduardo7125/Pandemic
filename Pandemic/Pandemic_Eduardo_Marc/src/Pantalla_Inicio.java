@@ -1,4 +1,3 @@
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,21 +14,28 @@ public class Pantalla_Inicio {
     private static Point mouseDownCompCoords;
     private static Point currCoords;
     private static Point frame1Position;
-    
+    private static JFrame frame = new JFrame();
+    private static JPanel panel = new JPanel();
     private static Color currentColor = new Color(173, 216, 230);
     private static boolean toWhite = true;
-
+    private static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    
     public static void main(String[] args) {
-        cargarPantallaInicio();
+        cargarPantallaInicio(frame, panel);
     }
 
-    public static void cargarPantallaInicio() {
-        JFrame frame = new JFrame();
+    public static void cargarPantallaInicio(final JFrame frame, JPanel panel) {
         frame.setSize(300, 530);
         frame.setResizable(false);
         frame.setUndecorated(true);
+    	frame.addComponentListener(new ComponentAdapter() {
+    	    @Override
+    	    public void componentMoved(ComponentEvent e) {
+    	        frame1Position = frame.getLocation();
+    	    }
+    	});
 
-        JPanel panel = new JPanel() {
+        panel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -68,6 +74,14 @@ public class Pantalla_Inicio {
 
         JButton informacionButton = new JButton("Información");
         informacionButton.setBounds(55, 300, 190, 30);
+        informacionButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+                frame.dispose();
+                mostrarSegundoFrame();
+			}
+		});
         styleButton(informacionButton);
         panel.add(informacionButton);
 
@@ -83,15 +97,6 @@ public class Pantalla_Inicio {
 
         JButton versionButton = new JButton("Versión");
         versionButton.setBounds(55, 420, 190, 30);
-        versionButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-                frame1Position = frame.getLocation();
-                frame.setVisible(false);
-                mostrarSegundoFrame();
-			}
-		});
         styleButton(versionButton);
         panel.add(versionButton);
         
@@ -105,58 +110,19 @@ public class Pantalla_Inicio {
                 System.exit(0);
             }
         });
+        
         panel.add(salirButton);
         
         moveWindow(frame);
+        
+        fondo(frame, panel);
 
         frame.add(panel);
+        
         frame.setVisible(true);
-    }
-    public static void mostrarSegundoFrame() {
-        JFrame frame2 = new JFrame("Segundo Frame");
-        frame2.setSize(300, 470);
-        frame2.setResizable(false);
-        frame2.setUndecorated(true);
-
-        frame2.setLocation(frame1Position);
-
-        JPanel contentPane = new JPanel();
-        contentPane.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-        frame2.setContentPane(contentPane);
-
-        JLabel menuLabel = new JLabel("<html><div style='text-align: center;'><h1>PANDEMIC</h1>"
-                + "<h2>MENÚ PRINCIPAL</h2><br>");
-        menuLabel.setBounds(70, 0, 260, 200);
-        contentPane.add(menuLabel);
-
-        JButton nuevaPartidaButton = new JButton("Menu/");
-        nuevaPartidaButton.setBounds(55, 150, 190, 30);
-        contentPane.add(nuevaPartidaButton);
-
-        moveWindow(frame2);
-        frame2.setVisible(true);
     }
     
-    public static void moveWindow(JFrame frame) {
-    	frame.addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                mouseDownCompCoords = e.getPoint();
-            }
-        });
-
-	    frame.addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                currCoords = e.getLocationOnScreen();
-                frame.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
-            }
-        });
-
-	    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
-
-        frame.add(panel);
-        frame.setVisible(true);
-        
+    public static void fondo(final JFrame frame, JPanel panel) {
         Timer timer = new Timer(40, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -181,6 +147,69 @@ public class Pantalla_Inicio {
             }
         });
         timer.start();
+    }
+    
+    public static void mostrarSegundoFrame() {
+        JFrame frame2 = new JFrame("Segundo Frame");
+        frame2.setSize(300, 530);
+        frame2.setResizable(false);
+        frame2.setUndecorated(true);
+        
+        frame2.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+
+        JPanel contentPane = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setColor(currentColor);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                g2d.dispose();
+            }
+        };
+        contentPane.setLayout(null);
+        contentPane.setBorder(BorderFactory.createLineBorder(Color.black, 1));
+        
+        JLabel menuLabel = new JLabel("<html><div style='text-align: center;'><h1>PANDEMIC</h1>"
+                + "<h2>MENÚ PRINCIPAL</h2><br>");
+        menuLabel.setBounds(70, 0, 260, 200);
+        contentPane.add(menuLabel);
+
+        JButton volverButton = new JButton("Volver");
+        volverButton.setBounds(55, 190, 190, 30);
+        styleButton(volverButton);
+        volverButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame2.dispose();
+                frame.setVisible(true);
+            }
+        });
+        contentPane.add(volverButton);
+        
+        fondo(frame2, contentPane);
+        frame2.setContentPane(contentPane);
+        frame2.setVisible(true);
+        moveWindow(frame2);
+    }
+    
+    public static void moveWindow(JFrame frame) {
+    	frame.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                mouseDownCompCoords = e.getPoint();
+            }
+        });
+
+	    frame.addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                currCoords = e.getLocationOnScreen();
+                frame.setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+            }
+        });
+
+        frame.setLocation(dim.width / 2 - frame.getSize().width / 2, dim.height / 2 - frame.getSize().height / 2);
+
+        
     }
     
     private static void styleButton(JButton button) {
