@@ -1,5 +1,4 @@
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,15 +32,110 @@ class Marco extends JFrame{
                 frame1Position = getLocation();
             }
         });
+
         Lamina1 lamina1 = new Lamina1();
+        
 		add(lamina1);
 		
-		fondo();
 		moveWindow();
 		
 		setVisible(true);
 	}
+    
+	private static Point currCoords = new Point();
+    private static Point mouseDownCompCoords;
+	private static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	public void moveWindow() {
+    	addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                mouseDownCompCoords = e.getPoint();
+            }
+        });
+
+	    addMouseMotionListener(new MouseMotionAdapter() {
+            public void mouseDragged(MouseEvent e) {
+                currCoords = e.getLocationOnScreen();
+                setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+            }
+        });
+
+        setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
+    }
 	
+}
+
+class Lamina1 extends JPanel implements ActionListener{
+	
+	ImageIcon icono;
+	ImageIcon iconoEscalado;
+	Image imagen;
+	Image imagenEscalada;
+
+	JPanel gridLabel1;
+	JPanel bottomPanel;
+	
+	JLabel version;
+	JLabel menuLabel1;
+	
+	JButton nuevaPartidaButton;
+	JButton cargarPartidaButton;
+	JButton informacionButton;
+	JButton resumenButton;
+	JButton autoresButton;
+	JButton salirButton;
+	
+	Lamina1(){
+		
+        icono = new ImageIcon("icon.png");
+        imagen = icono.getImage();
+        gridLabel1 = new JPanel();
+        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:icono_escalado.png'>");
+		nuevaPartidaButton = new JButton("Nueva Partida");
+		cargarPartidaButton = new JButton("Cargar Partida");
+		informacionButton = new JButton("Información");
+		resumenButton = new JButton("Resumen de puntuaciones");
+		autoresButton = new JButton("Autores");
+		salirButton = new JButton("Salir");
+		bottomPanel = new JPanel();
+		version = new JLabel("Version 1.0");
+		
+		styleButton(nuevaPartidaButton);
+		styleButton(cargarPartidaButton);
+		styleButton(informacionButton);
+		styleButton(resumenButton);
+		styleButton(autoresButton);
+		styleButton(salirButton);
+		
+		nuevaPartidaButton.addActionListener(this);
+		cargarPartidaButton.addActionListener(this);
+		informacionButton.addActionListener(this);
+		resumenButton.addActionListener(this);
+		autoresButton.addActionListener(this);
+		salirButton.addActionListener(this);
+		
+		gridLabel1.setLayout(new GridLayout(0, 1));
+		gridLabel1.add(menuLabel1);
+		gridLabel1.setOpaque(false);
+        add(gridLabel1, BorderLayout.CENTER);
+        
+		add(nuevaPartidaButton, BorderLayout.CENTER);
+		add(cargarPartidaButton, BorderLayout.CENTER);
+		add(informacionButton, BorderLayout.CENTER);
+		add(resumenButton, BorderLayout.CENTER);
+		add(autoresButton, BorderLayout.CENTER);
+		add(salirButton, BorderLayout.CENTER);
+		
+		bottomPanel.add(version);
+		bottomPanel.setOpaque(false);
+	    add(bottomPanel, BorderLayout.SOUTH);
+		
+	    fondo();
+	    
+	    setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
+	   
+	    
+	    
+	}
 	private static boolean toWhite = true;
 	private static Color currentColor = new Color(173, 216, 230);
     public void fondo() {
@@ -77,113 +171,6 @@ class Marco extends JFrame{
         g2d.fillRect(0, 0, getWidth(), getHeight());
         g2d.dispose();
     }
-    
-	private static Point currCoords = new Point();
-    private static Point mouseDownCompCoords;
-	private static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-	public void moveWindow() {
-    	addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                mouseDownCompCoords = e.getPoint();
-            }
-        });
-
-	    addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                currCoords = e.getLocationOnScreen();
-                setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
-            }
-        });
-
-        setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
-    }
-	
-}
-
-class Lamina1 extends JPanel implements ActionListener{
-	
-	ImageIcon icono;
-	ImageIcon iconoEscalado;
-	Image imagen;
-	Image imagenEscalada;
-
-	JPanel bottomPanel;
-	
-	JLabel version;
-	JLabel menuLabel1;
-	JLabel menuLabel2;
-	JLabel imagenLabel;
-	
-	JButton nuevaPartidaButton;
-	JButton cargarPartidaButton;
-	JButton informacionButton;
-	JButton resumenButton;
-	JButton autoresButton;
-	JButton salirButton;
-	
-	Lamina1(){
-		
-        icono = new ImageIcon("icon.png");
-        imagen = icono.getImage();
-        
-        imagenEscalada = imagen.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-        iconoEscalado = new ImageIcon(imagenEscalada);
-        imagenLabel = new JLabel(iconoEscalado);
-	
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.insets = new Insets(7, 7, 7, 7);
-		
-        menuLabel1 = new JLabel("<html><div style'text-align:center;'><h1>PANDEMIC</h1>");
-        menuLabel2 = new JLabel("<html><div style'text-align:center;'><h2>MENÚ PRINCIPAL</h2>");
-		nuevaPartidaButton = new JButton("Nueva Partida");
-		cargarPartidaButton = new JButton("Cargar Partida");
-		informacionButton = new JButton("Información");
-		resumenButton = new JButton("Resumen de puntuaciones");
-		autoresButton = new JButton("Autores");
-		salirButton = new JButton("Salir");
-		bottomPanel = new JPanel();
-		version = new JLabel("Version 1.0");
-		
-		styleButton(nuevaPartidaButton);
-		styleButton(cargarPartidaButton);
-		styleButton(informacionButton);
-		styleButton(resumenButton);
-		styleButton(autoresButton);
-		styleButton(salirButton);
-		
-		nuevaPartidaButton.addActionListener(this);
-		cargarPartidaButton.addActionListener(this);
-		informacionButton.addActionListener(this);
-		resumenButton.addActionListener(this);
-		autoresButton.addActionListener(this);
-		salirButton.addActionListener(this);
-		
-        add(menuLabel1, BorderLayout.NORTH);
-        gbc.gridy++;
-        add(menuLabel2, BorderLayout.NORTH);
-        gbc.gridy++;
-        add(imagenLabel, BorderLayout.CENTER);
-        gbc.gridy++;
-		add(nuevaPartidaButton, BorderLayout.CENTER);
-		gbc.gridy++;
-		add(cargarPartidaButton, BorderLayout.CENTER);
-		gbc.gridy++;
-		add(informacionButton, BorderLayout.CENTER);
-		gbc.gridy++;
-		add(resumenButton, BorderLayout.CENTER);
-		gbc.gridy++;
-		add(autoresButton, BorderLayout.CENTER);
-		gbc.gridy++;
-		add(salirButton, BorderLayout.CENTER);
-		bottomPanel.add(version);
-	    add(bottomPanel, BorderLayout.SOUTH);
-		
-	    setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	   
-	}
-    
     public static void styleButton(JButton button) {
         button.setBackground(new Color(240, 240, 240));
         button.setForeground(Color.BLACK);
