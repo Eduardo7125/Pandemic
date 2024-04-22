@@ -23,7 +23,7 @@ class Marco extends JFrame{
 		icono = new ImageIcon("icon.png");
         setIconImage(icono.getImage());
         
-        setSize(300, 560);
+        setSize(300, 520);
         setResizable(false);
         setUndecorated(true);
         addComponentListener(new ComponentAdapter() {
@@ -34,7 +34,7 @@ class Marco extends JFrame{
         });
 
         Lamina1 lamina1 = new Lamina1();
-        
+        lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 		add(lamina1);
 		
 		moveWindow();
@@ -85,7 +85,7 @@ class Lamina1 extends JPanel implements ActionListener{
 	JButton salirButton;
 	
 	Lamina1(){
-		
+
         icono = new ImageIcon("icon.png");
         imagen = icono.getImage();
         gridLabel1 = new JPanel();
@@ -127,6 +127,7 @@ class Lamina1 extends JPanel implements ActionListener{
 		
 		bottomPanel.add(version);
 		bottomPanel.setOpaque(false);
+		bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
 	    add(bottomPanel, BorderLayout.SOUTH);
 		
 	    fondo();
