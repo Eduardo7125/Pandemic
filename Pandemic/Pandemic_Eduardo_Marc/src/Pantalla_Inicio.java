@@ -20,7 +20,7 @@ class Marco extends JFrame{
     ImageIcon icono;
 	public Marco(){
 		setTitle("Pandemic");
-		icono = new ImageIcon("icon.png");
+		icono = new ImageIcon("src//img//icon.png");
         setIconImage(icono.getImage());
         
         setSize(300, 520);
@@ -68,9 +68,15 @@ class Lamina1 extends JPanel implements ActionListener{
 	
 	ImageIcon icono;
 	ImageIcon iconoEscalado;
+	ImageIcon iconoNuevaPartida;
+	ImageIcon iconoCargarPartida;
+	ImageIcon iconoinfo;
+	ImageIcon iconoscore;
 	Image imagen;
 	Image imagenEscalada;
-
+	static Image nuevaImagen;
+	static Image imagen_botones;
+	
 	JPanel gridLabel1;
 	JPanel bottomPanel;
 	
@@ -84,58 +90,81 @@ class Lamina1 extends JPanel implements ActionListener{
 	JButton autoresButton;
 	JButton salirButton;
 	
+	
 	Lamina1(){
-
-        icono = new ImageIcon("icon.png");
+        // Iconos
+        icono = new ImageIcon("src//img//icon.png");
+        iconoNuevaPartida = new ImageIcon("src//img//nueva_partida.png");
+        iconoCargarPartida = new ImageIcon("src//img//cargar_partida.png");
+        iconoinfo = new ImageIcon("src//img//info.png");
+        iconoscore = new ImageIcon("src//img//score.png");
         imagen = icono.getImage();
+        
+        // Paneles y etiquetas
         gridLabel1 = new JPanel();
-        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:icono_escalado.png'>");
-		nuevaPartidaButton = new JButton("Nueva Partida");
-		cargarPartidaButton = new JButton("Cargar Partida");
-		informacionButton = new JButton("Información");
-		resumenButton = new JButton("Resumen de puntuaciones");
-		autoresButton = new JButton("Autores");
-		salirButton = new JButton("Salir");
-		bottomPanel = new JPanel();
-		version = new JLabel("Version 1.0");
-		
-		styleButton(nuevaPartidaButton);
-		styleButton(cargarPartidaButton);
-		styleButton(informacionButton);
-		styleButton(resumenButton);
-		styleButton(autoresButton);
-		styleButton(salirButton);
-		
-		nuevaPartidaButton.addActionListener(this);
-		cargarPartidaButton.addActionListener(this);
-		informacionButton.addActionListener(this);
-		resumenButton.addActionListener(this);
-		autoresButton.addActionListener(this);
-		salirButton.addActionListener(this);
-		
-		gridLabel1.setLayout(new GridLayout(0, 1));
-		gridLabel1.add(menuLabel1);
-		gridLabel1.setOpaque(false);
+        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
+        
+        // Escalar la imagen del botón
+
+        
+        // Botones
+        nuevaPartidaButton = new JButton();
+        
+        imageBotones(iconoNuevaPartida);
+        nuevaPartidaButton.setIcon(new ImageIcon(nuevaImagen));
+        
+        imageBotones(iconoCargarPartida);
+        cargarPartidaButton = new JButton(new ImageIcon(nuevaImagen));
+        
+        imageBotones(iconoinfo);
+        informacionButton = new JButton(new ImageIcon(nuevaImagen));
+        
+        imageBotones(iconoscore);
+        resumenButton = new JButton(new ImageIcon(nuevaImagen));
+        autoresButton = new JButton("Autores");
+        salirButton = new JButton("Salir");
+        
+        // Panel inferior y etiqueta de versión
+        bottomPanel = new JPanel();
+        version = new JLabel("Version 1.0");
+        
+        // Estilo de los botones
+        styleButton(nuevaPartidaButton);
+        styleButton(cargarPartidaButton);
+        styleButton(informacionButton);
+        styleButton(resumenButton);
+        styleButton(autoresButton);
+        styleButton(salirButton);
+        
+        // Agregar oyentes a los botones
+        nuevaPartidaButton.addActionListener(this);
+        cargarPartidaButton.addActionListener(this);
+        informacionButton.addActionListener(this);
+        resumenButton.addActionListener(this);
+        autoresButton.addActionListener(this);
+        salirButton.addActionListener(this);
+        
+        // Configuración del diseño de la lámina
+        gridLabel1.setLayout(new GridLayout(0, 1));
+        gridLabel1.add(menuLabel1);
+        gridLabel1.setOpaque(false);
         add(gridLabel1, BorderLayout.CENTER);
         
-		add(nuevaPartidaButton, BorderLayout.CENTER);
-		add(cargarPartidaButton, BorderLayout.CENTER);
-		add(informacionButton, BorderLayout.CENTER);
-		add(resumenButton, BorderLayout.CENTER);
-		add(autoresButton, BorderLayout.CENTER);
-		add(salirButton, BorderLayout.CENTER);
-		
-		bottomPanel.add(version);
-		bottomPanel.setOpaque(false);
-		bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
-	    add(bottomPanel, BorderLayout.SOUTH);
-		
-	    fondo();
-	    
-	    setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
-	   
-	    
-	    
+        add(nuevaPartidaButton, BorderLayout.CENTER);
+        add(cargarPartidaButton, BorderLayout.CENTER);
+        add(informacionButton, BorderLayout.CENTER);
+        add(resumenButton, BorderLayout.CENTER);
+        add(autoresButton, BorderLayout.CENTER);
+        add(salirButton, BorderLayout.CENTER);
+        
+        bottomPanel.add(version);
+        bottomPanel.setOpaque(false);
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
+        add(bottomPanel, BorderLayout.SOUTH);
+        
+        fondo(); // Configurar fondo
+        
+        setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10)); // Borde vacío
 	}
 	private static boolean toWhite = true;
 	private static Color currentColor = new Color(173, 216, 230);
@@ -166,19 +195,21 @@ class Lamina1 extends JPanel implements ActionListener{
         timer.start();
     }
     public void paintComponent(Graphics g) {
-        super.paintComponents(g);
+        super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setColor(currentColor);
-        g2d.fillRect(0, 0, getWidth(), getHeight());
+        Image imagenFondo = new ImageIcon("src//img//fondo.jpg").getImage();
+        g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
         g2d.dispose();
     }
     public static void styleButton(JButton button) {
         button.setBackground(new Color(240, 240, 240));
         button.setForeground(Color.BLACK);
+        button.setBorderPainted(false);
         button.setFocusPainted(false);
+//        button.setOpaque(false);
+        button.setContentAreaFilled(false);
         button.setPreferredSize(new Dimension(200, 40));
         button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(220, 220, 220));
@@ -190,6 +221,10 @@ class Lamina1 extends JPanel implements ActionListener{
         });
     }
 	
+    public static void imageBotones(ImageIcon icono) {
+        imagen_botones = icono.getImage();
+        nuevaImagen = imagen_botones.getScaledInstance(550, 350, Image.SCALE_SMOOTH);
+    }
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
