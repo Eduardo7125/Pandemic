@@ -23,7 +23,7 @@ class Marco extends JFrame{
 		icono = new ImageIcon("src//img//icon.png");
         setIconImage(icono.getImage());
         
-        setSize(300, 520);
+        setSize(340, 640);
         setResizable(false);
         setUndecorated(true);
         addComponentListener(new ComponentAdapter() {
@@ -70,8 +70,9 @@ class Lamina1 extends JPanel implements ActionListener{
 	ImageIcon iconoEscalado;
 	ImageIcon iconoNuevaPartida;
 	ImageIcon iconoCargarPartida;
-	ImageIcon iconoinfo;
-	ImageIcon iconoscore;
+	ImageIcon iconoInfo;
+	ImageIcon iconoScore;
+	ImageIcon iconoSalir;
 	Image imagen;
 	Image imagenEscalada;
 	static Image nuevaImagen;
@@ -96,8 +97,9 @@ class Lamina1 extends JPanel implements ActionListener{
         icono = new ImageIcon("src//img//icon.png");
         iconoNuevaPartida = new ImageIcon("src//img//nueva_partida.png");
         iconoCargarPartida = new ImageIcon("src//img//cargar_partida.png");
-        iconoinfo = new ImageIcon("src//img//info.png");
-        iconoscore = new ImageIcon("src//img//score.png");
+        iconoInfo = new ImageIcon("src//img//info.png");
+        iconoScore = new ImageIcon("src//img//score.png");
+        iconoSalir = new ImageIcon("src//img//salir.png");
         imagen = icono.getImage();
         
         // Paneles y etiquetas
@@ -116,13 +118,15 @@ class Lamina1 extends JPanel implements ActionListener{
         imageBotones(iconoCargarPartida);
         cargarPartidaButton = new JButton(new ImageIcon(nuevaImagen));
         
-        imageBotones(iconoinfo);
+        imageBotones(iconoInfo);
         informacionButton = new JButton(new ImageIcon(nuevaImagen));
         
-        imageBotones(iconoscore);
+        imageBotones(iconoScore);
         resumenButton = new JButton(new ImageIcon(nuevaImagen));
         autoresButton = new JButton("Autores");
-        salirButton = new JButton("Salir");
+        
+        imageBotones(iconoSalir);
+        salirButton = new JButton(new ImageIcon(nuevaImagen));
         
         // Panel inferior y etiqueta de versión
         bottomPanel = new JPanel();
@@ -208,7 +212,7 @@ class Lamina1 extends JPanel implements ActionListener{
         button.setFocusPainted(false);
 //        button.setOpaque(false);
         button.setContentAreaFilled(false);
-        button.setPreferredSize(new Dimension(200, 40));
+        button.setPreferredSize(new Dimension(300, 60));
         button.setFont(new Font("Arial", Font.BOLD, 12));
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -223,7 +227,7 @@ class Lamina1 extends JPanel implements ActionListener{
 	
     public static void imageBotones(ImageIcon icono) {
         imagen_botones = icono.getImage();
-        nuevaImagen = imagen_botones.getScaledInstance(550, 350, Image.SCALE_SMOOTH);
+        nuevaImagen = imagen_botones.getScaledInstance(450, 300, Image.SCALE_SMOOTH);
     }
 	@Override
 	public void actionPerformed(ActionEvent e) {
