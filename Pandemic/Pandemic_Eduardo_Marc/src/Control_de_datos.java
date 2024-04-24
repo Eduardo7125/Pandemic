@@ -1,4 +1,13 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -27,7 +36,7 @@ public class Control_de_datos {
 	
 	public static void main(String [] args) {
 		try {
-		    File inputFile = new File("parametros.xml");
+		    File inputFile = new File("src//files//parametros.xml");
 		    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		    Document doc = dBuilder.parse(inputFile);
@@ -89,7 +98,7 @@ public class Control_de_datos {
 		        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); // Define la cantidad de espacios para la sangría
 
 		        DOMSource source = new DOMSource(rootElement_rewrite);
-		        StreamResult result = new StreamResult("parametros.xml");
+		        StreamResult result = new StreamResult("src//files//parametros.xml");
 
 		        transformer.transform(source, result);
 		    }
@@ -117,16 +126,95 @@ public class Control_de_datos {
             }
         }
 	}
-	public static <Ciudad> ArrayList<Ciudad> cargarCiudades() {
-		return null;
+
+    static String nombreFichero = "src//files//ciudades.txt";
+    static ArrayList<Ciudad> Ciudades = new ArrayList<>();
+	public static ArrayList<Ciudad> cargarCiudades() {
+	    try (FileReader fileReader = new FileReader(nombreFichero);
+	         BufferedReader bufferedReader = new BufferedReader(fileReader);) {
+
+	        String valor;
+	        while ((valor = bufferedReader.readLine()) != null) {
+	            String[] x = valor.split(";");
+	            int[] cords = new int[2];
+	            cords[0] = Integer.parseInt(x[2].split(",")[0]);
+	            cords[1] = Integer.parseInt(x[2].split(",")[1]);
+	            
+	            String[] ciudadesColindantes = x[3].split(",");
+	            
+	            Ciudad ciudad = new Ciudad(x[0], cords, x[1], 0, ciudadesColindantes);
+	            
+	            Ciudades.add(ciudad);
+	        }
+	    } catch (IOException e) {
+	        System.out.println("Ha habido un error al intentar leer los datos de Ciudades" + e);
+	    }
+	    
+	    return Ciudades;
 	}
 	
-	public static <Vacunas> ArrayList<Vacunas> cargarVacunas() {
-		return null;
+	static ArrayList<Vacunas> Vacuna = new ArrayList<>();
+	public static ArrayList<Vacunas> cargarVacunas() {
+		Vacunas Vacuna1 = new Vacunas("Alfa", "Azul", 0);
+		Vacunas Vacuna2 = new Vacunas("Beta", "Rojo", 0);
+		Vacunas Vacuna3 = new Vacunas("Gama", "Verde", 0);
+		Vacunas Vacuna4 = new Vacunas("Delta", "Amarillo", 0);
+		
+		Vacuna.add(Vacuna1);
+		Vacuna.add(Vacuna2);
+		Vacuna.add(Vacuna3);
+		Vacuna.add(Vacuna4);
+		
+		for (Vacunas vacuna : Vacuna) {
+			System.out.println(vacuna.getNombre());
+			System.out.println(vacuna.getColor());
+			System.out.println(vacuna.getPorcentaje());
+		}
+		return Vacuna;
 	}
+
+//	public static void calculo(int cityIndex, BufferedWriter bufferedWriter) throws IOException {
+//	x1 = cord1.get(cityIndex);
+//    y1 = cord2.get(cityIndex);
+//    ciudades = array.get(cityIndex);
+//    bufferedWriter.write("La ciudad "+ciudad.get(cityIndex)+" esta en las cordenadas ("+cord1.get(cityIndex)+","+cord2.get(cityIndex)+") sus ciudades colindantes son:\n");
+//    	for (String ciudadColindante : ciudades) {
+//            x2 = cord1.get(ciudad_2.get(ciudadColindante));
+//            y2 = cord2.get(ciudad_2.get(ciudadColindante));
+//            distancia = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+//            bufferedWriter.write(ciudadColindante+", que esta a una distancia de "+distancia);
+//            bufferedWriter.newLine();
+//		}
+//}
 	
-	public static <Virus> ArrayList<Virus> cargarVirus() {
-		return null;
+	static String FicheroEnfermedades = "src//files//CCP.bin";
+    static String FicheroCiudadEnfermedad = "src//files//ciudades-enfermedad.bin";
+    static int contador = 0;
+    static ArrayList<Virus> Virus = new ArrayList<>();
+	public static ArrayList<Virus> cargarVirus() throws IOException {
+		try (FileInputStream fileInputStream = new FileInputStream(FicheroEnfermedades);
+		         DataInputStream dataInputStream = new DataInputStream(fileInputStream)) {
+
+				@SuppressWarnings("unused")
+				String enfermedad_NO_USAR_NO_SIRVE = dataInputStream.readUTF();
+		        while (contador != 4) {
+		            int codigoEnfermedad = dataInputStream.readInt();
+		            String nombreEnfermedad = dataInputStream.readUTF();
+		            String colorEnfermedad = dataInputStream.readUTF();
+
+		            Virus virus = new Virus(String.valueOf(codigoEnfermedad), nombreEnfermedad, colorEnfermedad);
+		            Virus.add(virus);
+
+		            contador++;
+		        }
+		    } catch (EOFException e1) {
+		        System.out.println();
+		    } catch (FileNotFoundException e) {
+		        System.out.println("Fichero no encontrado " + e);
+		    } catch (IOException e) {
+		        System.out.println("Ha habido un error de lectura " + e);
+		    }
+		    return Virus;
 	}
 	
 	public static void cargarPartida() {

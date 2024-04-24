@@ -13,19 +13,32 @@ public class Ciudad {
 		this.enfermedad = enfermedad;
 		this.infeccion = infeccion;
 		this.ciudadesColindantes = ciudadesColindantes;
-		
 	}
 	
 	public void aumentarInfeccion() {
-		
+		this.infeccion += 1;
+		if (this.infeccion > 3) {
+			propagarInfeccion();
+		}
 	}
 	
+	boolean cantInfect;
 	public void disminuirInfeccion() {
-		
+		cantInfect = false;
+		if (this.infeccion < 1) {
+			cantInfect = true;
+			return;
+		}
+		this.infeccion -= 1;
 	}
 	
 	public void propagarInfeccion() {
-		
+		for (String colindantes : ciudadesColindantes) {
+	        String[] ciudad = getCiudadesColindantes();
+	        
+	        // Increase infection level of neighboring city
+	        ciudad.aumentarInfeccion()
+		}
 	}
 	
 	public String getNombre() {
