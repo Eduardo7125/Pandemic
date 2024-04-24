@@ -13,19 +13,40 @@ public class Ciudad {
 		this.enfermedad = enfermedad;
 		this.infeccion = infeccion;
 		this.ciudadesColindantes = ciudadesColindantes;
-		
 	}
 	
 	public void aumentarInfeccion() {
-		
+		this.infeccion += 1;
+		if (this.infeccion > 3) {
+			propagarInfeccion();
+		}
 	}
 	
+	boolean cantInfect;
 	public void disminuirInfeccion() {
-		
+		cantInfect = false;
+		if (this.infeccion < 1) {
+			cantInfect = true;
+			return;
+		}
+		this.infeccion -= 1;
 	}
 	
 	public void propagarInfeccion() {
-		
+		for (String colindantes : this.ciudadesColindantes) {
+			Ciudad ciudad = obtenerCiudad(colindantes);
+			
+	        ciudad.aumentarInfeccion();
+		}
+	}
+	
+	public Ciudad obtenerCiudad(String ciudadColindante) {
+		for (Ciudad ciudad : Control_de_datos.Ciudades) {
+	        if (ciudad.getNombre().equals(ciudadColindante)) {
+	            return ciudad;
+	        }
+	    }
+	    return null;
 	}
 	
 	public String getNombre() {

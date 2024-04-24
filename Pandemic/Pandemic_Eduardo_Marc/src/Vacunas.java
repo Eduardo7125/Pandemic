@@ -11,8 +11,21 @@ public class Vacunas {
 		this.porcentaje = porcentaje;
 	}
 	
+	boolean completo;
 	public void desarrollarVacuna(float porcentaje) {
-		
+		completo = false;
+        if (this.porcentaje > 100) {
+        	completo = true;
+        	this.porcentaje = 100;
+        	return;
+        }
+
+        this.porcentaje += porcentaje;
+        
+        if (this.porcentaje > 100) {
+        	this.porcentaje = 100;
+        	return;
+        }
 	}
 	
 	public String getNombre() {
