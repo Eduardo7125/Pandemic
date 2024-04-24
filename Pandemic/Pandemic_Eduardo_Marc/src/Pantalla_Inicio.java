@@ -4,6 +4,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
@@ -16,20 +17,23 @@ public class Pantalla_Inicio {
 }
 
 class Marco extends JFrame{
-    private static Point frame1Position;
-    ImageIcon icono;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	ImageIcon icono;
 	public Marco(){
 		setTitle("Pandemic");
 		icono = new ImageIcon("src//img//icon.png");
         setIconImage(icono.getImage());
         
-        setSize(340, 640);
+        setSize(320, 600);
         setResizable(false);
         setUndecorated(true);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentMoved(ComponentEvent e) {
-                frame1Position = getLocation();
+     
             }
         });
 
@@ -66,6 +70,13 @@ class Marco extends JFrame{
 
 class Lamina1 extends JPanel implements ActionListener{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6740953577204998600L;
+	/**
+	 * 
+	 */
 	ImageIcon icono;
 	ImageIcon iconoEscalado;
 	ImageIcon iconoNuevaPartida;
@@ -78,98 +89,80 @@ class Lamina1 extends JPanel implements ActionListener{
 	static Image nuevaImagen;
 	static Image imagen_botones;
 	
+	JPanel buttonPanel;
 	JPanel gridLabel1;
 	JPanel bottomPanel;
 	
 	JLabel version;
 	JLabel menuLabel1;
 	
+	JButton button;
 	JButton nuevaPartidaButton;
 	JButton cargarPartidaButton;
 	JButton informacionButton;
 	JButton resumenButton;
-	JButton autoresButton;
 	JButton salirButton;
 	
 	
 	Lamina1(){
-        // Iconos
+		
+		setLayout(new BorderLayout());
+		
+		// Iconos
         icono = new ImageIcon("src//img//icon.png");
         iconoNuevaPartida = new ImageIcon("src//img//nueva_partida.png");
         iconoCargarPartida = new ImageIcon("src//img//cargar_partida.png");
         iconoInfo = new ImageIcon("src//img//info.png");
-        iconoScore = new ImageIcon("src//img//score.png");
+        iconoScore = new ImageIcon("src//img//ranking.png");
         iconoSalir = new ImageIcon("src//img//salir.png");
-        imagen = icono.getImage();
-        
-        // Paneles y etiquetas
-        gridLabel1 = new JPanel();
-        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
-        
-        // Escalar la imagen del botón
 
-        
+        // Etiqueta del menú
+        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
+        menuLabel1.setHorizontalAlignment(SwingConstants.CENTER);
+        add(menuLabel1, BorderLayout.NORTH);
+
+        // Panel para los botones
+        buttonPanel = new JPanel(new GridLayout(5, 1, 10, 10));
+        buttonPanel.setOpaque(false);
+        add(buttonPanel, BorderLayout.CENTER);
         // Botones
-        nuevaPartidaButton = new JButton();
+        nuevaPartidaButton = createButton(iconoNuevaPartida);
+        cargarPartidaButton = createButton(iconoCargarPartida);
+        informacionButton = createButton(iconoInfo);
+        resumenButton = createButton(iconoScore);
+        salirButton = createButton(iconoSalir);
+
+        buttonPanel.add(nuevaPartidaButton);
+        buttonPanel.add(cargarPartidaButton);
+        buttonPanel.add(informacionButton);
+        buttonPanel.add(resumenButton);
+        buttonPanel.add(salirButton);
         
-        imageBotones(iconoNuevaPartida);
-        nuevaPartidaButton.setIcon(new ImageIcon(nuevaImagen));
-        
-        imageBotones(iconoCargarPartida);
-        cargarPartidaButton = new JButton(new ImageIcon(nuevaImagen));
-        
-        imageBotones(iconoInfo);
-        informacionButton = new JButton(new ImageIcon(nuevaImagen));
-        
-        imageBotones(iconoScore);
-        resumenButton = new JButton(new ImageIcon(nuevaImagen));
-        autoresButton = new JButton("Autores");
-        
-        imageBotones(iconoSalir);
-        salirButton = new JButton(new ImageIcon(nuevaImagen));
+        add(buttonPanel, BorderLayout.CENTER);
         
         // Panel inferior y etiqueta de versión
         bottomPanel = new JPanel();
-        version = new JLabel("Version 1.0");
-        
-        // Estilo de los botones
-        styleButton(nuevaPartidaButton);
-        styleButton(cargarPartidaButton);
-        styleButton(informacionButton);
-        styleButton(resumenButton);
-        styleButton(autoresButton);
-        styleButton(salirButton);
-        
-        // Agregar oyentes a los botones
-        nuevaPartidaButton.addActionListener(this);
-        cargarPartidaButton.addActionListener(this);
-        informacionButton.addActionListener(this);
-        resumenButton.addActionListener(this);
-        autoresButton.addActionListener(this);
-        salirButton.addActionListener(this);
-        
-        // Configuración del diseño de la lámina
-        gridLabel1.setLayout(new GridLayout(0, 1));
-        gridLabel1.add(menuLabel1);
-        gridLabel1.setOpaque(false);
-        add(gridLabel1, BorderLayout.CENTER);
-        
-        add(nuevaPartidaButton, BorderLayout.CENTER);
-        add(cargarPartidaButton, BorderLayout.CENTER);
-        add(informacionButton, BorderLayout.CENTER);
-        add(resumenButton, BorderLayout.CENTER);
-        add(autoresButton, BorderLayout.CENTER);
-        add(salirButton, BorderLayout.CENTER);
-        
+        version = new JLabel("<html><div style='float:left;'><p>Euardo/Marc</p></div><div style='text-align:center;'><p>Version 1.0</p></div>");
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
         add(bottomPanel, BorderLayout.SOUTH);
-        
+
         fondo(); // Configurar fondo
-        
+
         setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10)); // Borde vacío
 	}
+	
+    public JButton createButton(ImageIcon icono) {
+        button = new JButton();
+        imageBotones(icono);
+        button.setIcon(new ImageIcon(nuevaImagen));
+        styleButton(button);
+        add(button, BorderLayout.CENTER);
+        button.addActionListener(this);
+        return button;
+    }
+    
 	private static boolean toWhite = true;
 	private static Color currentColor = new Color(173, 216, 230);
     public void fondo() {
@@ -198,6 +191,7 @@ class Lamina1 extends JPanel implements ActionListener{
         });
         timer.start();
     }
+    
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
@@ -229,6 +223,7 @@ class Lamina1 extends JPanel implements ActionListener{
         imagen_botones = icono.getImage();
         nuevaImagen = imagen_botones.getScaledInstance(450, 300, Image.SCALE_SMOOTH);
     }
+    
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -239,8 +234,6 @@ class Lamina1 extends JPanel implements ActionListener{
 		} else if (e.getSource() == informacionButton) {
 //			lamina2.area1.setText("Has pulsado el bot�n Este");
 		} else if (e.getSource() == resumenButton) {
-			System.exit(0);
-		} else if (e.getSource() == autoresButton) {
 			System.exit(0);
 		}else if (e.getSource() == salirButton) {
 			System.exit(0);
