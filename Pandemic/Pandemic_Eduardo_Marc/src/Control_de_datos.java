@@ -23,114 +23,176 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Struct;
+import java.util.ArrayList;
+import java.util.Scanner;
 public class Control_de_datos {
 
-	private static String url; 
-	private static String user;
-	private static String password;
-	private static String ficheroTxt;
-	private static String ficheroBin;
-	private static String ficheroXML;
-	private static Scanner scan = new Scanner(System.in);
+	private static String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe"; 
+	private static String user = "DAM1_2324_PET_EDU";
+	private static String password = "X7565598R";
+	private static String ficheroTxt = "src//files//ciudades.txt";
+	private static String ficheroBin = "src//files//CCP.bin";
+	private static String ficheroXML = "src//files//parametros.xml";
+	Connection con = conectarBaseDatos();
 	
-	public static void main(String [] args) {
+//	public static void main(String [] args) {
+//		try {
+//		    File inputFile = new File(ficheroXML);
+//		    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//		    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+//		    Document doc = dBuilder.parse(inputFile);
+//		    doc.getDocumentElement().normalize();
+//
+//		    Element rootElement = doc.createElement("parametros");
+//
+//		    NodeList nodeCiudadesInfectadasInicio = doc.getElementsByTagName("numCiudadesInfectadasInicio");
+//		    NodeList nodeCiudadesInfectadasRonda = doc.getElementsByTagName("numCuidadesInfectadasRonda");
+//		    NodeList nodeEnfermedadesActivasDerrota = doc.getElementsByTagName("numEnfermedadesActivasDerrota");
+//		    NodeList nodeNumBrotesDerrota = doc.getElementsByTagName("numBrotesDerrota");
+//
+//		    Node node1 = nodeCiudadesInfectadasInicio.item(0);
+//		    Node node2 = nodeCiudadesInfectadasRonda.item(0);
+//		    Node node3 = nodeEnfermedadesActivasDerrota.item(0);
+//		    Node node4 = nodeNumBrotesDerrota.item(0);
+//
+//		    if (node1 != null && node2 != null && node3 != null && node4 != null) {
+//		        String CiudadesInfectadasInicio = node1.getTextContent();
+//		        String CiudadesInfectadasRonda = node2.getTextContent();
+//		        String EnfermedadesActivasDerrota = node3.getTextContent();
+//		        String NumBrotesDerrota = node4.getTextContent();
+//
+//		        Element rootElement_rewrite = doc.createElement("parametros");
+//
+//		        System.out.println("numCiudadesInfectadasInicio : " + CiudadesInfectadasInicio);
+//		        Element item = doc.createElement("numCiudadesInfectadasInicio");
+//		        String valor1 = ModificarXML(CiudadesInfectadasInicio);
+//		        item.appendChild(doc.createTextNode(valor1));
+//		        rootElement_rewrite.appendChild(item);
+//		        
+//		        System.out.println("----------------------");
+//		        
+//		        System.out.println("numCuidadesInfectadasRonda : "+ CiudadesInfectadasRonda);
+//		        Element item2 = doc.createElement("numCuidadesInfectadasRonda");
+//		        String valor2 = ModificarXML(CiudadesInfectadasRonda);
+//		        item2.appendChild(doc.createTextNode(valor2));
+//		        rootElement_rewrite.appendChild(item2);
+//		        
+//		        System.out.println("----------------------");
+//		        
+//		        System.out.println("numEnfermedadesActivasDerrota : "+ EnfermedadesActivasDerrota );
+//		        Element item3 = doc.createElement("numEnfermedadesActivasDerrota");
+//		        String valor3 = ModificarXML(EnfermedadesActivasDerrota);
+//		        item3.appendChild(doc.createTextNode(valor3));
+//		        rootElement_rewrite.appendChild(item3);
+//		        
+//		        System.out.println("----------------------");
+//		        
+//		        System.out.println("numBrotesDerrota : "+ NumBrotesDerrota );
+//		        Element item4 = doc.createElement("numBrotesDerrota");
+//		        String valor4 = ModificarXML(NumBrotesDerrota);
+//		        item4.appendChild(doc.createTextNode(valor4));
+//		        rootElement_rewrite.appendChild(item4);
+//		        
+//		        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//		        Transformer transformer = transformerFactory.newTransformer();
+//		        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//		        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); // Define la cantidad de espacios para la sangría
+//
+//		        DOMSource source = new DOMSource(rootElement_rewrite);
+//		        StreamResult result = new StreamResult(ficheroXML);
+//
+//		        transformer.transform(source, result);
+//		    }
+//		} catch (Exception e) {
+//		    e.printStackTrace();
+//		}
+//		
+//	}
+//	
+//	public static String ModificarXML(String valor) {
+//		while (true) {
+//            System.out.print("Ingrese el nuevo valor para " + valor + " o presione Enter para mantener el valor existente:");
+//            System.out.print("Ingrese el valor nuevo o presione Enter para mantener el valor existente (" + valor + "): ");
+//
+//            String variable1 = scan.nextLine();
+//
+//            if (variable1.isEmpty()) {
+//                return valor;
+//            }
+//
+//            if (variable1.matches("\\d+")) {
+//                return variable1;
+//            } else {
+//                System.out.println("El valor ingresado no es un número. Inténtelo de nuevo.");
+//            }
+//        }
+//	}
+	private static Connection conectarBaseDatos() {
+		Connection con = null;
+
+		System.out.println("Intentando conectarse a la base de datos");
+
 		try {
-		    File inputFile = new File("src//files//parametros.xml");
-		    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-		    Document doc = dBuilder.parse(inputFile);
-		    doc.getDocumentElement().normalize();
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			con = DriverManager.getConnection(URL, USER, PWD);
+		} catch (ClassNotFoundException e) {
+			System.out.println("No se ha encontrado el driver " + e);
+		} catch (SQLException e) {
+			System.out.println("Error en las credenciales o en la URL " + e);
+		}
 
-		    Element rootElement = doc.createElement("parametros");
+		System.out.println("Conectados a la base de datos");
 
-		    NodeList nodeCiudadesInfectadasInicio = doc.getElementsByTagName("numCiudadesInfectadasInicio");
-		    NodeList nodeCiudadesInfectadasRonda = doc.getElementsByTagName("numCuidadesInfectadasRonda");
-		    NodeList nodeEnfermedadesActivasDerrota = doc.getElementsByTagName("numEnfermedadesActivasDerrota");
-		    NodeList nodeNumBrotesDerrota = doc.getElementsByTagName("numBrotesDerrota");
+		return con;
+	}
 
-		    Node node1 = nodeCiudadesInfectadasInicio.item(0);
-		    Node node2 = nodeCiudadesInfectadasRonda.item(0);
-		    Node node3 = nodeEnfermedadesActivasDerrota.item(0);
-		    Node node4 = nodeNumBrotesDerrota.item(0);
+	private static ArrayList<Persona> select(Connection con) {
+		String sql = "SELECT p.* FROM PERSONA p";
+		ArrayList<Persona> p = new ArrayList<Persona>();
 
-		    if (node1 != null && node2 != null && node3 != null && node4 != null) {
-		        String CiudadesInfectadasInicio = node1.getTextContent();
-		        String CiudadesInfectadasRonda = node2.getTextContent();
-		        String EnfermedadesActivasDerrota = node3.getTextContent();
-		        String NumBrotesDerrota = node4.getTextContent();
+		try {
+			Statement st = con.createStatement();
+			ResultSet rs = st.executeQuery(sql);
 
-		        Element rootElement_rewrite = doc.createElement("parametros");
+			if (rs.isBeforeFirst()) {
+				while (rs.next()) {
+					String dni = rs.getString("DNI");
+					String nombre = rs.getString("NOMBRE");
 
-		        System.out.println("numCiudadesInfectadasInicio : " + CiudadesInfectadasInicio);
-		        Element item = doc.createElement("numCiudadesInfectadasInicio");
-		        String valor1 = ModificarXML(CiudadesInfectadasInicio);
-		        item.appendChild(doc.createTextNode(valor1));
-		        rootElement_rewrite.appendChild(item);
-		        
-		        System.out.println("----------------------");
-		        
-		        System.out.println("numCuidadesInfectadasRonda : "+ CiudadesInfectadasRonda);
-		        Element item2 = doc.createElement("numCuidadesInfectadasRonda");
-		        String valor2 = ModificarXML(CiudadesInfectadasRonda);
-		        item2.appendChild(doc.createTextNode(valor2));
-		        rootElement_rewrite.appendChild(item2);
-		        
-		        System.out.println("----------------------");
-		        
-		        System.out.println("numEnfermedadesActivasDerrota : "+ EnfermedadesActivasDerrota );
-		        Element item3 = doc.createElement("numEnfermedadesActivasDerrota");
-		        String valor3 = ModificarXML(EnfermedadesActivasDerrota);
-		        item3.appendChild(doc.createTextNode(valor3));
-		        rootElement_rewrite.appendChild(item3);
-		        
-		        System.out.println("----------------------");
-		        
-		        System.out.println("numBrotesDerrota : "+ NumBrotesDerrota );
-		        Element item4 = doc.createElement("numBrotesDerrota");
-		        String valor4 = ModificarXML(NumBrotesDerrota);
-		        item4.appendChild(doc.createTextNode(valor4));
-		        rootElement_rewrite.appendChild(item4);
-		        
-		        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		        Transformer transformer = transformerFactory.newTransformer();
-		        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-		        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); // Define la cantidad de espacios para la sangría
+					Struct domicilio = (Struct) rs.getObject("DOMICILIO");
+					Object[] valoresDireccion = domicilio.getAttributes();
+					String calle = (String) valoresDireccion[0];
+					String ciudad = (String) valoresDireccion[1];
+					String pais = (String) valoresDireccion[2];
 
-		        DOMSource source = new DOMSource(rootElement_rewrite);
-		        StreamResult result = new StreamResult("src//files//parametros.xml");
+					Direccion direccion = new Ranking(rondas, nombre, fecha, resultado);
+					Persona persona = new Persona(dni, nombre, direccion);
 
-		        transformer.transform(source, result);
-		    }
-		} catch (Exception e) {
-		    e.printStackTrace();
+					System.out.println(persona.toString());
+					p.add(persona);				}
+			} else {
+				System.out.println("No he encontrado nada");
+			}
+			
+			
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
+		return p;
 	}
 	
-	public static String ModificarXML(String valor) {
-		while (true) {
-            System.out.print("Ingrese el nuevo valor para " + valor + " o presione Enter para mantener el valor existente:");
-            System.out.print("Ingrese el valor nuevo o presione Enter para mantener el valor existente (" + valor + "): ");
-
-            String variable1 = scan.nextLine();
-
-            if (variable1.isEmpty()) {
-                return valor;
-            }
-
-            if (variable1.matches("\\d+")) {
-                return variable1;
-            } else {
-                System.out.println("El valor ingresado no es un número. Inténtelo de nuevo.");
-            }
-        }
-	}
-
-    static String nombreFichero = "src//files//ciudades.txt";
     static ArrayList<Ciudad> Ciudades = new ArrayList<>();
 	public static ArrayList<Ciudad> cargarCiudades() {
-	    try (FileReader fileReader = new FileReader(nombreFichero);
+	    try (FileReader fileReader = new FileReader(ficheroTxt);
 	         BufferedReader bufferedReader = new BufferedReader(fileReader);) {
 
 	        String valor;
@@ -165,11 +227,6 @@ public class Control_de_datos {
 		Vacuna.add(Vacuna3);
 		Vacuna.add(Vacuna4);
 		
-		for (Vacunas vacuna : Vacuna) {
-			System.out.println(vacuna.getNombre());
-			System.out.println(vacuna.getColor());
-			System.out.println(vacuna.getPorcentaje());
-		}
 		return Vacuna;
 	}
 
@@ -187,12 +244,10 @@ public class Control_de_datos {
 //		}
 //}
 	
-	static String FicheroEnfermedades = "src//files//CCP.bin";
-    static String FicheroCiudadEnfermedad = "src//files//ciudades-enfermedad.bin";
     static int contador = 0;
     static ArrayList<Virus> Virus = new ArrayList<>();
 	public static ArrayList<Virus> cargarVirus() throws IOException {
-		try (FileInputStream fileInputStream = new FileInputStream(FicheroEnfermedades);
+		try (FileInputStream fileInputStream = new FileInputStream(ficheroBin);
 		         DataInputStream dataInputStream = new DataInputStream(fileInputStream)) {
 
 				@SuppressWarnings("unused")

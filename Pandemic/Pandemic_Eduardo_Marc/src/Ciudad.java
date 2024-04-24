@@ -33,12 +33,20 @@ public class Ciudad {
 	}
 	
 	public void propagarInfeccion() {
-		for (String colindantes : ciudadesColindantes) {
-	        String[] ciudad = getCiudadesColindantes();
-	        
-	        // Increase infection level of neighboring city
-	        ciudad.aumentarInfeccion()
+		for (String colindantes : this.ciudadesColindantes) {
+			Ciudad ciudad = obtenerCiudad(colindantes);
+			
+	        ciudad.aumentarInfeccion();
 		}
+	}
+	
+	public Ciudad obtenerCiudad(String ciudadColindante) {
+		for (Ciudad ciudad : Control_de_datos.Ciudades) {
+	        if (ciudad.getNombre().equals(ciudadColindante)) {
+	            return ciudad;
+	        }
+	    }
+	    return null;
 	}
 	
 	public String getNombre() {
