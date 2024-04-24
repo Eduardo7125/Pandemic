@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -36,10 +37,10 @@ public class Control_de_datos {
 	private static String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe"; 
 	private static String user = "DAM1_2324_PET_EDU";
 	private static String password = "X7565598R";
+	public static Connection con = conectarBaseDatos();
 	private static String ficheroTxt = "src//files//ciudades.txt";
 	private static String ficheroBin = "src//files//CCP.bin";
 	private static String ficheroXML = "src//files//parametros.xml";
-	Connection con = conectarBaseDatos();
 	
 //	public static void main(String [] args) {
 //		try {
@@ -114,47 +115,25 @@ public class Control_de_datos {
 //		}
 //		
 //	}
-//	
-//	public static String ModificarXML(String valor) {
-//		while (true) {
-//            System.out.print("Ingrese el nuevo valor para " + valor + " o presione Enter para mantener el valor existente:");
-//            System.out.print("Ingrese el valor nuevo o presione Enter para mantener el valor existente (" + valor + "): ");
-//
-//            String variable1 = scan.nextLine();
-//
-//            if (variable1.isEmpty()) {
-//                return valor;
-//            }
-//
-//            if (variable1.matches("\\d+")) {
-//                return variable1;
-//            } else {
-//                System.out.println("El valor ingresado no es un número. Inténtelo de nuevo.");
-//            }
-//        }
-//	}
-	private static Connection conectarBaseDatos() {
+	
+	private static final Connection conectarBaseDatos() {
 		Connection con = null;
-
-		System.out.println("Intentando conectarse a la base de datos");
 
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection(URL, USER, PWD);
+			con = DriverManager.getConnection(url, user, password);
 		} catch (ClassNotFoundException e) {
 			System.out.println("No se ha encontrado el driver " + e);
 		} catch (SQLException e) {
 			System.out.println("Error en las credenciales o en la URL " + e);
 		}
-
-		System.out.println("Conectados a la base de datos");
-
+		System.out.println("2");
 		return con;
 	}
 
-	private static ArrayList<Persona> select(Connection con) {
-		String sql = "SELECT p.* FROM PERSONA p";
-		ArrayList<Persona> p = new ArrayList<Persona>();
+	private static ArrayList<Ranking> select(Connection con) {
+		String sql = "SELECT p.* FROM RANKING p";
+		ArrayList<Ranking> p = new ArrayList<Ranking>();
 
 		try {
 			Statement st = con.createStatement();
@@ -162,25 +141,17 @@ public class Control_de_datos {
 
 			if (rs.isBeforeFirst()) {
 				while (rs.next()) {
-					String dni = rs.getString("DNI");
-					String nombre = rs.getString("NOMBRE");
+					int rondas = rs.getInt("NºRondas");
+					String nombre = rs.getString("Nombre");
+					Date fecha = rs.getDate("Fecha");
+					int resultado = rs.getInt("Resultado");
 
-					Struct domicilio = (Struct) rs.getObject("DOMICILIO");
-					Object[] valoresDireccion = domicilio.getAttributes();
-					String calle = (String) valoresDireccion[0];
-					String ciudad = (String) valoresDireccion[1];
-					String pais = (String) valoresDireccion[2];
+					Ranking rank = new Ranking(rondas, nombre, fecha, resultado);
 
-					Direccion direccion = new Ranking(rondas, nombre, fecha, resultado);
-					Persona persona = new Persona(dni, nombre, direccion);
-
-					System.out.println(persona.toString());
-					p.add(persona);				}
+					p.add(rank);				}
 			} else {
 				System.out.println("No he encontrado nada");
-			}
-			
-			
+			}	
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -287,4 +258,52 @@ public class Control_de_datos {
 	public static void guardarRecord() {
 
 	}
+}
+
+
+class Ranking{
+	int rondas;
+	String nombre;
+	Date fecha;
+	int resultado;
+	
+	public Ranking(int rondas, String nombre, Date fecha, int resultado) {
+		this.rondas = rondas;
+		this.nombre = nombre;
+		this.fecha = fecha;
+		this.resultado = resultado;
+	}
+	
+	public int getRondas() {
+		return rondas;
+	}
+	
+	public void setRondas(int rondas) {
+		this.rondas = rondas;
+	}
+	
+	public String getNombre() {
+		return nombre;
+	}
+	
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	
+	public Date getFecha() {
+		return fecha;
+	}
+	
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+	
+	public int getResultado() {
+		return resultado;
+	}
+	
+	public void setResultado(int resultado) {
+		this.resultado = resultado;
+	}
+	
 }
