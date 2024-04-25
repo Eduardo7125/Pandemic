@@ -3,468 +3,289 @@ San Francisco
 315
 0
 0
-[Ljava.lang.String;@7f8a9499
-Chicago
-Los Angeles
-Manila
-Tokio
+[Chicago, Los Angeles, Manila, Tokio]
 Chicago
 300
 280
 0
 0
-[Ljava.lang.String;@5d43661b
-San Francisco
-Montreal
-Atlanta
-Mexico DF
-Los Angeles
+[San Francisco, Montreal, Atlanta, Mexico DF, Los Angeles]
 Atlanta
 320
 320
 0
 0
-[Ljava.lang.String;@12299890
-Chicago
-Miami
-Washington
+[Chicago, Miami, Washington]
 Montreal
 350
 280
 0
 0
-[Ljava.lang.String;@2fba3fc4
-Chicago
-Nueva York
-Washington
+[Chicago, Nueva York, Washington]
 Nueva York
 380
 290
 0
 0
-[Ljava.lang.String;@4bf48f6
-Montreal
-Washington
-Londres
-Madrid
+[Montreal, Washington, Londres, Madrid]
 Washington
 360
 330
 0
 0
-[Ljava.lang.String;@420a85c4
-Montreal
-Nueva York
-Atlanta
-Miami
+[Montreal, Nueva York, Atlanta, Miami]
 Londres
 700
 230
 0
 0
-[Ljava.lang.String;@1c39680d
-Nueva York
-Madrid
-Paris
-Essen
+[Nueva York, Madrid, Paris, Essen]
 Madrid
 687
 290
 0
 0
-[Ljava.lang.String;@62833051
-Nueva York
-Londres
-Paris
-Sao Paulo
-Argel
+[Nueva York, Londres, Paris, Sao Paulo, Argel]
 Paris
 727
 250
 0
 0
-[Ljava.lang.String;@1c852c0f
-Madrid
-Londres
-Essen
-Argel
-Milan
+[Madrid, Londres, Essen, Argel, Milan]
 Essen
 755
 190
 0
 0
-[Ljava.lang.String;@a37aefe
-Londres
-Paris
-San Petersburgo
-Milan
+[Londres, Paris, San Petersburgo, Milan]
 Milan
 755
 235
 0
 0
-[Ljava.lang.String;@5d99c6b5
-Essen
-Paris
-Estambul
+[Essen, Paris, Estambul]
 San Petersburgo
 815
 210
 0
 0
-[Ljava.lang.String;@266374ef
-Essen
-Estambul
-Moscu
+[Essen, Estambul, Moscu]
 Los Angeles
 275
 355
 3
 0
-[Ljava.lang.String;@13b3d178
-San Francisco
-Mexico DF
-Chicago
-Sidney
+[San Francisco, Mexico DF, Chicago, Sidney]
 Miami
 380
 360
 3
 0
-[Ljava.lang.String;@24c4ddae
-Washington
-Atlanta
-Mexico DF
-Bogota
+[Washington, Atlanta, Mexico DF, Bogota]
 Mexico DF
 300
 385
 3
 0
-[Ljava.lang.String;@37fb0bed
-Los Angeles
-Miami
-Chicago
-Bogota
-Lima
+[Los Angeles, Miami, Chicago, Bogota, Lima]
 Bogota
 400
 460
 3
 0
-[Ljava.lang.String;@a82c5f1
-Miami
-Mexico DF
-Lima
-Sao Paulo
-Buenos Aires
+[Miami, Mexico DF, Lima, Sao Paulo, Buenos Aires]
 Lima
 395
 520
 3
 0
-[Ljava.lang.String;@7b7fdc8
-Mexico DF
-Bogota
-Santiago de Chile
+[Mexico DF, Bogota, Santiago de Chile]
 Santiago de Chile
 430
 620
 3
 0
-[Ljava.lang.String;@51c693d
-Lima
+[Lima]
 Buenos Aires
 453
 670
 3
 0
-[Ljava.lang.String;@6a57ae10
-Sao Paulo
-Bogota
+[Sao Paulo, Bogota]
 Sao Paulo
 520
 570
 3
 0
-[Ljava.lang.String;@766653e6
-Bogota
-Buenos Aires
-Lagos
-Madrid
+[Bogota, Buenos Aires, Lagos, Madrid]
 Lagos
 710
 450
 3
 0
-[Ljava.lang.String;@4e07b95f
-Sao Paulo
-Kinsasa
-Jartum
+[Sao Paulo, Kinsasa, Jartum]
 Kinsasa
 770
 540
 3
 0
-[Ljava.lang.String;@28b46423
-Lagos
-Jartum
-Johannesburgo
+[Lagos, Jartum, Johannesburgo]
 Jartum
 815
 450
 3
 0
-[Ljava.lang.String;@7fc4780b
-El Cairo
-Lagos
-Kinsasa
-Johannesburgo
+[El Cairo, Lagos, Kinsasa, Johannesburgo]
 Johannesburgo
 815
 630
 3
 0
-[Ljava.lang.String;@3b79fd76
-Kinsasa
-Jartum
+[Kinsasa, Jartum]
 Argel
 730
 330
 2
 0
-[Ljava.lang.String;@48c76607
-Madrid
-Paris
-Estambul
-El Cairo
+[Madrid, Paris, Estambul, El Cairo]
 El Cairo
 820
 350
 2
 0
-[Ljava.lang.String;@43599640
-Argel
-Estambul
-Bagdad
+[Argel, Estambul, Bagdad]
 Riad
 895
 385
 2
 0
-[Ljava.lang.String;@1f81aa00
-El Cairo
-Bagdad
-Karachi
+[El Cairo, Bagdad, Karachi]
 Estambul
 830
 294
 2
 0
-[Ljava.lang.String;@6b6776cb
-Argel
-El Cairo
-Bagdad
-Moscu
+[Argel, El Cairo, Bagdad, Moscu]
 Bagdad
 880
 320
 2
 0
-[Ljava.lang.String;@1863d2fe
-Estambul
-Karachi
-Riad
-El Cairo
+[Estambul, Karachi, Riad, El Cairo]
 Moscu
 890
 230
 2
 0
-[Ljava.lang.String;@1787bc24
-Teheran
-Estambul
-San Petersburgo
+[Teheran, Estambul, San Petersburgo]
 Teheran
 920
 310
 2
 0
-[Ljava.lang.String;@544d57e
-Moscu
-Bagdad
-Karachi
-Nueva Delhi
+[Moscu, Bagdad, Karachi, Nueva Delhi]
 Karachi
 980
 355
 2
 0
-[Ljava.lang.String;@55c53a33
-Teheran
-Bagdad
-Nueva Delhi
-Riad
-Bombay
+[Teheran, Bagdad, Nueva Delhi, Riad, Bombay]
 Bombay
 1005
 395
 2
 0
-[Ljava.lang.String;@53b7f657
-Karachi
-Nueva Delhi
-Madras
+[Karachi, Nueva Delhi, Madras]
 Nueva Delhi
 1025
 330
 2
 0
-[Ljava.lang.String;@797b0699
-Teheran
-Karachi
-Bombay
-Madras
-Calcuta
+[Teheran, Karachi, Bombay, Madras, Calcuta]
 Calcuta
 1070
 370
 2
 0
-[Ljava.lang.String;@5a37d3ed
-Nueva Delhi
-Hong Kong
-Madras
-Bangkok
+[Nueva Delhi, Hong Kong, Madras, Bangkok]
 Madras
 1035
 410
 2
 0
-[Ljava.lang.String;@26df6e3a
-Bombay
-Nueva Delhi
-Calcuta
-Bangkok
-Yakarta
+[Bombay, Nueva Delhi, Calcuta, Bangkok, Yakarta]
 Yakarta
 1150
 525
 1
 0
-[Ljava.lang.String;@4a3631f8
-Madras
-Bangkok
-Ho Chi Minh
-Sidney
+[Madras, Bangkok, Ho Chi Minh, Sidney]
 Bangkok
 1120
 415
 1
 0
-[Ljava.lang.String;@6b58b9e9
-Yakarta
-Calcuta
-Madras
-Ho Chi Minh
-Hong Kong
+[Yakarta, Calcuta, Madras, Ho Chi Minh, Hong Kong]
 Hong Kong
 1165
 370
 1
 0
-[Ljava.lang.String;@f14a7d4
-Bangkok
-Ho Chi Minh
-Taipei
-Manila
-Shanghai
+[Bangkok, Ho Chi Minh, Taipei, Manila, Shanghai]
 Shanghai
 1195
 355
 1
 0
-[Ljava.lang.String;@52e7a6b2
-Pekin
-Hong Kong
-Seul
-Tokio
-Taipei
+[Pekin, Hong Kong, Seul, Tokio, Taipei]
 Pekin
 1175
 300
 1
 0
-[Ljava.lang.String;@29a5f4e7
-Seul
-Shanghai
+[Seul, Shanghai]
 Seul
 1225
 297
 1
 0
-[Ljava.lang.String;@79c97cb
-Pekin
-Tokio
+[Pekin, Tokio]
 Tokio
 1280
 290
 1
 0
-[Ljava.lang.String;@2d9caaeb
-San Francisco
-Seul
-Osaka
-Shanghai
+[San Francisco, Seul, Osaka, Shanghai]
 Osaka
 1255
 320
 1
 0
-[Ljava.lang.String;@42a15bdc
-Tokio
-Taipei
+[Tokio, Taipei]
 Taipei
 1205
 375
 1
 0
-[Ljava.lang.String;@44a59da3
-Osaka
-Shanghai
-Hong Kong
-Manila
+[Osaka, Shanghai, Hong Kong, Manila]
 Ho Chi Minh
 1148
 429
 1
 0
-[Ljava.lang.String;@27e47833
-Yakarta
-Bangkok
-Hong Kong
-Manila
+[Yakarta, Bangkok, Hong Kong, Manila]
 Manila
 1200
 420
 1
 0
-[Ljava.lang.String;@6f6745d6
-San Francisco
-Ho Chi Minh
-Taipei
-Hong Kong
-Sidney
+[San Francisco, Ho Chi Minh, Taipei, Hong Kong, Sidney]
 Sidney
 1320
 645
 1
 0
-[Ljava.lang.String;@27508c5d
-Los Angeles
-Manila
-Yakarta
+[Los Angeles, Manila, Yakarta]
 
 Alfa
 Azul

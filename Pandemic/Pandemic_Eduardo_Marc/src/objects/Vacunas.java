@@ -25,7 +25,6 @@ public class Vacunas {
         
         if (this.porcentaje > 100) {
         	this.porcentaje = 100;
-        	return;
         }
 	}
 	

@@ -11,11 +11,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.Serial;
 
 public class Pantalla_Inicio {
-	public static Marco mimimarco;
 	public static void main(String[] args) {
-		mimimarco = new Marco();	
+        Marco mimimarco = new Marco();
 	}
 
 }
@@ -24,7 +24,8 @@ class Marco extends JFrame{
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 	ImageIcon icono;
 	public Marco(){
 		setTitle("Pandemic");
@@ -35,10 +36,6 @@ class Marco extends JFrame{
         setResizable(false);
         setUndecorated(true);
         addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentMoved(ComponentEvent e) {
-     
-            }
         });
 
         Lamina1 lamina1 = new Lamina1();
@@ -52,7 +49,7 @@ class Marco extends JFrame{
     
 	private static Point currCoords = new Point();
     private static Point mouseDownCompCoords;
-	private static Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+	private static final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public void moveWindow() {
     	addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -77,24 +74,21 @@ class Lamina1 extends JPanel implements ActionListener{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6740953577204998600L;
+	@Serial
+    private static final long serialVersionUID = 6740953577204998600L;
 	/**
 	 * 
 	 */
 	ImageIcon icono;
-	ImageIcon iconoEscalado;
 	ImageIcon iconoNuevaPartida;
 	ImageIcon iconoCargarPartida;
 	ImageIcon iconoInfo;
 	ImageIcon iconoScore;
 	ImageIcon iconoSalir;
-	Image imagen;
-	Image imagenEscalada;
 	static Image nuevaImagen;
 	static Image imagen_botones;
 	
 	JPanel buttonPanel;
-	JPanel gridLabel1;
 	JPanel bottomPanel;
 	
 	JLabel version;
@@ -152,8 +146,6 @@ class Lamina1 extends JPanel implements ActionListener{
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
         add(bottomPanel, BorderLayout.SOUTH);
 
-        fondo(); // Configurar fondo
-
         setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10)); // Borde vacío
 	}
 	
@@ -166,36 +158,7 @@ class Lamina1 extends JPanel implements ActionListener{
         button.addActionListener(this);
         return button;
     }
-    
-	private static boolean toWhite = true;
-	private static Color currentColor = new Color(173, 216, 230);
-    public void fondo() {
-        Timer timer = new Timer(40, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (toWhite) {
-                    currentColor = new Color(
-                            Math.min(currentColor.getRed() + 1, 255),
-                            Math.min(currentColor.getGreen() + 1, 255),
-                            Math.min(currentColor.getBlue() + 1, 255));
-                    if (currentColor.equals(Color.WHITE)) {
-                        toWhite = false;
-                    }
-                } else {
-                    currentColor = new Color(
-                            Math.max(currentColor.getRed() - 1, 173),
-                            Math.max(currentColor.getGreen() - 1, 216),
-                            Math.max(currentColor.getBlue() - 1, 230));
-                    if (currentColor.equals(new Color(173, 216, 230))) {
-                        toWhite = true;
-                    }
-                }
-                repaint();
-            }
-        });
-        timer.start();
-    }
-    
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
@@ -277,7 +240,8 @@ class Lamina2 extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 2242406387998512165L;
+	@Serial
+    private static final long serialVersionUID = 2242406387998512165L;
 	/**
 	 * 
 	 */
@@ -349,34 +313,31 @@ class Lamina2 extends JPanel implements ActionListener {
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
         Lamina1.styleButton(salirButton);
-        
-        fondo();
+
+        repaint();
     }
     	private static boolean toWhite = true;
     	private static Color currentColor = new Color(173, 216, 230);
         public void fondo() {
-            Timer timer = new Timer(40, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (toWhite) {
-                        currentColor = new Color(
-                                Math.min(currentColor.getRed() + 1, 255),
-                                Math.min(currentColor.getGreen() + 1, 255),
-                                Math.min(currentColor.getBlue() + 1, 255));
-                        if (currentColor.equals(Color.WHITE)) {
-                            toWhite = false;
-                        }
-                    } else {
-                        currentColor = new Color(
-                                Math.max(currentColor.getRed() - 1, 173),
-                                Math.max(currentColor.getGreen() - 1, 216),
-                                Math.max(currentColor.getBlue() - 1, 230));
-                        if (currentColor.equals(new Color(173, 216, 230))) {
-                            toWhite = true;
-                        }
+            Timer timer = new Timer(40, e -> {
+                if (toWhite) {
+                    currentColor = new Color(
+                            Math.min(currentColor.getRed() + 1, 255),
+                            Math.min(currentColor.getGreen() + 1, 255),
+                            Math.min(currentColor.getBlue() + 1, 255));
+                    if (currentColor.equals(Color.WHITE)) {
+                        toWhite = false;
                     }
-                    repaint();
+                } else {
+                    currentColor = new Color(
+                            Math.max(currentColor.getRed() - 1, 173),
+                            Math.max(currentColor.getGreen() - 1, 216),
+                            Math.max(currentColor.getBlue() - 1, 230));
+                    if (currentColor.equals(new Color(173, 216, 230))) {
+                        toWhite = true;
+                    }
                 }
+                repaint();
             });
             timer.start();
         }

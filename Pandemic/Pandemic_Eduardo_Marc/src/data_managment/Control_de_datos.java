@@ -11,20 +11,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -37,19 +30,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Struct;
-import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Control_de_datos {
 
-	private static String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe"; 
-	private static String user = "DAM1_2324_PET_EDU";
-	private static String password = "X7565598R";
-	public static Connection con = conectarBaseDatos();
-	private static String ficheroTxt = "src//files//ciudades.txt";
-	private static String ficheroBin = "src//files//CCP.bin";
-	private static String ficheroXML = "src//files//parametros.xml";
+	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
+	private static final String user = "DAM1_2324_PET_EDU";
+	private static final String password = "X7565598R";
+	public static Connection con;
+	private static final String ficheroTxt = "src//files//ciudades.txt";
+	private static final String ficheroBin = "src//files//CCP.bin";
+	private static final String ficheroXML = "src//files//parametros.xml";
 	
     static int contador = 0;
 	public static String CiudadesInfectadasInicio;
@@ -61,7 +51,7 @@ public class Control_de_datos {
 	static ArrayList<Vacunas> Vacuna = new ArrayList<>();
     static ArrayList<Virus> Virus = new ArrayList<>();
     
-	private static final Connection conectarBaseDatos() {
+	private static Connection conectarBaseDatos() {
 		Connection con = null;
 			try {
 				Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -77,7 +67,7 @@ public class Control_de_datos {
 
 	private static ArrayList<Ranking> select(Connection con) {
 		String sql = "SELECT p.* FROM RANKING_PANDEMIC p";
-		ArrayList<Ranking> p = new ArrayList<Ranking>();
+		ArrayList<Ranking> p = new ArrayList<>();
 
 		try {
 			Statement st = con.createStatement();
@@ -98,8 +88,7 @@ public class Control_de_datos {
 			}	
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Ha habido un error al intentar leer los datos" + e);
 		}
 		
 		return p;
@@ -107,7 +96,7 @@ public class Control_de_datos {
 	
 	public static ArrayList<Ciudad> cargarCiudades() {
 	    try (FileReader fileReader = new FileReader(ficheroTxt);
-	         BufferedReader bufferedReader = new BufferedReader(fileReader);) {
+	         BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
 	        String valor;
 	        while ((valor = bufferedReader.readLine()) != null) {
@@ -196,14 +185,19 @@ public class Control_de_datos {
 		    return new int[]{Integer.parseInt(CiudadesInfectadasInicio),Integer.parseInt(CiudadesInfectadasInicio),
 		    		Integer.parseInt(EnfermedadesActivasDerrota),Integer.parseInt(NumBrotesDerrota)};
 		} catch (Exception e) {
-		    e.printStackTrace();
+			System.out.println("Ha habido un error al intentar leer los datos" + e);
 		}
 		return null;
 		
 	}
 	
 	public static void cargarPartida() {
-
+		con = conectarBaseDatos();
+		cargarCiudades();
+		cargarVacunas();
+		cargarVirus();
+		cargarXML();
+		cargarRecord();
 	}
 
 	public static void main(String []args) {
@@ -212,7 +206,7 @@ public class Control_de_datos {
 			cargarVacunas();
 			cargarVirus();
 			try (FileWriter fileWriter = new FileWriter("partida");
-	        		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);){
+	        		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
 
 			            for (Ciudad ciudades : Ciudades) {
 			            	bufferedWriter.write(ciudades.getNombre()+"\n");
@@ -220,10 +214,7 @@ public class Control_de_datos {
 			            	bufferedWriter.write(ciudades.getCoordenadas()[1]+"\n");
 			            	bufferedWriter.write(ciudades.getEnfermedad()+"\n");
 			            	bufferedWriter.write(ciudades.getInfeccion()+"\n");
-			            	bufferedWriter.write(ciudades.getCiudadesColindantes()+"\n");
-			            	for (int i = 0; i < ciudades.getCiudadesColindantes().length; i++) {
-			            		bufferedWriter.write(ciudades.getCiudadesColindantes()[i]+"\n");
-							}
+			            	bufferedWriter.write(Arrays.toString(ciudades.getCiudadesColindantes()) +"\n");
 			            }
 			            bufferedWriter.newLine();
 			            for (Vacunas vacuna : Vacuna) {
