@@ -12,8 +12,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Pantalla_Inicio {
+	public static Marco mimimarco;
 	public static void main(String[] args) {
-		Marco mimimarco = new Marco();	
+		mimimarco = new Marco();	
 	}
 
 }
@@ -144,7 +145,7 @@ class Lamina1 extends JPanel implements ActionListener{
         
         // Panel inferior y etiqueta de versión
         bottomPanel = new JPanel();
-        version = new JLabel("<html><div style='float:left;'><p>Euardo/Marc</p></div><div style='text-align:center;'><p>Version 1.0</p></div>");
+        version = new JLabel("<html><p>Euardo/Marc</p><div style='text-align:center;'><p>Version 1.0</p></div>");
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
@@ -206,7 +207,7 @@ class Lamina1 extends JPanel implements ActionListener{
         button.setForeground(Color.BLACK);
         button.setBorderPainted(false);
         button.setFocusPainted(false);
-//        button.setOpaque(false);
+        button.setOpaque(false);
         button.setContentAreaFilled(false);
         button.setPreferredSize(new Dimension(300, 60));
         button.setFont(new Font("Arial", Font.BOLD, 12));
@@ -234,7 +235,15 @@ class Lamina1 extends JPanel implements ActionListener{
 		} else if (e.getSource() == cargarPartidaButton) {
 			System.exit(0);
 		} else if (e.getSource() == informacionButton) {
-//			lamina2.area1.setText("Has pulsado el bot�n Este");
+			setVisible(false); 
+	        removeAll();
+	        
+	        Lamina2 lamina2 = new Lamina2();
+	        lamina2.setVisible(true);
+	        
+	        getParent().add(lamina2);
+	        getParent().revalidate();
+	        getParent().repaint();
 		} else if (e.getSource() == resumenButton) {
 			System.exit(0);
 		}else if (e.getSource() == salirButton) {
@@ -259,20 +268,23 @@ class Lamina1 extends JPanel implements ActionListener{
 }
 class Lamina2 extends JPanel implements ActionListener {
 	
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6740953577283057324L;
+	private static final long serialVersionUID = 2242406387998512165L;
 	/**
 	 * 
 	 */
 	JButton salirButton;
 	JPanel buttonPanel;
 	JScrollPane scrollPane;
-    Lamina2(Marco frame) {
+	JLabel menuLabel1;
+    Lamina2() {
+        getParent().setSize(1000, 1000);
         setLayout(new BorderLayout());
         
-        JLabel menuLabel1 = new JLabel("<html><div style='text-align:justify;'><h1>INFORMACIÓN</h1>" + 
+        menuLabel1 = new JLabel("<html><div style='text-align:justify;'><h1>INFORMACIÓN</h1>" + 
         		"<h2>INICIO:</h2>" +
                 "<p>- Al inicio de cada partida se inicializan las vacunas.</p>" +
                 "<p>- Al inicio de cada partida se inicializan las ciudades.</p>" +
@@ -320,8 +332,7 @@ class Lamina2 extends JPanel implements ActionListener {
                 "<p>- Se gana al curar todas las infecciones.</p>" +
                 "<p>- Si se llega a X brotes, se pierde la partida.</p>" +
                 "</div></html>");
-        
-        salirButton = Lamina1.salirButton;
+        salirButton = new JButton("salir");
         salirButton.addActionListener(this);
         
         buttonPanel = new JPanel();
