@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -204,9 +205,41 @@ public class Control_de_datos {
 	public static void cargarPartida() {
 
 	}
-	
-	public static void guardarPartida() {
 
+	public static void main(String []args) {
+			cargarCiudades();
+			cargarPartida();
+			cargarVacunas();
+			cargarVirus();
+			try (FileWriter fileWriter = new FileWriter("partida");
+	        		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);){
+
+			            for (Ciudad ciudades : Ciudades) {
+			            	bufferedWriter.write(ciudades.getNombre()+"\n");
+			            	bufferedWriter.write(ciudades.getCoordenadas()[0]+"\n");
+			            	bufferedWriter.write(ciudades.getCoordenadas()[1]+"\n");
+			            	bufferedWriter.write(ciudades.getEnfermedad()+"\n");
+			            	bufferedWriter.write(ciudades.getInfeccion()+"\n");
+			            	bufferedWriter.write(ciudades.getCiudadesColindantes()+"\n");
+			            	for (int i = 0; i < ciudades.getCiudadesColindantes().length; i++) {
+			            		bufferedWriter.write(ciudades.getCiudadesColindantes()[i]+"\n");
+							}
+			            }
+			            bufferedWriter.newLine();
+			            for (Vacunas vacuna : Vacuna) {
+			            	bufferedWriter.write(vacuna.getNombre()+"\n");
+			            	bufferedWriter.write(vacuna.getColor()+"\n");
+			            	bufferedWriter.write(vacuna.getPorcentaje()+"\n");
+			            }
+			            bufferedWriter.newLine();
+			            for (Virus virus : Virus) {
+			            	bufferedWriter.write(virus.getIdentificador()+"\n");
+			            	bufferedWriter.write(virus.getNombre()+"\n");
+			            	bufferedWriter.write(virus.getColor()+"\n");
+			            }	
+					} catch (IOException e) {
+						System.out.println("Ha habido un error al intentar abrir el fichero" + e);
+					}
 	}
 	
 	public static void cargarRecord() {
