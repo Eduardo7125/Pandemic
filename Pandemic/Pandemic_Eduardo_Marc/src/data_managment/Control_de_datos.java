@@ -49,80 +49,6 @@ public class Control_de_datos {
 	private static String ficheroBin = "src//files//CCP.bin";
 	private static String ficheroXML = "src//files//parametros.xml";
 	
-//	public static void main(String [] args) {
-//		try {
-//		    File inputFile = new File(ficheroXML);
-//		    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-//		    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-//		    Document doc = dBuilder.parse(inputFile);
-//		    doc.getDocumentElement().normalize();
-//
-//		    Element rootElement = doc.createElement("parametros");
-//
-//		    NodeList nodeCiudadesInfectadasInicio = doc.getElementsByTagName("numCiudadesInfectadasInicio");
-//		    NodeList nodeCiudadesInfectadasRonda = doc.getElementsByTagName("numCuidadesInfectadasRonda");
-//		    NodeList nodeEnfermedadesActivasDerrota = doc.getElementsByTagName("numEnfermedadesActivasDerrota");
-//		    NodeList nodeNumBrotesDerrota = doc.getElementsByTagName("numBrotesDerrota");
-//
-//		    Node node1 = nodeCiudadesInfectadasInicio.item(0);
-//		    Node node2 = nodeCiudadesInfectadasRonda.item(0);
-//		    Node node3 = nodeEnfermedadesActivasDerrota.item(0);
-//		    Node node4 = nodeNumBrotesDerrota.item(0);
-//
-//		    if (node1 != null && node2 != null && node3 != null && node4 != null) {
-//		        String CiudadesInfectadasInicio = node1.getTextContent();
-//		        String CiudadesInfectadasRonda = node2.getTextContent();
-//		        String EnfermedadesActivasDerrota = node3.getTextContent();
-//		        String NumBrotesDerrota = node4.getTextContent();
-//
-//		        Element rootElement_rewrite = doc.createElement("parametros");
-//
-//		        System.out.println("numCiudadesInfectadasInicio : " + CiudadesInfectadasInicio);
-//		        Element item = doc.createElement("numCiudadesInfectadasInicio");
-//		        String valor1 = ModificarXML(CiudadesInfectadasInicio);
-//		        item.appendChild(doc.createTextNode(valor1));
-//		        rootElement_rewrite.appendChild(item);
-//		        
-//		        System.out.println("----------------------");
-//		        
-//		        System.out.println("numCuidadesInfectadasRonda : "+ CiudadesInfectadasRonda);
-//		        Element item2 = doc.createElement("numCuidadesInfectadasRonda");
-//		        String valor2 = ModificarXML(CiudadesInfectadasRonda);
-//		        item2.appendChild(doc.createTextNode(valor2));
-//		        rootElement_rewrite.appendChild(item2);
-//		        
-//		        System.out.println("----------------------");
-//		        
-//		        System.out.println("numEnfermedadesActivasDerrota : "+ EnfermedadesActivasDerrota );
-//		        Element item3 = doc.createElement("numEnfermedadesActivasDerrota");
-//		        String valor3 = ModificarXML(EnfermedadesActivasDerrota);
-//		        item3.appendChild(doc.createTextNode(valor3));
-//		        rootElement_rewrite.appendChild(item3);
-//		        
-//		        System.out.println("----------------------");
-//		        
-//		        System.out.println("numBrotesDerrota : "+ NumBrotesDerrota );
-//		        Element item4 = doc.createElement("numBrotesDerrota");
-//		        String valor4 = ModificarXML(NumBrotesDerrota);
-//		        item4.appendChild(doc.createTextNode(valor4));
-//		        rootElement_rewrite.appendChild(item4);
-//		        
-//		        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//		        Transformer transformer = transformerFactory.newTransformer();
-//		        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//		        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4"); // Define la cantidad de espacios para la sangría
-//
-//		        DOMSource source = new DOMSource(rootElement_rewrite);
-//		        StreamResult result = new StreamResult(ficheroXML);
-//
-//		        transformer.transform(source, result);
-//		    }
-//		} catch (Exception e) {
-//		    e.printStackTrace();
-//		}
-//		
-//	}
-	
 	private static final Connection conectarBaseDatos() {
 		Connection con = null;
 
@@ -224,7 +150,7 @@ public class Control_de_datos {
 	
     static int contador = 0;
     static ArrayList<Virus> Virus = new ArrayList<>();
-	public static ArrayList<Virus> cargarVirus() throws IOException {
+	public static ArrayList<Virus> cargarVirus() {
 		try (FileInputStream fileInputStream = new FileInputStream(ficheroBin);
 		         DataInputStream dataInputStream = new DataInputStream(fileInputStream)) {
 
@@ -248,6 +174,43 @@ public class Control_de_datos {
 		        System.out.println("Ha habido un error de lectura " + e);
 		    }
 		    return Virus;
+	}
+	
+	public static String CiudadesInfectadasInicio;
+	public static String CiudadesInfectadasRonda;
+	public static String EnfermedadesActivasDerrota;
+	public static String NumBrotesDerrota;
+	public static int[] cargarXML() {
+		try {
+		    File inputFile = new File(ficheroXML);
+		    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		    Document doc = dBuilder.parse(inputFile);
+		    doc.getDocumentElement().normalize();
+
+		    NodeList nodeCiudadesInfectadasInicio = doc.getElementsByTagName("numCiudadesInfectadasInicio");
+		    NodeList nodeCiudadesInfectadasRonda = doc.getElementsByTagName("numCuidadesInfectadasRonda");
+		    NodeList nodeEnfermedadesActivasDerrota = doc.getElementsByTagName("numEnfermedadesActivasDerrota");
+		    NodeList nodeNumBrotesDerrota = doc.getElementsByTagName("numBrotesDerrota");
+
+		    Node node1 = nodeCiudadesInfectadasInicio.item(0);
+		    Node node2 = nodeCiudadesInfectadasRonda.item(0);
+		    Node node3 = nodeEnfermedadesActivasDerrota.item(0);
+		    Node node4 = nodeNumBrotesDerrota.item(0);
+
+		    if (node1 != null && node2 != null && node3 != null && node4 != null) {
+		    	CiudadesInfectadasInicio = node1.getTextContent();
+		        CiudadesInfectadasRonda = node2.getTextContent();
+		        EnfermedadesActivasDerrota = node3.getTextContent();
+		        NumBrotesDerrota = node4.getTextContent();
+		    }
+		    return new int[]{Integer.parseInt(CiudadesInfectadasInicio),Integer.parseInt(CiudadesInfectadasInicio),
+		    		Integer.parseInt(EnfermedadesActivasDerrota),Integer.parseInt(NumBrotesDerrota)};
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 	public static void cargarPartida() {

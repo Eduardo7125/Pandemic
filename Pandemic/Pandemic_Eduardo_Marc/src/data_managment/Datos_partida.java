@@ -27,7 +27,10 @@ public class Datos_partida {
 	}
 	
 	public void cargarDatos() {
-		
+		this.ciudades = Control_de_datos.cargarCiudades();
+		this.virus = Control_de_datos.cargarVirus();
+		this.vacunas = Control_de_datos.cargarVacunas();
+	
 	}
 	
 	public void modificarCiudad(String nCiudad, int modificacion) {
