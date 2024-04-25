@@ -1,4 +1,9 @@
+package data_managment;
 import java.util.ArrayList;
+
+import objects.Ciudad;
+import objects.Vacunas;
+import objects.Virus;
 
 public class Datos_partida {
 	

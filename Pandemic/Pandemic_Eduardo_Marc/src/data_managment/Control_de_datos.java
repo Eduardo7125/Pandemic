@@ -1,3 +1,5 @@
+package data_managment;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -24,6 +26,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import objects.Ciudad;
+import objects.Vacunas;
+import objects.Virus;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -161,7 +168,7 @@ public class Control_de_datos {
 		return p;
 	}
 	
-    static ArrayList<Ciudad> Ciudades = new ArrayList<>();
+    public static ArrayList<Ciudad> Ciudades = new ArrayList<>();
 	public static ArrayList<Ciudad> cargarCiudades() {
 	    try (FileReader fileReader = new FileReader(ficheroTxt);
 	         BufferedReader bufferedReader = new BufferedReader(fileReader);) {
