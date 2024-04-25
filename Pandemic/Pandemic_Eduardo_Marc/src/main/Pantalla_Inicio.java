@@ -237,10 +237,11 @@ class Lamina1 extends JPanel implements ActionListener{
 		} else if (e.getSource() == informacionButton) {
 			setVisible(false); 
 	        removeAll();
-	        
+//	        GraphicsDevice grafica=GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();<br />
+//	        grafica.setFullScreenWindow(this);
 	        Lamina2 lamina2 = new Lamina2();
 	        lamina2.setVisible(true);
-	        
+	        getParent().setSize(getPreferredSize());;
 	        getParent().add(lamina2);
 	        getParent().revalidate();
 	        getParent().repaint();
@@ -281,7 +282,7 @@ class Lamina2 extends JPanel implements ActionListener {
 	JScrollPane scrollPane;
 	JLabel menuLabel1;
     Lamina2() {
-        getParent().setSize(1000, 1000);
+    
         setLayout(new BorderLayout());
         
         menuLabel1 = new JLabel("<html><div style='text-align:justify;'><h1>INFORMACIÓN</h1>" + 
