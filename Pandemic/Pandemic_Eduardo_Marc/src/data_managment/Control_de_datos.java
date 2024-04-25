@@ -39,6 +39,7 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Scanner;
+
 public class Control_de_datos {
 
 	private static String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe"; 
@@ -49,23 +50,32 @@ public class Control_de_datos {
 	private static String ficheroBin = "src//files//CCP.bin";
 	private static String ficheroXML = "src//files//parametros.xml";
 	
+    static int contador = 0;
+	public static String CiudadesInfectadasInicio;
+	public static String CiudadesInfectadasRonda;
+	public static String EnfermedadesActivasDerrota;
+	public static String NumBrotesDerrota;
+	
+    public static ArrayList<Ciudad> Ciudades = new ArrayList<>();
+	static ArrayList<Vacunas> Vacuna = new ArrayList<>();
+    static ArrayList<Virus> Virus = new ArrayList<>();
+    
 	private static final Connection conectarBaseDatos() {
 		Connection con = null;
-
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection(url, user, password);
-		} catch (ClassNotFoundException e) {
-			System.out.println("No se ha encontrado el driver " + e);
-		} catch (SQLException e) {
-			System.out.println("Error en las credenciales o en la URL " + e);
-		}
-		System.out.println("2");
+			try {
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				con = DriverManager.getConnection(url, user, password);
+			} catch (ClassNotFoundException e) {
+				System.out.println("No se ha encontrado el driver " + e);
+			} catch (SQLException e) {
+				System.out.println("Error en las credenciales o en la URL " + e);
+			}
 		return con;
 	}
+	
 
 	private static ArrayList<Ranking> select(Connection con) {
-		String sql = "SELECT p.* FROM RANKING p";
+		String sql = "SELECT p.* FROM RANKING_PANDEMIC p";
 		ArrayList<Ranking> p = new ArrayList<Ranking>();
 
 		try {
@@ -78,8 +88,8 @@ public class Control_de_datos {
 					String nombre = rs.getString("Nombre");
 					Date fecha = rs.getDate("Fecha");
 					int resultado = rs.getInt("Resultado");
-
-					Ranking rank = new Ranking(rondas, nombre, fecha, resultado);
+					int puntuacion = rs.getInt("Puntuacion");
+					Ranking rank = new Ranking(rondas, nombre, fecha, resultado, puntuacion);
 
 					p.add(rank);				}
 			} else {
@@ -94,7 +104,6 @@ public class Control_de_datos {
 		return p;
 	}
 	
-    public static ArrayList<Ciudad> Ciudades = new ArrayList<>();
 	public static ArrayList<Ciudad> cargarCiudades() {
 	    try (FileReader fileReader = new FileReader(ficheroTxt);
 	         BufferedReader bufferedReader = new BufferedReader(fileReader);) {
@@ -119,7 +128,6 @@ public class Control_de_datos {
 	    return Ciudades;
 	}
 	
-	static ArrayList<Vacunas> Vacuna = new ArrayList<>();
 	public static ArrayList<Vacunas> cargarVacunas() {
 		Vacunas Vacuna1 = new Vacunas("Alfa", "Azul", 0);
 		Vacunas Vacuna2 = new Vacunas("Beta", "Rojo", 0);
@@ -133,23 +141,7 @@ public class Control_de_datos {
 		
 		return Vacuna;
 	}
-
-//	public static void calculo(int cityIndex, BufferedWriter bufferedWriter) throws IOException {
-//	x1 = cord1.get(cityIndex);
-//    y1 = cord2.get(cityIndex);
-//    ciudades = array.get(cityIndex);
-//    bufferedWriter.write("La ciudad "+ciudad.get(cityIndex)+" esta en las cordenadas ("+cord1.get(cityIndex)+","+cord2.get(cityIndex)+") sus ciudades colindantes son:\n");
-//    	for (String ciudadColindante : ciudades) {
-//            x2 = cord1.get(ciudad_2.get(ciudadColindante));
-//            y2 = cord2.get(ciudad_2.get(ciudadColindante));
-//            distancia = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-//            bufferedWriter.write(ciudadColindante+", que esta a una distancia de "+distancia);
-//            bufferedWriter.newLine();
-//		}
-//}
 	
-    static int contador = 0;
-    static ArrayList<Virus> Virus = new ArrayList<>();
 	public static ArrayList<Virus> cargarVirus() {
 		try (FileInputStream fileInputStream = new FileInputStream(ficheroBin);
 		         DataInputStream dataInputStream = new DataInputStream(fileInputStream)) {
@@ -176,10 +168,6 @@ public class Control_de_datos {
 		    return Virus;
 	}
 	
-	public static String CiudadesInfectadasInicio;
-	public static String CiudadesInfectadasRonda;
-	public static String EnfermedadesActivasDerrota;
-	public static String NumBrotesDerrota;
 	public static int[] cargarXML() {
 		try {
 		    File inputFile = new File(ficheroXML);
@@ -236,12 +224,13 @@ class Ranking{
 	String nombre;
 	Date fecha;
 	int resultado;
-	
-	public Ranking(int rondas, String nombre, Date fecha, int resultado) {
+	int puntuacion;
+	public Ranking(int rondas, String nombre, Date fecha, int resultado, int puntuacion) {
 		this.rondas = rondas;
 		this.nombre = nombre;
 		this.fecha = fecha;
 		this.resultado = resultado;
+		this.puntuacion = puntuacion;
 	}
 	
 	public int getRondas() {
@@ -276,4 +265,11 @@ class Ranking{
 		this.resultado = resultado;
 	}
 	
+	public int getPuntuacion() {
+		return puntuacion;
+	}
+
+	public void setPuntuacion(int puntuacion) {
+		this.puntuacion = puntuacion;
+	}
 }

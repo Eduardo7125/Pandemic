@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
@@ -145,7 +146,7 @@ class Lamina1 extends JPanel implements ActionListener{
         
         // Panel inferior y etiqueta de versión
         bottomPanel = new JPanel();
-        version = new JLabel("<html><p>Euardo/Marc</p><div style='text-align:center;'><p>Version 1.0</p></div>");
+        version = new JLabel("<html><div style='text-align:center;color: white;'><p>Eduardo/Marc</p><p>Version 1.0</p></div>");
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
@@ -241,8 +242,11 @@ class Lamina1 extends JPanel implements ActionListener{
 //	        grafica.setFullScreenWindow(this);
 	        Lamina2 lamina2 = new Lamina2();
 	        lamina2.setVisible(true);
-	        getParent().setSize(getPreferredSize());;
 	        getParent().add(lamina2);
+	        
+	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+	        parentFrame.setSize(1000, 600);
+	        
 	        getParent().revalidate();
 	        getParent().repaint();
 		} else if (e.getSource() == resumenButton) {
