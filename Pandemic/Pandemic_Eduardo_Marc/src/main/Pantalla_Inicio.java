@@ -9,6 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
+import javax.swing.border.Border;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.Serial;
@@ -192,7 +194,19 @@ class Lamina1 extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == nuevaPartidaButton) {
-			System.exit(0);
+			setVisible(false); 
+	        removeAll();
+	        Lamina3 lamina3 = new Lamina3();
+	        lamina3.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+	        lamina3.setVisible(true);
+	        getParent().add(lamina3);
+	        
+	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+	        GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+	        graphicsDevice.setFullScreenWindow(parentFrame);
+	        
+	        getParent().revalidate();
+	        getParent().repaint();
 		} else if (e.getSource() == cargarPartidaButton) {
 			System.exit(0);
 		} else if (e.getSource() == informacionButton) {
@@ -233,13 +247,12 @@ class Lamina1 extends JPanel implements ActionListener{
 	}
 }
 class Lamina2 extends JPanel implements ActionListener {
-	
-
 	/**
 	 * 
 	 */
 	@Serial
     private static final long serialVersionUID = 2242406387998512165L;
+	
 	JButton salirButton;
 	JPanel buttonPanel;
 	JScrollPane scrollPane;
@@ -338,3 +351,76 @@ class Lamina2 extends JPanel implements ActionListener {
     		
     	}
     }
+class Lamina3 extends JPanel implements ActionListener {
+	
+	ImageIcon background;
+	
+	JButton salirButton;
+	
+	JPanel topPanel;
+	JPanel leftPanel;
+	JPanel rightPanel;
+	JPanel bottomPanel;
+	JPanel middlePanel;
+	
+	JLabel LabelImagen;
+	JLabel menuLabel1;
+	Lamina3(){
+		setLayout(new BorderLayout());
+		
+		topPanel = new JPanel(new BorderLayout());
+		bottomPanel = new JPanel();
+		leftPanel = new JPanel();
+		rightPanel = new JPanel();
+		middlePanel = new JPanel();
+
+		salirButton = new JButton("sdsd");
+		salirButton.addActionListener(this);
+		topPanel.add(salirButton, BorderLayout.EAST);
+		topPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
+		topPanel.setBackground(Color.white);
+
+		
+		bottomPanel.setBackground(Color.black);
+		
+		leftPanel.setBackground(Color.blue);
+		
+		rightPanel.setBackground(Color.red);
+
+		middlePanel.setOpaque(false);
+		
+		
+		add(topPanel, BorderLayout.NORTH);
+		add(bottomPanel, BorderLayout.SOUTH);
+		add(leftPanel, BorderLayout.EAST);
+		add(rightPanel, BorderLayout.WEST);
+		add(middlePanel, BorderLayout.CENTER);
+		
+	}
+	
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+        Image imagenFondo = new ImageIcon("src//img//mapa.jpg").getImage();
+        g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
+        g2d.dispose();
+    }
+	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getSource() == salirButton) {
+			setVisible(false); 
+	        removeAll();
+	        Lamina1 lamina1 = new Lamina1();
+	        lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+	        lamina1.setVisible(true);
+	        getParent().add(lamina1);
+	        
+	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+	        parentFrame.setSize(320, 600);
+	        
+	        getParent().revalidate();
+	        getParent().repaint();
+		}
+		
+	}
+}
