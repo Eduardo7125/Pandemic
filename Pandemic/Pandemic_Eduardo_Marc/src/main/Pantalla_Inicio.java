@@ -35,8 +35,6 @@ class Marco extends JFrame{
         setSize(320, 600);
         setResizable(false);
         setUndecorated(true);
-        addComponentListener(new ComponentAdapter() {
-        });
 
         Lamina1 lamina1 = new Lamina1();
         lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -51,21 +49,25 @@ class Marco extends JFrame{
     private static Point mouseDownCompCoords;
 	private static final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 	public void moveWindow() {
-    	addMouseListener(new MouseAdapter() {
-            public void mousePressed(MouseEvent e) {
-                mouseDownCompCoords = e.getPoint();
-            }
-        });
+	    MouseListener mouseListener = new MouseAdapter() {
+	        public void mousePressed(MouseEvent e) {
+	            mouseDownCompCoords = e.getPoint();
+	        }
+	    };
+	    
+	    addMouseListener(mouseListener);
+	    
+	    MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
+	        public void mouseDragged(MouseEvent e) {
+	            currCoords = e.getLocationOnScreen();
+	            setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
+	        }
+	    };
+	    
+	    addMouseMotionListener(mouseMotionListener);
 
-	    addMouseMotionListener(new MouseMotionAdapter() {
-            public void mouseDragged(MouseEvent e) {
-                currCoords = e.getLocationOnScreen();
-                setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
-            }
-        });
-
-        setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
-    }
+	    setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
+	}
 	
 }
 
@@ -76,9 +78,6 @@ class Lamina1 extends JPanel implements ActionListener{
 	 */
 	@Serial
     private static final long serialVersionUID = 6740953577204998600L;
-	/**
-	 * 
-	 */
 	ImageIcon icono;
 	ImageIcon iconoNuevaPartida;
 	ImageIcon iconoCargarPartida;
@@ -106,7 +105,6 @@ class Lamina1 extends JPanel implements ActionListener{
 		
 		setLayout(new BorderLayout());
 		
-		// Iconos
         icono = new ImageIcon("src//img//icon.png");
         iconoNuevaPartida = new ImageIcon("src//img//nueva_partida.png");
         iconoCargarPartida = new ImageIcon("src//img//cargar_partida.png");
@@ -114,16 +112,14 @@ class Lamina1 extends JPanel implements ActionListener{
         iconoScore = new ImageIcon("src//img//ranking.png");
         iconoSalir = new ImageIcon("src//img//salir.png");
 
-        // Etiqueta del menú
         menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
         menuLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         add(menuLabel1, BorderLayout.NORTH);
 
-        // Panel para los botones
         buttonPanel = new JPanel(new GridLayout(5, 1, 10, 10));
         buttonPanel.setOpaque(false);
         add(buttonPanel, BorderLayout.CENTER);
-        // Botones
+
         nuevaPartidaButton = createButton(iconoNuevaPartida);
         cargarPartidaButton = createButton(iconoCargarPartida);
         informacionButton = createButton(iconoInfo);
@@ -138,7 +134,6 @@ class Lamina1 extends JPanel implements ActionListener{
         
         add(buttonPanel, BorderLayout.CENTER);
         
-        // Panel inferior y etiqueta de versión
         bottomPanel = new JPanel();
         version = new JLabel("<html><div style='text-align:center;color: white;'><p>Eduardo/Marc</p><p>Version 1.0</p></div>");
         bottomPanel.add(version);
@@ -146,7 +141,7 @@ class Lamina1 extends JPanel implements ActionListener{
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
         add(bottomPanel, BorderLayout.SOUTH);
 
-        setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10)); // Borde vacío
+        setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
 	}
 	
     public JButton createButton(ImageIcon icono) {
@@ -175,12 +170,14 @@ class Lamina1 extends JPanel implements ActionListener{
         button.setContentAreaFilled(false);
         button.setPreferredSize(new Dimension(300, 60));
         button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent evt) {
                 button.setBackground(new Color(220, 220, 220));
             }
 
-            public void mouseExited(java.awt.event.MouseEvent evt) {
+            @Override
+            public void mouseExited(MouseEvent evt) {
                 button.setBackground(new Color(240, 240, 240));
             }
         });
@@ -204,6 +201,7 @@ class Lamina1 extends JPanel implements ActionListener{
 //	        GraphicsDevice grafica=GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();<br />
 //	        grafica.setFullScreenWindow(this);
 	        Lamina2 lamina2 = new Lamina2();
+	        lamina2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 	        lamina2.setVisible(true);
 	        getParent().add(lamina2);
 	        
@@ -242,9 +240,6 @@ class Lamina2 extends JPanel implements ActionListener {
 	 */
 	@Serial
     private static final long serialVersionUID = 2242406387998512165L;
-	/**
-	 * 
-	 */
 	JButton salirButton;
 	JPanel buttonPanel;
 	JScrollPane scrollPane;
@@ -316,37 +311,29 @@ class Lamina2 extends JPanel implements ActionListener {
 
         repaint();
     }
-    	private static boolean toWhite = true;
-    	private static Color currentColor = new Color(173, 216, 230);
-        public void fondo() {
-            Timer timer = new Timer(40, e -> {
-                if (toWhite) {
-                    currentColor = new Color(
-                            Math.min(currentColor.getRed() + 1, 255),
-                            Math.min(currentColor.getGreen() + 1, 255),
-                            Math.min(currentColor.getBlue() + 1, 255));
-                    if (currentColor.equals(Color.WHITE)) {
-                        toWhite = false;
-                    }
-                } else {
-                    currentColor = new Color(
-                            Math.max(currentColor.getRed() - 1, 173),
-                            Math.max(currentColor.getGreen() - 1, 216),
-                            Math.max(currentColor.getBlue() - 1, 230));
-                    if (currentColor.equals(new Color(173, 216, 230))) {
-                        toWhite = true;
-                    }
-                }
-                repaint();
-            });
-            timer.start();
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g.create();
+            Image imagenFondo = new ImageIcon("src//img//fondo.jpg").getImage();
+            g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
+            g2d.dispose();
         }
-        
     	@Override
     	public void actionPerformed(ActionEvent e) {
     		
     		if (e.getSource() == salirButton) {
-    			System.exit(0);
+    			setVisible(false); 
+    	        removeAll();
+    	        Lamina1 lamina1 = new Lamina1();
+    	        lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+    	        lamina1.setVisible(true);
+    	        getParent().add(lamina1);
+    	        
+    	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+    	        parentFrame.setSize(320, 600);
+    	        
+    	        getParent().revalidate();
+    	        getParent().repaint();
     		}
     		
     	}

@@ -22,7 +22,6 @@ public class Datos_partida {
 		this.ciudades = Control_de_datos.cargarCiudades();
 		this.virus = Control_de_datos.cargarVirus();
 		this.vacunas = Control_de_datos.cargarVacunas();
-		
 	}
 	
 	public Datos_partida(ArrayList<Ciudad> ciudades, ArrayList<Virus> virus, ArrayList<Vacunas> vacunas, int brotes,

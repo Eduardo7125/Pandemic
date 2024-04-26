@@ -39,7 +39,7 @@ public class Control_de_datos {
 	public static Connection con;
 	private static final String ficheroTxt = "src//files//ciudades.txt";
 	private static final String ficheroBin = "src//files//CCP.bin";
-	private static final String ficheroXML = "src//files//parametros.xml";
+	public static String ficheroXML = "src//files//parametrosFacil.xml";
 	
     static int contador = 0;
 	public static String CiudadesInfectadasInicio;
@@ -159,6 +159,13 @@ public class Control_de_datos {
 	}
 	
 	public static int[] cargarXML() {
+//		if (e.getsource = dificil) {
+//			ficheroXML = "src//files//parametrosDificil.xml";
+//		}else if(e.getsource = medio){
+//			ficheroXML = "src//files//parametrosMedio.xml";
+//		}else if(e.getsource = facil){
+//			ficheroXML = "src//files//parametrosFacil.xml";
+//		}
 		try {
 		    File inputFile = new File(ficheroXML);
 		    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -201,36 +208,32 @@ public class Control_de_datos {
 	}
 
 	public static void main(String []args) {
-			cargarCiudades();
-			cargarPartida();
-			cargarVacunas();
-			cargarVirus();
-			try (FileWriter fileWriter = new FileWriter("partida");
-	        		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
+		cargarPartida();
+		try (FileWriter fileWriter = new FileWriter("partida");
+        		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
 
-			            for (Ciudad ciudades : Ciudades) {
-			            	bufferedWriter.write(ciudades.getNombre()+"\n");
-			            	bufferedWriter.write(ciudades.getCoordenadas()[0]+"\n");
-			            	bufferedWriter.write(ciudades.getCoordenadas()[1]+"\n");
-			            	bufferedWriter.write(ciudades.getEnfermedad()+"\n");
-			            	bufferedWriter.write(ciudades.getInfeccion()+"\n");
-			            	bufferedWriter.write(Arrays.toString(ciudades.getCiudadesColindantes()) +"\n");
-			            }
-			            bufferedWriter.newLine();
-			            for (Vacunas vacuna : Vacuna) {
-			            	bufferedWriter.write(vacuna.getNombre()+"\n");
-			            	bufferedWriter.write(vacuna.getColor()+"\n");
-			            	bufferedWriter.write(vacuna.getPorcentaje()+"\n");
-			            }
-			            bufferedWriter.newLine();
-			            for (Virus virus : Virus) {
-			            	bufferedWriter.write(virus.getIdentificador()+"\n");
-			            	bufferedWriter.write(virus.getNombre()+"\n");
-			            	bufferedWriter.write(virus.getColor()+"\n");
-			            }	
-					} catch (IOException e) {
-						System.out.println("Ha habido un error al intentar abrir el fichero" + e);
-					}
+		            for (Ciudad ciudades : Ciudades) {
+		            	bufferedWriter.write(ciudades.getNombre()+"\n");
+		            	bufferedWriter.write(Arrays.toString(ciudades.getCoordenadas())+"\n");
+		            	bufferedWriter.write(ciudades.getEnfermedad()+"\n");
+		            	bufferedWriter.write(ciudades.getInfeccion()+"\n");
+		            	bufferedWriter.write(Arrays.toString(ciudades.getCiudadesColindantes()) +"\n");
+		            }
+		            bufferedWriter.newLine();
+		            for (Vacunas vacuna : Vacuna) {
+		            	bufferedWriter.write(vacuna.getNombre()+"\n");
+		            	bufferedWriter.write(vacuna.getColor()+"\n");
+		            	bufferedWriter.write(vacuna.getPorcentaje()+"\n");
+		            }
+		            bufferedWriter.newLine();
+		            for (Virus virus : Virus) {
+		            	bufferedWriter.write(virus.getIdentificador()+"\n");
+		            	bufferedWriter.write(virus.getNombre()+"\n");
+		            	bufferedWriter.write(virus.getColor()+"\n");
+		            }	
+				} catch (IOException e) {
+					System.out.println("Ha habido un error al intentar abrir el fichero" + e);
+				}
 	}
 	
 	public static void cargarRecord() {
