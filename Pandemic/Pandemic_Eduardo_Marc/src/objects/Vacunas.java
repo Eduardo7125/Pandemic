@@ -1,5 +1,7 @@
 package objects;
 
+import javax.swing.JProgressBar;
+
 public class Vacunas {
 
 	private String nombre;
@@ -13,20 +15,16 @@ public class Vacunas {
 	}
 	
 	boolean completo;
-	public void desarrollarVacuna(float porcentaje) {
+	public void desarrollarVacuna(JProgressBar barra, float porcentaje) {
 		completo = false;
-		float valor = getPorcentaje();
-        if (valor > 100) {
-        	completo = true;
-        	setPorcentaje(100);
-        	return;
-        }
-
-        setPorcentaje(valor += porcentaje);
-        
-        if (valor > 100) {
-        	setPorcentaje(100);
-        }
+		int nuevoValor = barra.getValue() + (int) porcentaje;
+		if (nuevoValor <= barra.getMaximum()) {
+			barra.setValue(nuevoValor);
+			System.out.println("Se aumentó el valor de la vacuna " + barra.getName() + " a " + nuevoValor);
+		} else {
+			completo = true;
+			System.out.println("La vacuna " + barra.getName() + " ya está completamente desarrollada.");
+		}
 	}
 	
 	public String getNombre() {

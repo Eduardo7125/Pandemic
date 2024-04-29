@@ -23,8 +23,11 @@ import java.text.NumberFormat;
 
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
-		Control_de_datos.cargarPartida();
-        Marco mimimarco = new Marco();
+        Control_de_datos.cargarPartida(); // Uncomment if needed
+        SwingUtilities.invokeLater(() -> {
+            Marco mimimarco = new Marco();
+            mimimarco.setVisible(true);
+        });
 	}
 
 }
@@ -351,57 +354,86 @@ class Lamina3 extends JPanel implements ActionListener {
 	
 	public void vacunas() {
 		GridBagConstraints gbc = new GridBagConstraints();
-	    gbc.gridx = 0;
-	    gbc.gridy = GridBagConstraints.RELATIVE;
-	    gbc.anchor = GridBagConstraints.WEST;
-	    gbc.insets = new Insets(5, 5, 5, 5);
-	    
-		ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
-        Image imagen = icono.getImage();
-        Image imagenEscalada = imagen.getScaledInstance(75, 39, Image.SCALE_SMOOTH);
-        ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
-        
-		for (int i = 0; i < 4; i++) {
-	        JProgressBar vacunas = new JProgressBar();
-	        vacunas.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
-	        	protected Color getSelectionForeground() {
-	                return Color.DARK_GRAY;
-	            }
-	        });
+		gbc.gridx = 0;
+		gbc.gridy = GridBagConstraints.RELATIVE;
+		gbc.anchor = GridBagConstraints.WEST;
+		gbc.insets = new Insets(5, 5, 5, 5);
 
-	        vacunas.setMinimum(0);
-	        vacunas.setMaximum(100);
-	        vacunas.setValue(45);
-	        vacunas.setStringPainted(true);
-	        vacunas.setOpaque(false);
-	        vacunas.setStringPainted(true);
-	        vacunas.addMouseListener(new MouseAdapter() {
-	            @Override
-	            public void mouseClicked(MouseEvent e) {
-	            	float valorFloat = (float) 20;
-	                Vacunas.desarrollarVacuna(valorFloat);
-	                System.out.println("Se hizo clic en la barra de progreso. Valor: " + value);
-	            }
-	        });
-	        vacunas.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
-	        
-	        switch (i) {
-			case 0:
-				vacunas.setForeground(new Color(118, 189, 248));
-				break;
-			case 1:
-				vacunas.setForeground(new Color(248, 118, 118));
-				break;
-			case 2:
-				vacunas.setForeground(new Color(118, 248, 150));
-				break;
-			default:
-				vacunas.setForeground(new Color(236, 248, 118));
-				break;
+		ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
+		Image imagen = icono.getImage();
+		Image imagenEscalada = imagen.getScaledInstance(75, 39, Image.SCALE_SMOOTH);
+		ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+
+		// Array para almacenar las barras de progreso
+		JProgressBar[] barras = new JProgressBar[4];
+
+		for (int i = 0; i < 4; i++) {
+			vacunas = new JProgressBar();
+			vacunas.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
+				protected Color getSelectionForeground() {
+					return Color.DARK_GRAY;
+				}
+			});
+
+			vacunas.setMinimum(0);
+			vacunas.setMaximum(100);
+			vacunas.setValue(45);
+			vacunas.setStringPainted(true);
+			vacunas.setOpaque(false);
+			vacunas.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
+
+			switch (i) {
+				case 0:
+					vacunas.setName("Alfa");
+					vacunas.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							float valorFloat = (float) 20;
+							Vacunas vacunas2 = new Vacunas(null, null, 0);
+							vacunas2.desarrollarVacuna(vacunas, valorFloat);
+						}
+					});
+					vacunas.setForeground(new Color(118, 189, 248));
+					break;
+				case 1:
+					vacunas.setName("Alfa");
+					vacunas.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							float valorFloat = (float) 20;
+							Vacunas vacunas2 = new Vacunas(null, null, 0);
+							vacunas2.desarrollarVacuna(vacunas, valorFloat);
+						}
+					});
+					vacunas.setForeground(new Color(248, 118, 118));
+					break;
+				case 2:
+					vacunas.setName("Alfa");
+					vacunas.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							float valorFloat = (float) 20;
+							Vacunas vacunas2 = new Vacunas(null, null, 0);
+							vacunas2.desarrollarVacuna(vacunas, valorFloat);
+						}
+					});
+					vacunas.setForeground(new Color(118, 248, 150));
+					break;
+				default:
+					vacunas.setName("Alfa");
+					vacunas.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							float valorFloat = (float) 20;
+							Vacunas vacunas2 = new Vacunas(null, null, 0);
+							vacunas2.desarrollarVacuna(vacunas, valorFloat);
+						}
+					});
+					vacunas.setForeground(new Color(236, 248, 118));
+					break;
 			}
-    
-	        gbc.gridy = i;
-	        rightPanel.add(vacunas, gbc);
+
+			barras[i] = vacunas;
 		}
 	}
     public void paintComponent(Graphics g) {
