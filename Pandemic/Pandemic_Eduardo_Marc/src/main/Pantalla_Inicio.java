@@ -107,7 +107,7 @@ class Lamina1 extends JPanel implements ActionListener{
 	JButton informacionButton;
 	JButton resumenButton;
 	static JButton salirButton;
-	
+	private static Lamina1 instance;
 	
 	Lamina1(){
 		
@@ -201,12 +201,12 @@ class Lamina1 extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == nuevaPartidaButton) {
-			setVisible(false); 
-	        removeAll();
-	        Lamina3 lamina3 = new Lamina3();
-	        lamina3.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	        lamina3.setVisible(true);
-	        getParent().add(lamina3);
+		    setVisible(false);
+		    Lamina3 lamina3 = Lamina3.getInstance();
+		    getParent().remove(lamina3);
+		    lamina3.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+		    lamina3.setVisible(true);
+		    getParent().add(lamina3);
 	        
 	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
 	        GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -239,6 +239,12 @@ class Lamina1 extends JPanel implements ActionListener{
 		
 	}
 	
+    public static Lamina1 getInstance() {
+        if (instance == null) {
+            instance = new Lamina1();
+        }
+        return instance;
+    }
     
 	public static void cargarRecords() {
 		
@@ -293,7 +299,7 @@ class Lamina3 extends JPanel implements ActionListener {
 	JLabel brotes;
 	
 	JProgressBar vacunas;
-	
+	private static Lamina3 instance;
 	int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
 	
 	Lamina3(){
@@ -370,8 +376,7 @@ class Lamina3 extends JPanel implements ActionListener {
 		
 		if (e.getSource() == salirButton) {
 			setVisible(false); 
-	        removeAll();
-	        Lamina1 lamina1 = new Lamina1();
+	        Lamina1 lamina1 = Lamina1.getInstance();
 	        lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 	        lamina1.setVisible(true);
 	        getParent().add(lamina1);
@@ -384,4 +389,10 @@ class Lamina3 extends JPanel implements ActionListener {
 		}
 		
 	}
+    public static Lamina3 getInstance() {
+        if (instance == null) {
+            instance = new Lamina3();
+        }
+        return instance;
+    }
 }
