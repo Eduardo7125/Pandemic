@@ -350,6 +350,7 @@ class Lamina3 extends JPanel implements ActionListener {
 	}
 	
 	public void vacunas() {
+<<<<<<< HEAD
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = GridBagConstraints.RELATIVE;
@@ -431,6 +432,22 @@ class Lamina3 extends JPanel implements ActionListener {
 			}
 
 			barras[i] = vacunas;
+=======
+		ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
+        Image imagen = icono.getImage();
+        Image imagenEscalada = imagen.getScaledInstance(75, 39, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+		for (int i = 0; i < 4; i++) {
+	        JProgressBar vacunas = new JProgressBar();
+	        vacunas.setUI(new CustomProgressBarUI(iconoEscalado.getImage()));
+	        vacunas.setMinimum(0);
+	        vacunas.setMaximum(100);
+	        vacunas.setValue(50);
+	        vacunas.setOpaque(false);
+	        vacunas.setStringPainted(true);
+	        vacunas.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
+	        rightPanel.add(vacunas);
+>>>>>>> parent of 150da1d (Vacuans)
 		}
 	}
     public void paintComponent(Graphics g) {
