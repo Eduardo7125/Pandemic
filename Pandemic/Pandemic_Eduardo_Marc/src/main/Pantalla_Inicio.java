@@ -23,11 +23,9 @@ import java.text.NumberFormat;
 
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
-        Control_de_datos.cargarPartida(); // Uncomment if needed
-        SwingUtilities.invokeLater(() -> {
-            Marco mimimarco = new Marco();
-            mimimarco.setVisible(true);
-        });
+//        Control_de_datos.cargarPartida(); // Uncomment if needed
+        Marco mimimarco = new Marco();
+        mimimarco.setVisible(true);
 	}
 
 }
