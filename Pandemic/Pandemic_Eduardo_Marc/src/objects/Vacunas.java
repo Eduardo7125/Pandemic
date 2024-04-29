@@ -15,16 +15,17 @@ public class Vacunas {
 	boolean completo;
 	public void desarrollarVacuna(float porcentaje) {
 		completo = false;
-        if (this.porcentaje > 100) {
+		float valor = getPorcentaje();
+        if (valor > 100) {
         	completo = true;
-        	this.porcentaje = 100;
+        	setPorcentaje(100);
         	return;
         }
 
-        this.porcentaje += porcentaje;
+        setPorcentaje(valor += porcentaje);
         
-        if (this.porcentaje > 100) {
-        	this.porcentaje = 100;
+        if (valor > 100) {
+        	setPorcentaje(100);
         }
 	}
 	

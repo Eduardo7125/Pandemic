@@ -15,7 +15,7 @@ public class Control_de_partida {
 	}
 	
 	public void gestionarVacuna() {
-		
+
 	}
 	
 	public void gestionarInfeccion() {
