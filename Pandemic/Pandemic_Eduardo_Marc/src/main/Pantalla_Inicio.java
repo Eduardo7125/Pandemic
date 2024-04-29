@@ -15,6 +15,9 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -39,20 +42,14 @@ class Marco extends JFrame {
     ImageIcon icono;
 
     public Marco() {
-        setTitle("Pandemic");
+    	setTitle("Pandemic");
         icono = new ImageIcon("src//img//icon.png");
         setIconImage(icono.getImage());
 
-        setSize(320, 600);
-        setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Maximizar la ventana al inicio
         setUndecorated(true);
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentMoved(java.awt.event.ComponentEvent evt) {
 
-            }
-        });
-
-        Lamina1 lamina1 = new Lamina1(this);
+        Lamina1 lamina1 = new Lamina1();
         lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         add(lamina1);
 
@@ -93,14 +90,18 @@ class Marco extends JFrame {
 
 class Lamina1 extends JPanel implements ActionListener {
 
-    ImageIcon icono;
+	ImageIcon icono;
     ImageIcon iconoEscalado;
     ImageIcon iconoNuevaPartida;
+    ImageIcon iconoNuevaPartida2;
     ImageIcon iconoCargarPartida;
     ImageIcon iconoCargarPartida2;
     ImageIcon iconoInfo;
+    ImageIcon iconoInfo2;
     ImageIcon iconoScore;
+    ImageIcon iconoScore2;
     ImageIcon iconoSalir;
+    ImageIcon iconoSalir2;
     Image imagen;
     Image imagenEscalada;
     static Image nuevaImagen;
@@ -122,21 +123,24 @@ class Lamina1 extends JPanel implements ActionListener {
 
     Marco marco;
 
-    Lamina1(Marco marco) {
-        this.marco = marco;
+    Lamina1() {
         setLayout(new BorderLayout());
 
         // Iconos
         icono = new ImageIcon("src//img//icon.png");
         iconoNuevaPartida = new ImageIcon("src//img//nueva_partida.png");
+        iconoNuevaPartida2 = new ImageIcon("src//img//nueva_partida2.png");
         iconoCargarPartida = new ImageIcon("src//img//cargar_partida.png");
         iconoCargarPartida2 = new ImageIcon("src//img//cargar_partida2.png");
         iconoInfo = new ImageIcon("src//img//info.png");
+        iconoInfo2 = new ImageIcon("src//img//info2.png");
         iconoScore = new ImageIcon("src//img//ranking.png");
+        iconoScore2 = new ImageIcon("src//img//ranking2.png");
         iconoSalir = new ImageIcon("src//img//salir.png");
+        iconoSalir2 = new ImageIcon("src//img//salir2.png");
 
         // Etiqueta del menú
-        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
+        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
         menuLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         add(menuLabel1, BorderLayout.NORTH);
 
@@ -145,11 +149,11 @@ class Lamina1 extends JPanel implements ActionListener {
         buttonPanel.setOpaque(false);
         add(buttonPanel, BorderLayout.CENTER);
         // Botones
-        nuevaPartidaButton = createButton(iconoNuevaPartida);
-        cargarPartidaButton = createButton(iconoCargarPartida);
-        informacionButton = createButton(iconoInfo);
-        resumenButton = createButton(iconoScore);
-        salirButton = createButton(iconoSalir);
+        nuevaPartidaButton = createButton(iconoNuevaPartida, iconoNuevaPartida2);
+        cargarPartidaButton = createButton(iconoCargarPartida, iconoCargarPartida2);
+        informacionButton = createButton(iconoInfo, iconoInfo2);
+        resumenButton = createButton(iconoScore, iconoScore2);
+        salirButton = createButton(iconoSalir, iconoSalir2);
 
         buttonPanel.add(nuevaPartidaButton);
         buttonPanel.add(cargarPartidaButton);
@@ -161,7 +165,7 @@ class Lamina1 extends JPanel implements ActionListener {
 
         // Panel inferior y etiqueta de versión
         bottomPanel = new JPanel();
-        version = new JLabel("<html><p>Euardo/Marc</p><div style='text-align:center;'><p>Version 1.0</p></div>");
+        JLabel version = new JLabel("<html><font color='white'><p>Euardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
@@ -172,13 +176,26 @@ class Lamina1 extends JPanel implements ActionListener {
         setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10)); // Borde vacío
     }
 
-    public JButton createButton(ImageIcon icono) {
-        button = new JButton();
-        imageBotones(icono);
-        button.setIcon(new ImageIcon(nuevaImagen));
+    public JButton createButton(ImageIcon icono, ImageIcon iconoHover) {
+        JButton button = new JButton();
+        button.setIcon(icono);
         styleButton(button);
         add(button, BorderLayout.CENTER);
         button.addActionListener(this);
+
+        // Agregar listener para cambiar el icono al pasar el ratón
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setIcon(iconoHover);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setIcon(icono);
+            }
+        });
+
         return button;
     }
 
@@ -229,15 +246,6 @@ class Lamina1 extends JPanel implements ActionListener {
         button.setContentAreaFilled(false);
         button.setPreferredSize(new Dimension(300, 60));
         button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(220, 220, 220));
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(240, 240, 240));
-            }
-        });
     }
 
     public static void imageBotones(ImageIcon icono) {
@@ -253,25 +261,24 @@ class Lamina1 extends JPanel implements ActionListener {
         } else if (e.getSource() == cargarPartidaButton) {
             System.exit(0);
         } else if (e.getSource() == informacionButton) {
-			setVisible(false); 
-	        removeAll();
-	        Lamina2 lamina2 = new Lamina2();
-	        lamina2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	        lamina2.setVisible(true);
-	        getParent().add(lamina2);
-	        
-	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-	        GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-	        graphicsDevice.setFullScreenWindow(parentFrame);
-	        
-	        getParent().revalidate();
-	        getParent().repaint();
+            setVisible(false);
+            removeAll();
+            Lamina2 lamina2 = new Lamina2();
+            lamina2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            lamina2.setVisible(true);
+            getParent().add(lamina2);
+
+            JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+            graphicsDevice.setFullScreenWindow(parentFrame);
+
+            getParent().revalidate();
+            getParent().repaint();
         } else if (e.getSource() == resumenButton) {
             System.exit(0);
         } else if (e.getSource() == salirButton) {
             System.exit(0);
         }
-
     }
 
     public static void cargarRecords() {
@@ -283,13 +290,13 @@ class Lamina1 extends JPanel implements ActionListener {
     }
 
     public static void cargarPartida() {
-
+    	
     }
 }
 
 class Lamina2 extends JPanel implements ActionListener {
 
-    private static final long serialVersionUID = 2242406387998512165L;
+	private static final long serialVersionUID = 2242406387998512165L;
 
     JButton salirButton;
     JPanel buttonPanel;
@@ -297,7 +304,6 @@ class Lamina2 extends JPanel implements ActionListener {
     JLabel informacionLabel;
     JLabel tituloLabel;
 
-    Marco marco;
 
     Lamina2() {
 
@@ -307,39 +313,39 @@ class Lamina2 extends JPanel implements ActionListener {
 
         JButton texto1 = new JButton("INFORMACIÓN");
 
-        JButton texto2 = new JButton("INICIO");
+        JButton texto2 = new JButton("START");
         texto2.addActionListener(this);
         buttonPanel.add(texto2);
 
-        JButton texto3 = new JButton("CIUDAD");
+        JButton texto3 = new JButton("CITY");
         texto3.addActionListener(this);
         buttonPanel.add(texto3);
 
-        JButton texto4 = new JButton("PARTIDAS");
+        JButton texto4 = new JButton("GAMES");
         texto4.addActionListener(this);
         buttonPanel.add(texto4);
 
-        JButton texto5 = new JButton("JUGADOR");
+        JButton texto5 = new JButton("PLAYER");
         texto5.addActionListener(this);
         buttonPanel.add(texto5);
 
-        JButton texto6 = new JButton("INVESTIGACIONES");
+        JButton texto6 = new JButton("RESEARCH");
         texto6.addActionListener(this);
         buttonPanel.add(texto6);
 
-        JButton texto7 = new JButton("VACUNA");
+        JButton texto7 = new JButton("VACCINE");
         texto7.addActionListener(this);
         buttonPanel.add(texto7);
 
-        JButton texto8 = new JButton("CURAR");
+        JButton texto8 = new JButton("HEAL");
         texto8.addActionListener(this);
         buttonPanel.add(texto8);
 
-        JButton texto9 = new JButton("FINALIZAR");
+        JButton texto9 = new JButton("END");
         texto9.addActionListener(this);
         buttonPanel.add(texto9);
 
-        salirButton = new JButton("SALIR");
+        salirButton = new JButton("MENU");
         salirButton.addActionListener(this);
         buttonPanel.add(salirButton);
 
@@ -368,70 +374,70 @@ class Lamina2 extends JPanel implements ActionListener {
         String informacion = "";
 
         switch (boton.getText()) {
-            case "INICIO":
-                tituloLabel.setText("INICIO");
-                informacion = "<html><p>Al inicio de cada partida se inicializan las vacunas.<br>"
-                        + "Al inicio de cada partida se inicializan las ciudades.<br>"
-                        + "Cada ciudad solo se puede infectar con 1 tipo de infección en base a id.<br>"
-                        + "Si hay un brote en la ciudad adyacente y ambas ciudades son de un tipo distinto de infección, se sumará la infección correspondiente al tipo.<br>"
-                        + "Si en una ciudad hay 3 de infección y se le suma 1, eso es un brote. Si hay brote se suma 1 de infección en las ciudades colindantes.<br>"
-                        + "Si hay 3 ciudades conectadas, en la 1 hay un brote, salta a la 2, también hay brote, en la 3 se le suma 2 de infección. No se le suma 1 a las ciudades conectadas que hayan tenido brote en esta cadena de brotes.<br>"
-                        + "El número de ciudades infectadas al inicio del juego son un parámetro de configuración.<br>"
-                        + "El número de ciudades infectadas a cada ronda son un parámetro de configuración.<br>"
-                        + "El número de enfermedades son un parámetro de configuración.</p></html>";
+            case "START":
+                tituloLabel.setText("START");
+                informacion = "<html><p>At the beginning of each game, vaccines are initialized.<br>"
+                        + "At the beginning of each game, cities are initialized.<br>"
+                        + "Each city can only be infected with 1 type of infection based on its ID.<br>"
+                        + "If there is an outbreak in the adjacent city and both cities have different types of infection, the corresponding infection type will be added.<br>"
+                        + "If a city has 3 infections and 1 is added, it is an outbreak. If there is an outbreak, 1 infection is added to the neighboring cities.<br>"
+                        + "If there are 3 connected cities, an outbreak occurs in the first city, it jumps to the second, there is also an outbreak, in the third, 2 infections are added. 1 is not added to the connected cities that have had an outbreak in this chain of outbreaks.<br>"
+                        + "The number of infected cities at the beginning of the game is a configuration parameter.<br>"
+                        + "The number of infected cities each round is a configuration parameter.<br>"
+                        + "The number of diseases is a configuration parameter.</p></html>";
                 break;
-            case "CIUDAD":
-                tituloLabel.setText("CIUDAD");
-                informacion = "<html><p>Cada ciudad tiene 1 nombre, coordenada X, coordenada Y y tipo de enfermedad.<br>"
-                        + "Cada ciudad tiene diferentes niveles de infección.<br>"
-                        + "Cada ciudad guarda sus ciudades adyacentes.<br>"
-                        + "Cada ciudad aumenta en +1 el nivel de infección al volver a infectarse.<br>"
-                        + "En cada ciudad, si el nivel de infección supera el 3, la infección se propaga a sus ciudades adyacentes y se suma (+1 al contador de brotes).</p></html>";
+            case "CITY":
+                tituloLabel.setText("CITY");
+                informacion = "<html><p>Each city has a name, X coordinate, Y coordinate, and type of disease.<br>"
+                        + "Each city has different infection levels.<br>"
+                        + "Each city stores its adjacent cities.<br>"
+                        + "Each city increases the infection level by +1 when it becomes infected again.<br>"
+                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent cities and (+1 is added to the outbreak counter).</p></html>";
                 break;
-            case "PARTIDAS":
-                tituloLabel.setText("PARTIDAS");
-                informacion = "<html><p>Número de ronda.<br>"
-                        + "Tendrá una lista con todas las ciudades y se podrán realizar acciones en ellas.<br>"
-                        + "Tendrá una lista con todas las vacunas y se podrán realizar acciones en ellas (generar vacuna, aumentar%,...).</p></html>";
+            case "GAMES":
+                tituloLabel.setText("GAMES");
+                informacion = "<html><p>Round number.<br>"
+                        + "It will have a list with all the cities and actions that can be performed on them.<br>"
+                        + "It will have a list with all the vaccines and actions that can be performed on them (generate vaccine, increase%, ...).</p></html>";
                 break;
-            case "JUGADOR":
-                tituloLabel.setText("JUGADOR");
-                informacion = "<html><p>El jugador tendrá 4 acciones por ronda.<br>"
-                        + "Cada turno se puede crear la vacuna (realizar investigación) o curar ciudades. No se pueden hacer las 2 cosas en un mismo turno.<br>"
-                        + "Al curar se gasta 1 acción y solo afecta a una ciudad.<br>"
-                        + "Al realizar la investigación se gastan las 4 acciones.<br>"
-                        + "Se puede tratar la enfermedad de la ciudad que se elija.<br>"
-                        + "Cada ciudad tiene 1 nombre, coordenada X, coordenada Y y tipo de enfermedad.<br>"
-                        + "Cada ciudad tiene diferentes niveles de infección.<br>"
-                        + "Cada ciudad guarda sus ciudades adyacentes.<br>"
-                        + "Cada ciudad aumenta en +1 el nivel de infección al volver a infectarse.<br>"
-                        + "En cada ciudad, si el nivel de infección supera el 3, la infección se propaga a sus ciudades adyacentes y se suma (+1 al contador de brotes).</p></html>";
+            case "PLAYER":
+                tituloLabel.setText("PLAYER");
+                informacion = "<html><p>The player will have 4 actions per round.<br>"
+                        + "Each turn, the player can create the vaccine (conduct research) or cure cities. Both cannot be done in the same turn.<br>"
+                        + "Curing costs 1 action and only affects one city.<br>"
+                        + "When conducting research, all 4 actions are spent.<br>"
+                        + "The disease of the chosen city can be treated.<br>"
+                        + "Each city has a name, X coordinate, Y coordinate, and type of disease.<br>"
+                        + "Each city has different infection levels.<br>"
+                        + "Each city stores its adjacent cities.<br>"
+                        + "Each city increases the infection level by +1 when it becomes infected again.<br>"
+                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent cities and (+1 is added to the outbreak counter).</p></html>";
                 break;
-            case "INVESTIGACIONES":
-                tituloLabel.setText("INVESTIGACIONES");
-                informacion = "<html><p>Cada vez que se realiza una investigación, el jugador gasta 4 acciones y se aumentará un porcentaje de la vacuna seleccionada.</p></html>";
+            case "RESEARCH":
+                tituloLabel.setText("RESEARCH");
+                informacion = "<html><p>Every time research is conducted, the player spends 4 actions and the percentage of the selected vaccine will increase.</p></html>";
                 break;
-            case "VACUNA":
-                tituloLabel.setText("VACUNA");
-                informacion = "<html><p>La vacuna está formada por 4 partes (1 parte por investigación).<br>"
-                        + "1 vacuna por tipo de enfermedad.<br>"
-                        + "Tienen 1 nombre, 1 color y 1 % de desarrollo.<br>"
-                        + "Si la vacuna está desarrollada al 100%, se indica que el desarrollo ya está completo.<br>"
-                        + "Con 1 vacuna completa se puede curar una ciudad entera de golpe.</p></html>";
+            case "VACCINE":
+                tituloLabel.setText("VACCINE");
+                informacion = "<html><p>The vaccine consists of 4 parts (1 part per research).<br>"
+                        + "1 vaccine per disease type.<br>"
+                        + "They have a name, a color, and a development percentage.<br>"
+                        + "If the vaccine is developed 100%, it is indicated that the development is already complete.<br>"
+                        + "With 1 complete vaccine, an entire city can be cured at once.</p></html>";
                 break;
-            case "CURAR":
-                tituloLabel.setText("CURAR");
-                informacion = "<html><p>Si al curar 1 ciudad infectada no se tiene una vacuna desarrollada al 100%, solo se reduce en 1 el nivel de infección.<br>"
-                        + "Si al curar 1 ciudad infectada se tiene una vacuna desarrollada al 100%, se elimina totalmente la infección (nivel de infección 0).</p></html>";
+            case "HEAL":
+                tituloLabel.setText("HEAL");
+                informacion = "<html><p>If when curing 1 infected city, a vaccine developed 100% is not available, only the infection level is reduced by 1.<br>"
+                        + "If when curing 1 infected city, a vaccine developed 100% is available, the infection is completely eliminated (infection level 0).</p></html>";
                 break;
-            case "FINALIZAR":
-                tituloLabel.setText("FINALIZAR");
-                informacion = "<html><p>En cada ronda se comprueba si el jugador ha ganado, ha perdido o no se sabe.<br>"
-                        + "Se gana al curar todas las infecciones.<br>"
-                        + "Si se llega a X brotes, se pierde la partida.</p></html>";
+            case "END":
+                tituloLabel.setText("END");
+                informacion = "<html><p>At the end of each round, it is checked whether the player has won, lost, or it is unknown.<br>"
+                        + "You win by curing all infections.<br>"
+                        + "If X outbreaks occur, the game is lost.</p></html>";
                 break;
-            case "SALIR":
-            	System.exit(0);
+            case "MENU":
+                Pantalla_Inicio.mimimarco.cambiarPanel(new Lamina1());
                 break;
         }
 
