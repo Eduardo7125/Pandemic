@@ -2,21 +2,27 @@ package main;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicProgressBarUI;
+
+import data_managment.Control_de_datos;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Ellipse2D;
 import java.io.Serial;
 
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
+		Control_de_datos.cargarPartida();
         Marco mimimarco = new Marco();
 	}
 
@@ -105,6 +111,7 @@ class Lamina1 extends JPanel implements ActionListener{
 	
 	Lamina1(){
 		
+		putClientProperty("JComponent.roundRect", true);
 		setLayout(new BorderLayout());
 		
         icono = new ImageIcon("src//img//icon.png");
@@ -210,20 +217,20 @@ class Lamina1 extends JPanel implements ActionListener{
 		} else if (e.getSource() == cargarPartidaButton) {
 			System.exit(0);
 		} else if (e.getSource() == informacionButton) {
-			setVisible(false); 
-	        removeAll();
+//			setVisible(false); 
+//	        removeAll();
 //	        GraphicsDevice grafica=GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();<br />
 //	        grafica.setFullScreenWindow(this);
-	        Lamina2 lamina2 = new Lamina2();
-	        lamina2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	        lamina2.setVisible(true);
-	        getParent().add(lamina2);
-	        
-	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-	        parentFrame.setSize(1000, 600);
-	        
-	        getParent().revalidate();
-	        getParent().repaint();
+//	        Lamina2 lamina2 = new Lamina2();
+//	        lamina2.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+//	        lamina2.setVisible(true);
+//	        getParent().add(lamina2);
+//	        
+//	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+//	        parentFrame.setSize(1000, 600);
+//	        
+//	        getParent().revalidate();
+//	        getParent().repaint();
 		} else if (e.getSource() == resumenButton) {
 			System.exit(0);
 		}else if (e.getSource() == salirButton) {
@@ -246,113 +253,31 @@ class Lamina1 extends JPanel implements ActionListener{
 		
 	}
 }
-class Lamina2 extends JPanel implements ActionListener {
+class CustomProgressBarUI extends BasicProgressBarUI {
+    private Image backgroundImage;
+
+    public CustomProgressBarUI(Image backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+
+    @Override
+    protected void paintDeterminate(Graphics g, JComponent c) {
+        super.paintDeterminate(g, c);
+
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.drawImage(backgroundImage, 0, 0, c.getWidth(), c.getHeight(), null);
+
+        g2d.dispose();
+    }
+}
+class Lamina3 extends JPanel implements ActionListener {
 	/**
 	 * 
 	 */
-	@Serial
-    private static final long serialVersionUID = 2242406387998512165L;
-	
-	JButton salirButton;
-	JPanel buttonPanel;
-	JScrollPane scrollPane;
-	JLabel menuLabel1;
-    Lamina2() {
-    
-        setLayout(new BorderLayout());
-        
-        menuLabel1 = new JLabel("<html><div style='text-align:justify;'><h1>INFORMACIÓN</h1>" + 
-        		"<h2>INICIO:</h2>" +
-                "<p>- Al inicio de cada partida se inicializan las vacunas.</p>" +
-                "<p>- Al inicio de cada partida se inicializan las ciudades.</p>" +
-                "<p>- Cada ciudad solo se puede infectar con 1 tipo de infección en base a id.</p>" +
-                "<p>- Si hay un brote en la ciudad adyacente y ambas ciudades son de un tipo distinto de infección, se sumará la infección correspondiente al tipo.</p>" +
-                "<p>- Si en una ciudad hay 3 de infección y se le suma 1, eso es un brote. Si hay brote se suma 1 de infección en las ciudades colindantes.</p>" +
-                "<p>- Si hay 3 ciudades conectadas, en la 1 hay un brote, salta a la 2, también hay brote, en la 3 se le suma 2 de infección. No se le suma 1 a las ciudades conectadas que hayan tenido brote en esta cadena de brotes.</p>" +
-                "<p>- El número de ciudades infectadas al inicio del juego son un parámetro de configuración.</p>" +
-                "<p>- El Número De Ciudades Infectadas A Cada Ronda Son Un Parámetro De Configuración.</p>" +
-                "<p>- El Número De Enfermedades Son Un Parámetro De Configuración.</p>" +
-        		"<h2>CIUDAD:</h2>" +
-        		"<p>-Cada ciudad tiene 1 nombre, coordenada X, coordenada Y y tipo de enfermedad.</p>" +
-                "<p>-Cada ciudad tiene diferentes niveles de infección.</p>" +
-                "<p>-Cada ciudad guardará sus ciudades adyacentes.</p>" +
-                "<p>-Cada ciudad aumenta +1 el nivel de infección al volver a infectarse.</p>" +
-                "<p>-En cada ciudad, si el nivel de infección supera el 3, la infección se propaga a sus ciudades adyacentes y se suma (+1 al contador de brotes).</p>" +
-                "<h2>PARTIDAS:</h2>" +
-                "<p>- Número de ronda.</p>" +
-                "<p>- Tendrá una lista con todas las ciudades y se podrán realizar acciones en ellas.</p>" +
-                "<p>- Tendrá una lista con todas las vacunas y se podrán realizar acciones en ellas (generar vacuna, aumentar%,...).</p>" +
-                "<h2>JUGADOR:</h2>" +
-                "<p>- El jugador tendrá 4 acciones por ronda.</p>" +
-                "<p>- Cada turno se puede crear la vacuna (realizar investigación) o curar ciudades. No se pueden hacer las 2 cosas en un mismo turno.</p>" +
-                "<p>- Al curar se gasta 1 acción y solo afecta a una ciudad.</p>" +
-                "<p>- Al realizar la investigación se gastan las 4 acciones.</p>" +
-                "<p>- Se puede tratar la enfermedad de la ciudad que se elija.</p>" +
-                "<p>- Cada ciudad tiene 1 nombre, coordenada X, coordenada Y y tipo de enfermedad.</p>" +
-                "<p>- Cada ciudad tiene diferentes niveles de infección.</p>" +
-                "<p>- Cada ciudad guardará sus ciudades adyacentes.</p>" +
-                "<p>- Cada ciudad aumenta +1 el nivel de infección al volver a infectarse.</p>" +
-                "<p>- En cada ciudad, si el nivel de infección supera el 3, la infección se propaga a sus ciudades adyacentes y se suma (+1 al contador de brotes).</p>" +
-                "<h2>INVESTIGACIONES:</h2>" +
-                "<p>- Cada vez que se realiza una investigación el jugador gasta 4 acciones y se aumentará un % de la vacuna seleccionada.</p>" +
-                "<h2>VACUNA:</h2>" +
-                "<p>- La vacuna está formada por 4 partes (1 parte por investigación).</p>" +
-                "<p>- 1 vacuna por tipo de enfermedad.</p>" +
-                "<p>- Tienen 1 nombre, 1 color y 1 % de desarrollo.</p>" +
-                "<p>- Si la vacuna está desarrollada al 100% se indica que el desarrollo ya está completo.</p>" +
-                "<p>- Con 1 vacuna completa se puede curar una ciudad entera de golpe.</p>" +
-                "<h2>CURAR:</h2>" +
-                "<p>- Si al curar 1 ciudad infectada no se tiene una vacuna desarrollada (100%), solo se reduce 1 el nivel de infección.</p>" +
-                "<p>- Si al curar 1 ciudad infectada se tiene una vacuna (100% de desarrollo la vacuna), se elimina totalmente la infección (nivel de infección 0).</p>" +
-                "<h2>FINALIZAR:</h2>" +
-                "<p>- En cada ronda se comprueba si el jugador ha ganado, ha perdido o no se sabe.</p>" +
-                "<p>- Se gana al curar todas las infecciones.</p>" +
-                "<p>- Si se llega a X brotes, se pierde la partida.</p>" +
-                "</div></html>");
-        salirButton = new JButton("salir");
-        salirButton.addActionListener(this);
-        
-        buttonPanel = new JPanel();
-        buttonPanel.add(salirButton);
-        
-        scrollPane = new JScrollPane(menuLabel1);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        
-        add(scrollPane, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
-        Lamina1.styleButton(salirButton);
+	private static final long serialVersionUID = 7725219079694206212L;
 
-        repaint();
-    }
-        public void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g.create();
-            Image imagenFondo = new ImageIcon("src//img//fondo.jpg").getImage();
-            g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
-            g2d.dispose();
-        }
-    	@Override
-    	public void actionPerformed(ActionEvent e) {
-    		
-    		if (e.getSource() == salirButton) {
-    			setVisible(false); 
-    	        removeAll();
-    	        Lamina1 lamina1 = new Lamina1();
-    	        lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    	        lamina1.setVisible(true);
-    	        getParent().add(lamina1);
-    	        
-    	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-    	        parentFrame.setSize(320, 600);
-    	        
-    	        getParent().revalidate();
-    	        getParent().repaint();
-    		}
-    		
-    	}
-    }
-class Lamina3 extends JPanel implements ActionListener {
-	
 	ImageIcon background;
 	
 	JButton salirButton;
@@ -365,13 +290,20 @@ class Lamina3 extends JPanel implements ActionListener {
 	
 	JLabel LabelImagen;
 	JLabel menuLabel1;
+	JLabel brotes;
+	
+	JProgressBar vacunas;
+	
+	int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
+	
 	Lamina3(){
+		
 		setLayout(new BorderLayout());
 		
 		topPanel = new JPanel(new BorderLayout());
 		bottomPanel = new JPanel();
-		leftPanel = new JPanel();
-		rightPanel = new JPanel();
+		leftPanel = new JPanel(new GridLayout(brotesvalor, 0, 10, 10));
+		rightPanel = new JPanel(new GridBagLayout());
 		middlePanel = new JPanel();
 
 		salirButton = new JButton("sdsd");
@@ -380,24 +312,53 @@ class Lamina3 extends JPanel implements ActionListener {
 		topPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
 		topPanel.setBackground(Color.white);
 
-		
+		brotes();
 		bottomPanel.setBackground(Color.black);
 		
-		leftPanel.setBackground(Color.blue);
+		vacunas();
+		rightPanel.setBackground(Color.blue);
 		
-		rightPanel.setBackground(Color.red);
+		leftPanel.setBackground(Color.red);
 
 		middlePanel.setOpaque(false);
 		
 		
 		add(topPanel, BorderLayout.NORTH);
 		add(bottomPanel, BorderLayout.SOUTH);
-		add(leftPanel, BorderLayout.EAST);
-		add(rightPanel, BorderLayout.WEST);
+		add(rightPanel, BorderLayout.EAST);
+		add(leftPanel, BorderLayout.WEST);
 		add(middlePanel, BorderLayout.CENTER);
 		
 	}
+	public void brotes() {
+		ImageIcon icono = new ImageIcon("src//img//brote_inactivo.png");
+        Image imagen = icono.getImage();
+        Image imagenEscalada = imagen.getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+		for (int i = 0; i < brotesvalor; i++) {
+			brotes = new JLabel(iconoEscalado);
+			brotes.setSize(75, 75);
+			leftPanel.add(brotes);
+		}
+	}
 	
+	public void vacunas() {
+		ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
+        Image imagen = icono.getImage();
+        Image imagenEscalada = imagen.getScaledInstance(75, 39, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+		for (int i = 0; i < 4; i++) {
+	        JProgressBar vacunas = new JProgressBar();
+	        vacunas.setUI(new CustomProgressBarUI(iconoEscalado.getImage()));
+	        vacunas.setMinimum(0);
+	        vacunas.setMaximum(100);
+	        vacunas.setValue(50);
+	        vacunas.setOpaque(false);
+	        vacunas.setStringPainted(true);
+	        vacunas.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
+	        rightPanel.add(vacunas);
+		}
+	}
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();

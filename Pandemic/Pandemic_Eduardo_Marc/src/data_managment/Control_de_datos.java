@@ -199,7 +199,7 @@ public class Control_de_datos {
 	}
 	
 	public static void cargarPartida() {
-		con = conectarBaseDatos();
+		cargarRecord();
 		cargarCiudades();
 		cargarVacunas();
 		cargarVirus();
@@ -237,7 +237,7 @@ public class Control_de_datos {
 	}
 	
 	public static void cargarRecord() {
-
+		con = conectarBaseDatos();
 	}
 	
 	public static void guardarRecord() {
