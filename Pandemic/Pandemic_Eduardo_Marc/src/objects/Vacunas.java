@@ -17,6 +17,7 @@ public class Vacunas {
 	boolean completo;
 	public void desarrollarVacuna(JProgressBar barra, float porcentaje) {
 		completo = false;
+<<<<<<< HEAD
 		int nuevoValor = barra.getValue() + (int) porcentaje;
 		if (nuevoValor <= barra.getMaximum()) {
 			barra.setValue(nuevoValor);
@@ -25,6 +26,19 @@ public class Vacunas {
 			completo = true;
 			System.out.println("La vacuna " + barra.getName() + " ya está completamente desarrollada.");
 		}
+=======
+        if (this.porcentaje > 100) {
+        	completo = true;
+        	this.porcentaje = 100;
+        	return;
+        }
+
+        this.porcentaje += porcentaje;
+        
+        if (this.porcentaje > 100) {
+        	this.porcentaje = 100;
+        }
+>>>>>>> parent of 150da1d (Vacuans)
 	}
 	
 	public String getNombre() {

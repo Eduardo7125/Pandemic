@@ -7,19 +7,18 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
 import data_managment.Control_de_datos;
-import objects.Vacunas;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Ellipse2D;
 import java.io.Serial;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
@@ -324,9 +323,9 @@ class Lamina3 extends JPanel implements ActionListener {
 		bottomPanel.setBackground(Color.black);
 		
 		vacunas();
-		rightPanel.setBackground(new Color(0,0,0,128));
+		rightPanel.setBackground(Color.blue);
 		
-		leftPanel.setBackground(new Color(0,0,0,128));
+		leftPanel.setBackground(Color.red);
 
 		middlePanel.setOpaque(false);
 		
@@ -351,6 +350,7 @@ class Lamina3 extends JPanel implements ActionListener {
 	}
 	
 	public void vacunas() {
+<<<<<<< HEAD
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = GridBagConstraints.RELATIVE;
@@ -432,6 +432,22 @@ class Lamina3 extends JPanel implements ActionListener {
 			}
 
 			barras[i] = vacunas;
+=======
+		ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
+        Image imagen = icono.getImage();
+        Image imagenEscalada = imagen.getScaledInstance(75, 39, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
+		for (int i = 0; i < 4; i++) {
+	        JProgressBar vacunas = new JProgressBar();
+	        vacunas.setUI(new CustomProgressBarUI(iconoEscalado.getImage()));
+	        vacunas.setMinimum(0);
+	        vacunas.setMaximum(100);
+	        vacunas.setValue(50);
+	        vacunas.setOpaque(false);
+	        vacunas.setStringPainted(true);
+	        vacunas.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
+	        rightPanel.add(vacunas);
+>>>>>>> parent of 150da1d (Vacuans)
 		}
 	}
     public void paintComponent(Graphics g) {
