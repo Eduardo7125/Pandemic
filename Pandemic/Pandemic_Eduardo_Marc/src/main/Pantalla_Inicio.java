@@ -326,7 +326,6 @@ class Lamina2 extends JPanel implements ActionListener {
     JLabel informacionLabel;
     JLabel tituloLabel;
 
-
     Lamina2() {
 
         setLayout(new BorderLayout());
@@ -373,21 +372,25 @@ class Lamina2 extends JPanel implements ActionListener {
 
         Lamina1.styleButton(salirButton);
 
-        tituloLabel = new JLabel("INFORMACIÓN");
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        tituloLabel = new JLabel("START");
+        tituloLabel.setFont(new Font("Arial", Font.BOLD, 40));
         tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         informacionLabel = new JLabel();
         informacionLabel.setVerticalAlignment(JLabel.TOP);
+        informacionLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
         scrollPane = new JScrollPane(informacionLabel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(tituloLabel, BorderLayout.NORTH);
-        centerPanel.add(buttonPanel, BorderLayout.WEST); // Cambio en la disposición del panel de botones
+        centerPanel.add(buttonPanel, BorderLayout.WEST);
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         add(centerPanel, BorderLayout.CENTER);
+
+        ActionEvent startEvent = new ActionEvent(texto2, ActionEvent.ACTION_PERFORMED, texto2.getActionCommand());
+        actionPerformed(startEvent);
     }
 
     @Override
@@ -401,9 +404,10 @@ class Lamina2 extends JPanel implements ActionListener {
                 informacion = "<html><p>At the beginning of each game, vaccines are initialized.<br>"
                         + "At the beginning of each game, cities are initialized.<br>"
                         + "Each city can only be infected with 1 type of infection based on its ID.<br>"
-                        + "If there is an outbreak in the adjacent city and both cities have different types of infection, the corresponding infection type will be added.<br>"
+                        + "If there is an outbreak in the adjacent city and both cities have different types of infection, the corresponding infection type will <br> be added.<br>"
                         + "If a city has 3 infections and 1 is added, it is an outbreak. If there is an outbreak, 1 infection is added to the neighboring cities.<br>"
-                        + "If there are 3 connected cities, an outbreak occurs in the first city, it jumps to the second, there is also an outbreak, in the third, 2 infections are added. 1 is not added to the connected cities that have had an outbreak in this chain of outbreaks.<br>"
+                        + "If there are 3 connected cities, an outbreak occurs in the first city, it jumps to the second, there is also an outbreak, <br>"
+                        + "in the third, 2 infections are added. 1 is not added to the connected cities that have had an outbreak in this chain of outbreaks.<br>"
                         + "The number of infected cities at the beginning of the game is a configuration parameter.<br>"
                         + "The number of infected cities each round is a configuration parameter.<br>"
                         + "The number of diseases is a configuration parameter.</p></html>";
@@ -459,20 +463,22 @@ class Lamina2 extends JPanel implements ActionListener {
                         + "If X outbreaks occur, the game is lost.</p></html>";
                 break;
             case "MENU":
-    			setVisible(false); 
-    	        Lamina1 lamina1 = Lamina1.getInstance();
-    	        lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-    	        lamina1.setVisible(true);
-    	        getParent().add(lamina1);
-    	        
-    	        getParent().revalidate();
-    	        getParent().repaint();
+                setVisible(false);
+                Lamina1 lamina1 = Lamina1.getInstance();
+                lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                lamina1.setVisible(true);
+                getParent().add(lamina1);
+
+                getParent().revalidate();
+                getParent().repaint();
                 break;
         }
 
         informacionLabel.setText(informacion);
     }
-	private static Lamina2 instance;
+
+    private static Lamina2 instance;
+
     public static Lamina2 getInstance() {
         if (instance == null) {
             instance = new Lamina2();
@@ -480,6 +486,7 @@ class Lamina2 extends JPanel implements ActionListener {
         return instance;
     }
 }
+
 class Lamina3 extends JPanel implements ActionListener {
 	/**
 	 * 
