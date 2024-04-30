@@ -204,7 +204,7 @@ public class Control_de_datos {
 	}
 	
 	public static void cargarPartida() {
-		cargarRecord();
+//		cargarRecord();
 		cargarCiudades();
 		cargarVacunas();
 		cargarVirus();
