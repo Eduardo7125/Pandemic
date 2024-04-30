@@ -48,8 +48,8 @@ public class Control_de_datos {
 	public static String NumBrotesDerrota;
 	
     public static ArrayList<Ciudad> Ciudades = new ArrayList<>();
-	static ArrayList<Vacunas> Vacuna = new ArrayList<>();
-    static ArrayList<Virus> Virus = new ArrayList<>();
+    public static ArrayList<Vacunas> Vacuna = new ArrayList<>();
+    public static ArrayList<Virus> Virus = new ArrayList<>();
     
 	private static Connection conectarBaseDatos() {
 		Connection con = null;
@@ -122,12 +122,15 @@ public class Control_de_datos {
 	    
 	    return Ciudades;
 	}
-	
+	public static Vacunas Vacuna1;
+	public static Vacunas Vacuna2;
+	public static Vacunas Vacuna3;
+	public static Vacunas Vacuna4;
 	public static ArrayList<Vacunas> cargarVacunas() {
-		Vacunas Vacuna1 = new Vacunas("Alfa", "Azul", 0);
-		Vacunas Vacuna2 = new Vacunas("Beta", "Rojo", 0);
-		Vacunas Vacuna3 = new Vacunas("Gama", "Verde", 0);
-		Vacunas Vacuna4 = new Vacunas("Delta", "Amarillo", 0);
+		Vacuna1 = new Vacunas("Alfa", "Azul", 0);
+		Vacuna2 = new Vacunas("Beta", "Rojo", 0);
+		Vacuna3 = new Vacunas("Gama", "Verde", 0);
+		Vacuna4 = new Vacunas("Delta", "Amarillo", 0);
 		
 		Vacuna.add(Vacuna1);
 		Vacuna.add(Vacuna2);
@@ -204,7 +207,7 @@ public class Control_de_datos {
 	}
 	
 	public static void cargarPartida() {
-//		cargarRecord();
+		cargarRecord();
 		cargarCiudades();
 		cargarVacunas();
 		cargarVirus();

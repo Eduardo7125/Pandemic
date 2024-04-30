@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicProgressBarUI;
@@ -16,6 +17,9 @@ import data_managment.Control_de_datos;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.Serial;
 
 public class Pantalla_Inicio {
@@ -56,33 +60,7 @@ class Marco extends JFrame{
         lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         add(lamina1);
 
-        moveWindow();
-
         setVisible(true);
-	}
-    
-	private static Point currCoords = new Point();
-    private static Point mouseDownCompCoords;
-	private static final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-	public void moveWindow() {
-	    MouseListener mouseListener = new MouseAdapter() {
-	        public void mousePressed(MouseEvent e) {
-	            mouseDownCompCoords = e.getPoint();
-	        }
-	    };
-	    
-	    addMouseListener(mouseListener);
-	    
-	    MouseMotionListener mouseMotionListener = new MouseMotionAdapter() {
-	        public void mouseDragged(MouseEvent e) {
-	            currCoords = e.getLocationOnScreen();
-	            setLocation(currCoords.x - mouseDownCompCoords.x, currCoords.y - mouseDownCompCoords.y);
-	        }
-	    };
-	    
-	    addMouseMotionListener(mouseMotionListener);
-
-	    setLocation(dim.width / 2 - getSize().width / 2, dim.height / 2 - getSize().height / 2);
 	}
 	
 }
@@ -240,11 +218,6 @@ class Lamina1 extends JPanel implements ActionListener {
         });
     }
 	
-    public static void imageBotones(ImageIcon icono) {
-        imagen_botones = icono.getImage();
-        nuevaImagen = imagen_botones.getScaledInstance(450, 300, Image.SCALE_SMOOTH);
-    }
-    
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -501,6 +474,7 @@ class Lamina3 extends JPanel implements ActionListener {
 	JLabel brotes;
 	
 	JProgressBar vacunas;
+
 	private static Lamina3 instance;
 	int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
 	
@@ -519,15 +493,40 @@ class Lamina3 extends JPanel implements ActionListener {
 		topPanel.add(salirButton, BorderLayout.EAST);
 		topPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
 		topPanel.setBackground(Color.white);
+		
+		JTextArea texto = new JTextArea(7, 50);
+		texto.setEditable(false);
+		Font font = new Font("Karmatic Arcade", Font.PLAIN, 14);
+		texto.setFont(font);
+        texto.setForeground(Color.BLUE);
+        texto.setBackground(Color.LIGHT_GRAY);
+        JScrollPane scrollPane = new JScrollPane(texto);// Establecer el tamaño del JScrollPane
 
-		brotes();
+        rightPanel.add(scrollPane, BorderLayout.CENTER);
+        PrintStream printStream = new PrintStream(new OutputStream() {
+            @Override
+            public void write(int b) throws IOException {
+            	texto.append(String.valueOf((char) b));
+            }
+        });
+
+        System.setOut(printStream);
+        System.setErr(printStream);
+        texto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+		bottomPanel.add(texto, BorderLayout.CENTER);
 		bottomPanel.setBackground(Color.black);
 		
-		vacunas();
-		rightPanel.setBackground(new Color(0,0,0,128));
-
+		vacunas("Alfa", new Color(118, 189, 248));
+		vacunas("Beta", new Color(248, 118, 118));
+		vacunas("Gama", new Color(118, 248, 150));
+		vacunas("Delta", new Color(236, 248, 118));
+		
+		rightPanel.setBackground(Color.blue.darker().darker().darker());
+		rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+		
+		brotes();
 		leftPanel.setBackground(new Color(0,0,0,128));
-
+		
 		middlePanel.setOpaque(false);
 		
 		
@@ -550,7 +549,11 @@ class Lamina3 extends JPanel implements ActionListener {
 		}
 	}
 	
-	public void vacunas() {
+	public static float valorFloat = (float) 20;
+	
+	public void vacunas(String nombre, Color color) {
+		final JProgressBar vacunaFinal = new JProgressBar();
+		
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = GridBagConstraints.RELATIVE;
@@ -562,78 +565,48 @@ class Lamina3 extends JPanel implements ActionListener {
 		Image imagenEscalada = imagen.getScaledInstance(75, 39, Image.SCALE_SMOOTH);
 		ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
 
-		JProgressBar[] barras = new JProgressBar[4];
-
-		for (int i = 0; i < 4; i++) {
-			vacunas = new JProgressBar();
-			vacunas.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
-				protected Color getSelectionForeground() {
-					return Color.DARK_GRAY;
-				}
-			});
-
-			vacunas.setMinimum(0);
-			vacunas.setMaximum(100);
-			vacunas.setValue(45);
-			vacunas.setStringPainted(true);
-			vacunas.setOpaque(false);
-			vacunas.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
-
-			switch (i) {
-				case 0:
-					vacunas.setName("Alfa");
-					vacunas.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							float valorFloat = (float) 20;
-//							Vacunas vacunas2 = new Vacunas(null, null, 0);
-//							vacunas2.desarrollarVacuna(vacunas, valorFloat);
-						}
-					});
-					vacunas.setForeground(new Color(118, 189, 248));
-					break;
-				case 1:
-					vacunas.setName("Alfa");
-					vacunas.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							float valorFloat = (float) 20;
-//							Vacunas vacunas2 = new Vacunas(null, null, 0);
-//							vacunas2.desarrollarVacuna(vacunas, valorFloat);
-						}
-					});
-					vacunas.setForeground(new Color(248, 118, 118));
-					break;
-				case 2:
-					vacunas.setName("Alfa");
-					vacunas.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							float valorFloat = (float) 20;
-//							Vacunas vacunas2 = new Vacunas(null, null, 0);
-//							vacunas2.desarrollarVacuna(vacunas, valorFloat);
-						}
-					});
-					vacunas.setForeground(new Color(118, 248, 150));
-					break;
-				default:
-					vacunas.setName("Alfa");
-					vacunas.addMouseListener(new MouseAdapter() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							float valorFloat = (float) 20;
-//							Vacunas vacunas2 = new Vacunas(null, null, 0);
-//							vacunas2.desarrollarVacuna(vacunas, valorFloat);
-						}
-					});
-					vacunas.setForeground(new Color(236, 248, 118));
-					break;
+		vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
+			protected Color getSelectionForeground() {
+				return Color.DARK_GRAY;
 			}
-			rightPanel.add(vacunas, gbc);
+		});
+
+		vacunaFinal.setMinimum(0);
+		vacunaFinal.setMaximum(100);
+		vacunaFinal.setStringPainted(true);
+		vacunaFinal.setOpaque(false);
+		vacunaFinal.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
+		
+		vacunaFinal.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                switch (nombre) {
+                    case "Alfa":
+                        Control_de_datos.Vacuna.get(0).desarrollarVacuna(valorFloat);
+                        vacunaFinal.setValue((int) Control_de_datos.Vacuna.get(0).getPorcentaje());
+                        break;
+                    case "Beta":
+                        Control_de_datos.Vacuna.get(1).desarrollarVacuna(valorFloat);
+                        vacunaFinal.setValue((int) Control_de_datos.Vacuna.get(1).getPorcentaje());
+                        break;
+                    case "Gama":
+                        Control_de_datos.Vacuna.get(2).desarrollarVacuna(valorFloat);
+                        vacunaFinal.setValue((int) Control_de_datos.Vacuna.get(2).getPorcentaje());
+                        break;
+                    case "Delta":
+                        Control_de_datos.Vacuna.get(3).desarrollarVacuna(valorFloat);
+                        vacunaFinal.setValue((int) Control_de_datos.Vacuna.get(3).getPorcentaje());
+                        break;
+                }
+            }
+        });
+
+		vacunaFinal.setForeground(color);
+		vacunaFinal.setName(nombre);
+		rightPanel.add(vacunaFinal, gbc);
 			 
-			barras[i] = vacunas;
-		}
 	}
+	
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();

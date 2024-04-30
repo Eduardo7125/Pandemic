@@ -15,15 +15,15 @@ public class Vacunas {
 	}
 	
 	boolean completo;
-	public void desarrollarVacuna(JProgressBar barra, float porcentaje) {
+	public void desarrollarVacuna(float porcentaje) {
 		completo = false;
-		int nuevoValor = barra.getValue() + (int) porcentaje;
-		if (nuevoValor <= barra.getMaximum()) {
-			barra.setValue(nuevoValor);
-			System.out.println("Se aumentó el valor de la vacuna " + barra.getName() + " a " + nuevoValor);
+		int nuevoValor = (int) (this.getPorcentaje() + (int) porcentaje);
+		if (nuevoValor <= 100) {
+			this.setPorcentaje(nuevoValor);
+			System.out.println("Se aumentó el valor de la vacuna " + this.getNombre() + " a " + nuevoValor);
 		} else {
 			completo = true;
-			System.out.println("La vacuna " + barra.getName() + " ya está completamente desarrollada.");
+			System.out.println("La vacuna " + this.getNombre() + " ya está completamente desarrollada.");
 		}
 
 	}
