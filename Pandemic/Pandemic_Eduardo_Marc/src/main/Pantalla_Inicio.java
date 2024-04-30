@@ -41,11 +41,9 @@ class Marco extends JFrame{
 	 */
 	@Serial
     private static final long serialVersionUID = 1L;
-	ImageIcon icono;
 	public Marco(){
 		setTitle("Pandemic");
-		icono = new ImageIcon("src//img//icon.png");
-        setIconImage(icono.getImage());
+        setIconImage(new ImageIcon("src//img//icon.png").getImage());
         GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         if (graphicsDevice.isFullScreenSupported()) {
             setUndecorated(true);
@@ -496,17 +494,23 @@ class Lamina3 extends JPanel implements ActionListener {
 		
 		JTextArea texto = new JTextArea(7, 50);
 		texto.setEditable(false);
-		Font font = new Font("Karmatic Arcade", Font.PLAIN, 14);
-		texto.setFont(font);
+        texto.setFont(new Font("Arial", Font.BOLD, 14));
         texto.setForeground(Color.BLUE);
         texto.setBackground(Color.LIGHT_GRAY);
-        JScrollPane scrollPane = new JScrollPane(texto);// Establecer el tamaño del JScrollPane
-
-        rightPanel.add(scrollPane, BorderLayout.CENTER);
         PrintStream printStream = new PrintStream(new OutputStream() {
-            @Override
+        	@Override
             public void write(int b) throws IOException {
-            	texto.append(String.valueOf((char) b));
+                texto.append(String.valueOf((char) b));
+
+                int lineCount = texto.getLineCount();
+                if (lineCount > 10) {
+                    try {
+                        int endOfFirstLine = texto.getLineEndOffset(0);
+                        texto.replaceRange("", 0, endOfFirstLine);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
         });
 
