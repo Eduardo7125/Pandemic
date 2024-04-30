@@ -7,24 +7,25 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
 import data_managment.Control_de_datos;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Ellipse2D;
 import java.io.Serial;
 
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
-//        Control_de_datos.cargarPartida(); // Uncomment if needed
-        Marco mimimarco = new Marco();
-        mimimarco.setVisible(true);
+	    Thread cargaPartidaThread = new Thread(() -> Control_de_datos.cargarPartida());
+	    cargaPartidaThread.start();
+
+	    SwingUtilities.invokeLater(() -> {
+	        Marco mimimarco = new Marco();
+	        mimimarco.setVisible(true);
+	    });
 	}
 
 }
@@ -40,18 +41,22 @@ class Marco extends JFrame{
 		setTitle("Pandemic");
 		icono = new ImageIcon("src//img//icon.png");
         setIconImage(icono.getImage());
-        
-        setSize(320, 600);
-        setResizable(false);
-        setUndecorated(true);
+        GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        if (graphicsDevice.isFullScreenSupported()) {
+            setUndecorated(true);
+            setResizable(false);
+            graphicsDevice.setFullScreenWindow(this);
+        } else {
+            System.out.println("El modo de pantalla completa no es soportado por este dispositivo.");
+        }
 
         Lamina1 lamina1 = new Lamina1();
         lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		add(lamina1);
-		
-		moveWindow();
-		
-		setVisible(true);
+        add(lamina1);
+
+        moveWindow();
+
+        setVisible(true);
 	}
     
 	private static Point currCoords = new Point();
@@ -209,10 +214,6 @@ class Lamina1 extends JPanel implements ActionListener{
 		    lamina3.setVisible(true);
 		    getParent().add(lamina3);
 	        
-	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-	        GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-	        graphicsDevice.setFullScreenWindow(parentFrame);
-	        
 	        getParent().revalidate();
 	        getParent().repaint();
 		} else if (e.getSource() == cargarPartidaButton) {
@@ -323,9 +324,9 @@ class Lamina3 extends JPanel implements ActionListener {
 		bottomPanel.setBackground(Color.black);
 		
 		vacunas();
-		rightPanel.setBackground(Color.blue);
-		
-		leftPanel.setBackground(Color.red);
+		rightPanel.setBackground(new Color(0,0,0,128));
+
+		leftPanel.setBackground(new Color(0,0,0,128));
 
 		middlePanel.setOpaque(false);
 		
@@ -350,7 +351,6 @@ class Lamina3 extends JPanel implements ActionListener {
 	}
 	
 	public void vacunas() {
-<<<<<<< HEAD
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = GridBagConstraints.RELATIVE;
@@ -362,7 +362,6 @@ class Lamina3 extends JPanel implements ActionListener {
 		Image imagenEscalada = imagen.getScaledInstance(75, 39, Image.SCALE_SMOOTH);
 		ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
 
-		// Array para almacenar las barras de progreso
 		JProgressBar[] barras = new JProgressBar[4];
 
 		for (int i = 0; i < 4; i++) {
@@ -387,8 +386,8 @@ class Lamina3 extends JPanel implements ActionListener {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 							float valorFloat = (float) 20;
-							Vacunas vacunas2 = new Vacunas(null, null, 0);
-							vacunas2.desarrollarVacuna(vacunas, valorFloat);
+//							Vacunas vacunas2 = new Vacunas(null, null, 0);
+//							vacunas2.desarrollarVacuna(vacunas, valorFloat);
 						}
 					});
 					vacunas.setForeground(new Color(118, 189, 248));
@@ -399,8 +398,8 @@ class Lamina3 extends JPanel implements ActionListener {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 							float valorFloat = (float) 20;
-							Vacunas vacunas2 = new Vacunas(null, null, 0);
-							vacunas2.desarrollarVacuna(vacunas, valorFloat);
+//							Vacunas vacunas2 = new Vacunas(null, null, 0);
+//							vacunas2.desarrollarVacuna(vacunas, valorFloat);
 						}
 					});
 					vacunas.setForeground(new Color(248, 118, 118));
@@ -411,8 +410,8 @@ class Lamina3 extends JPanel implements ActionListener {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 							float valorFloat = (float) 20;
-							Vacunas vacunas2 = new Vacunas(null, null, 0);
-							vacunas2.desarrollarVacuna(vacunas, valorFloat);
+//							Vacunas vacunas2 = new Vacunas(null, null, 0);
+//							vacunas2.desarrollarVacuna(vacunas, valorFloat);
 						}
 					});
 					vacunas.setForeground(new Color(118, 248, 150));
@@ -423,31 +422,16 @@ class Lamina3 extends JPanel implements ActionListener {
 						@Override
 						public void mouseClicked(MouseEvent e) {
 							float valorFloat = (float) 20;
-							Vacunas vacunas2 = new Vacunas(null, null, 0);
-							vacunas2.desarrollarVacuna(vacunas, valorFloat);
+//							Vacunas vacunas2 = new Vacunas(null, null, 0);
+//							vacunas2.desarrollarVacuna(vacunas, valorFloat);
 						}
 					});
 					vacunas.setForeground(new Color(236, 248, 118));
 					break;
 			}
-
+			rightPanel.add(vacunas, gbc);
+			 
 			barras[i] = vacunas;
-=======
-		ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
-        Image imagen = icono.getImage();
-        Image imagenEscalada = imagen.getScaledInstance(75, 39, Image.SCALE_SMOOTH);
-        ImageIcon iconoEscalado = new ImageIcon(imagenEscalada);
-		for (int i = 0; i < 4; i++) {
-	        JProgressBar vacunas = new JProgressBar();
-	        vacunas.setUI(new CustomProgressBarUI(iconoEscalado.getImage()));
-	        vacunas.setMinimum(0);
-	        vacunas.setMaximum(100);
-	        vacunas.setValue(50);
-	        vacunas.setOpaque(false);
-	        vacunas.setStringPainted(true);
-	        vacunas.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
-	        rightPanel.add(vacunas);
->>>>>>> parent of 150da1d (Vacuans)
 		}
 	}
     public void paintComponent(Graphics g) {
@@ -465,9 +449,6 @@ class Lamina3 extends JPanel implements ActionListener {
 	        lamina1.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 	        lamina1.setVisible(true);
 	        getParent().add(lamina1);
-	        
-	        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-	        parentFrame.setSize(320, 600);
 	        
 	        getParent().revalidate();
 	        getParent().repaint();

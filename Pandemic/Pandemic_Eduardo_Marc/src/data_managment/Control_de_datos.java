@@ -53,15 +53,20 @@ public class Control_de_datos {
     
 	private static Connection conectarBaseDatos() {
 		Connection con = null;
-			try {
-				Class.forName("oracle.jdbc.driver.OracleDriver");
-				con = DriverManager.getConnection(url, user, password);
-			} catch (ClassNotFoundException e) {
-				System.out.println("No se ha encontrado el driver " + e);
-			} catch (SQLException e) {
-				System.out.println("Error en las credenciales o en la URL " + e);
-			}
-		return con;
+	    try {
+	        Class.forName("oracle.jdbc.driver.OracleDriver");
+	        con = DriverManager.getConnection(url, user, password);
+	        if (con != null) {
+	            System.out.println("Conexión establecida correctamente.");
+	        } else {
+	            System.out.println("No se pudo establecer la conexión.");
+	        }
+	    } catch (ClassNotFoundException e) {
+	        System.out.println("No se ha encontrado el driver " + e);
+	    } catch (SQLException e) {
+	        System.out.println("Error en las credenciales o en la URL " + e);
+	    }
+	    return con;
 	}
 	
 
@@ -204,7 +209,6 @@ public class Control_de_datos {
 		cargarVacunas();
 		cargarVirus();
 		cargarXML();
-		cargarRecord();
 	}
 
 	public static void main(String []args) {
@@ -237,7 +241,18 @@ public class Control_de_datos {
 	}
 	
 	public static void cargarRecord() {
-		con = conectarBaseDatos();
+	    try {
+	        con = conectarBaseDatos();
+	    } finally {
+	        if (con != null) {
+	            try {
+	                con.close();
+	                System.out.println("Conexión cerrada correctamente.");
+	            } catch (SQLException e) {
+	                System.out.println("Error al cerrar la conexión " + e);
+	            }
+	        }
+	    }
 	}
 	
 	public static void guardarRecord() {
