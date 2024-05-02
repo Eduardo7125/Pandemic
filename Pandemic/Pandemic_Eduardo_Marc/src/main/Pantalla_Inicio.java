@@ -14,8 +14,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
+<<<<<<< HEAD
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,12 +25,33 @@ import javax.swing.Timer;
 
 public class Pantalla_Inicio {
     public static Marco mimimarco;
+=======
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.basic.BasicProgressBarUI;
+
+import data_managment.Control_de_datos;
+
+import java.awt.*;
+import java.io.Serial;
+
+public class Pantalla_Inicio {
+	public static void main(String[] args) {
+	    Thread cargaPartidaThread = new Thread(() -> Control_de_datos.cargarPartida());
+	    cargaPartidaThread.start();
+
+	    SwingUtilities.invokeLater(() -> {
+	        Marco mimimarco = new Marco();
+	        mimimarco.setVisible(true);
+	    });
+	}
+>>>>>>> Eduardo
 
     public static void main(String[] args) {
         mimimarco = new Marco();
     }
 }
 
+<<<<<<< HEAD
 class Marco extends JFrame {
 
     ImageIcon icono;
@@ -208,11 +230,55 @@ class Lamina1 extends JPanel implements ActionListener {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+=======
+class Marco extends JFrame{
+    /**
+	 * 
+	 */
+	@Serial
+    private static final long serialVersionUID = 1L;
+	public Marco(){
+		setTitle("Pandemic");
+        setIconImage(new ImageIcon("src//img//icon.png").getImage());
+        GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        if (graphicsDevice.isFullScreenSupported()) {
+            setUndecorated(true);
+            setResizable(false);
+            graphicsDevice.setFullScreenWindow(this);
+        } else {
+            System.out.println("El modo de pantalla completa no es soportado por este dispositivo.");
+        }
+
+        menu menu = main.menu.getInstance();
+        
+        menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        add(menu);
+
+        setVisible(true);
+	}
+	
+}
+
+class CustomProgressBarUI extends BasicProgressBarUI {
+    private Image backgroundImage;
+
+    public CustomProgressBarUI(Image backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+
+    @Override
+    protected void paintDeterminate(Graphics g, JComponent c) {
+        super.paintDeterminate(g, c);
+
+>>>>>>> Eduardo
         Graphics2D g2d = (Graphics2D) g.create();
-        Image imagenFondo = new ImageIcon("src//img//fondo.jpg").getImage();
-        g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        g2d.drawImage(backgroundImage, 0, 0, c.getWidth(), c.getHeight(), null);
+
         g2d.dispose();
     }
+<<<<<<< HEAD
 
     public static void styleButton(JButton button) {
         button.setBackground(new Color(240, 240, 240));
@@ -406,3 +472,6 @@ class Lamina2 extends JPanel implements ActionListener {
         }
     }
 }
+=======
+}
+>>>>>>> Eduardo

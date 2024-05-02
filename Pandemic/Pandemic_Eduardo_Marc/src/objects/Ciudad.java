@@ -1,7 +1,6 @@
 package objects;
 
 import data_managment.*;
-import main.*;
 
 public class Ciudad {	
 

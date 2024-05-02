@@ -11,19 +11,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -36,37 +30,49 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Struct;
-import java.util.ArrayList;
-import java.util.Scanner;
+
 public class Control_de_datos {
 
-	private static String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe"; 
-	private static String user = "DAM1_2324_PET_EDU";
-	private static String password = "X7565598R";
-	public static Connection con = conectarBaseDatos();
-	private static String ficheroTxt = "src//files//ciudades.txt";
-	private static String ficheroBin = "src//files//CCP.bin";
-	private static String ficheroXML = "src//files//parametros.xml";
+	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
+	private static final String user = "DAM1_2324_PET_EDU";
+	private static final String password = "edu";
+	public static Connection con;
+	private static final String ficheroTxt = "src//files//ciudades.txt";
+	private static final String ficheroBin = "src//files//CCP.bin";
+	public static String ficheroXML = "src//files//parametrosFacil.xml";
 	
-	private static final Connection conectarBaseDatos() {
+    static int contador = 0;
+	public static String CiudadesInfectadasInicio;
+	public static String CiudadesInfectadasRonda;
+	public static String EnfermedadesActivasDerrota;
+	public static String NumBrotesDerrota;
+	
+    public static ArrayList<Ciudad> Ciudades = new ArrayList<>();
+    public static ArrayList<Vacunas> Vacuna = new ArrayList<>();
+    public static ArrayList<Virus> Virus = new ArrayList<>();
+    
+	private static Connection conectarBaseDatos() {
 		Connection con = null;
-
-		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			con = DriverManager.getConnection(url, user, password);
-		} catch (ClassNotFoundException e) {
-			System.out.println("No se ha encontrado el driver " + e);
-		} catch (SQLException e) {
-			System.out.println("Error en las credenciales o en la URL " + e);
-		}
-		System.out.println("2");
-		return con;
+	    try {
+	        Class.forName("oracle.jdbc.driver.OracleDriver");
+	        con = DriverManager.getConnection(url, user, password);
+	        if (con != null) {
+	            System.out.println("Conexión establecida correctamente.");
+	        } else {
+	            System.out.println("No se pudo establecer la conexión.");
+	        }
+	    } catch (ClassNotFoundException e) {
+	        System.out.println("No se ha encontrado el driver " + e);
+	    } catch (SQLException e) {
+	        System.out.println("Error en las credenciales o en la URL " + e);
+	    }
+	    return con;
 	}
+	
 
 	private static ArrayList<Ranking> select(Connection con) {
-		String sql = "SELECT p.* FROM RANKING p";
-		ArrayList<Ranking> p = new ArrayList<Ranking>();
+		String sql = "SELECT p.* FROM RANKING_PANDEMIC p";
+		ArrayList<Ranking> p = new ArrayList<>();
 
 		try {
 			Statement st = con.createStatement();
@@ -78,8 +84,8 @@ public class Control_de_datos {
 					String nombre = rs.getString("Nombre");
 					Date fecha = rs.getDate("Fecha");
 					int resultado = rs.getInt("Resultado");
-
-					Ranking rank = new Ranking(rondas, nombre, fecha, resultado);
+					int puntuacion = rs.getInt("Puntuacion");
+					Ranking rank = new Ranking(rondas, nombre, fecha, resultado, puntuacion);
 
 					p.add(rank);				}
 			} else {
@@ -87,17 +93,15 @@ public class Control_de_datos {
 			}	
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Ha habido un error al intentar leer los datos" + e);
 		}
 		
 		return p;
 	}
 	
-    public static ArrayList<Ciudad> Ciudades = new ArrayList<>();
 	public static ArrayList<Ciudad> cargarCiudades() {
 	    try (FileReader fileReader = new FileReader(ficheroTxt);
-	         BufferedReader bufferedReader = new BufferedReader(fileReader);) {
+	         BufferedReader bufferedReader = new BufferedReader(fileReader)) {
 
 	        String valor;
 	        while ((valor = bufferedReader.readLine()) != null) {
@@ -118,13 +122,15 @@ public class Control_de_datos {
 	    
 	    return Ciudades;
 	}
-	
-	static ArrayList<Vacunas> Vacuna = new ArrayList<>();
+	public static Vacunas Vacuna1;
+	public static Vacunas Vacuna2;
+	public static Vacunas Vacuna3;
+	public static Vacunas Vacuna4;
 	public static ArrayList<Vacunas> cargarVacunas() {
-		Vacunas Vacuna1 = new Vacunas("Alfa", "Azul", 0);
-		Vacunas Vacuna2 = new Vacunas("Beta", "Rojo", 0);
-		Vacunas Vacuna3 = new Vacunas("Gama", "Verde", 0);
-		Vacunas Vacuna4 = new Vacunas("Delta", "Amarillo", 0);
+		Vacuna1 = new Vacunas("Alfa", "Azul", 0);
+		Vacuna2 = new Vacunas("Beta", "Rojo", 0);
+		Vacuna3 = new Vacunas("Gama", "Verde", 0);
+		Vacuna4 = new Vacunas("Delta", "Amarillo", 0);
 		
 		Vacuna.add(Vacuna1);
 		Vacuna.add(Vacuna2);
@@ -133,23 +139,7 @@ public class Control_de_datos {
 		
 		return Vacuna;
 	}
-
-//	public static void calculo(int cityIndex, BufferedWriter bufferedWriter) throws IOException {
-//	x1 = cord1.get(cityIndex);
-//    y1 = cord2.get(cityIndex);
-//    ciudades = array.get(cityIndex);
-//    bufferedWriter.write("La ciudad "+ciudad.get(cityIndex)+" esta en las cordenadas ("+cord1.get(cityIndex)+","+cord2.get(cityIndex)+") sus ciudades colindantes son:\n");
-//    	for (String ciudadColindante : ciudades) {
-//            x2 = cord1.get(ciudad_2.get(ciudadColindante));
-//            y2 = cord2.get(ciudad_2.get(ciudadColindante));
-//            distancia = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-//            bufferedWriter.write(ciudadColindante+", que esta a una distancia de "+distancia);
-//            bufferedWriter.newLine();
-//		}
-//}
 	
-    static int contador = 0;
-    static ArrayList<Virus> Virus = new ArrayList<>();
 	public static ArrayList<Virus> cargarVirus() {
 		try (FileInputStream fileInputStream = new FileInputStream(ficheroBin);
 		         DataInputStream dataInputStream = new DataInputStream(fileInputStream)) {
@@ -176,11 +166,14 @@ public class Control_de_datos {
 		    return Virus;
 	}
 	
-	public static String CiudadesInfectadasInicio;
-	public static String CiudadesInfectadasRonda;
-	public static String EnfermedadesActivasDerrota;
-	public static String NumBrotesDerrota;
 	public static int[] cargarXML() {
+//		if (e.getsource = dificil) {
+//			ficheroXML = "src//files//parametrosDificil.xml";
+//		}else if(e.getsource = medio){
+//			ficheroXML = "src//files//parametrosMedio.xml";
+//		}else if(e.getsource = facil){
+//			ficheroXML = "src//files//parametrosFacil.xml";
+//		}
 		try {
 		    File inputFile = new File(ficheroXML);
 		    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -207,22 +200,62 @@ public class Control_de_datos {
 		    return new int[]{Integer.parseInt(CiudadesInfectadasInicio),Integer.parseInt(CiudadesInfectadasInicio),
 		    		Integer.parseInt(EnfermedadesActivasDerrota),Integer.parseInt(NumBrotesDerrota)};
 		} catch (Exception e) {
-		    e.printStackTrace();
+			System.out.println("Ha habido un error al intentar leer los datos" + e);
 		}
 		return null;
 		
 	}
 	
 	public static void cargarPartida() {
-
+		cargarRecord();
+		cargarCiudades();
+		cargarVacunas();
+		cargarVirus();
+		cargarXML();
 	}
-	
-	public static void guardarPartida() {
 
+	public static void main(String []args) {
+		cargarPartida();
+		try (FileWriter fileWriter = new FileWriter("partida");
+        		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
+
+		            for (Ciudad ciudades : Ciudades) {
+		            	bufferedWriter.write(ciudades.getNombre()+"\n");
+		            	bufferedWriter.write(Arrays.toString(ciudades.getCoordenadas())+"\n");
+		            	bufferedWriter.write(ciudades.getEnfermedad()+"\n");
+		            	bufferedWriter.write(ciudades.getInfeccion()+"\n");
+		            	bufferedWriter.write(Arrays.toString(ciudades.getCiudadesColindantes()) +"\n");
+		            }
+		            bufferedWriter.newLine();
+		            for (Vacunas vacuna : Vacuna) {
+		            	bufferedWriter.write(vacuna.getNombre()+"\n");
+		            	bufferedWriter.write(vacuna.getColor()+"\n");
+		            	bufferedWriter.write(vacuna.getPorcentaje()+"\n");
+		            }
+		            bufferedWriter.newLine();
+		            for (Virus virus : Virus) {
+		            	bufferedWriter.write(virus.getIdentificador()+"\n");
+		            	bufferedWriter.write(virus.getNombre()+"\n");
+		            	bufferedWriter.write(virus.getColor()+"\n");
+		            }	
+				} catch (IOException e) {
+					System.out.println("Ha habido un error al intentar abrir el fichero" + e);
+				}
 	}
 	
 	public static void cargarRecord() {
-
+	    try {
+	        con = conectarBaseDatos();
+	    } finally {
+	        if (con != null) {
+	            try {
+	                con.close();
+	                System.out.println("Conexión cerrada correctamente.");
+	            } catch (SQLException e) {
+	                System.out.println("Error al cerrar la conexión " + e);
+	            }
+	        }
+	    }
 	}
 	
 	public static void guardarRecord() {
@@ -236,12 +269,13 @@ class Ranking{
 	String nombre;
 	Date fecha;
 	int resultado;
-	
-	public Ranking(int rondas, String nombre, Date fecha, int resultado) {
+	int puntuacion;
+	public Ranking(int rondas, String nombre, Date fecha, int resultado, int puntuacion) {
 		this.rondas = rondas;
 		this.nombre = nombre;
 		this.fecha = fecha;
 		this.resultado = resultado;
+		this.puntuacion = puntuacion;
 	}
 	
 	public int getRondas() {
@@ -276,4 +310,11 @@ class Ranking{
 		this.resultado = resultado;
 	}
 	
+	public int getPuntuacion() {
+		return puntuacion;
+	}
+
+	public void setPuntuacion(int puntuacion) {
+		this.puntuacion = puntuacion;
+	}
 }
