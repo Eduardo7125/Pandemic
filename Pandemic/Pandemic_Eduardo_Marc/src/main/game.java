@@ -95,7 +95,6 @@ class game extends JPanel implements ActionListener {
 		add(middlePanel, BorderLayout.CENTER);
 		
 	}
-	
 	public void terminal() {
 		JTextArea texto = new JTextArea(7, 50);
 		texto.setEditable(false);
@@ -125,13 +124,8 @@ class game extends JPanel implements ActionListener {
                 }
             }
         });
-
-        Thread configThread = new Thread(() -> {
-            System.setOut(printStream);
-            System.setErr(printStream);
-        });
-        
-        configThread.start();
+        System.setOut(printStream);
+        System.setErr(printStream);
         texto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		bottomPanel.add(texto, BorderLayout.CENTER);
 	}

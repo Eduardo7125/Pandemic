@@ -43,6 +43,7 @@ class menu extends JPanel implements ActionListener {
     Image imagen;
     Image imagenEscalada;
     static Image nuevaImagen;
+    static Image nuevaImagen2;
     static Image imagen_botones;
 
     JPanel buttonPanel;
@@ -89,13 +90,9 @@ class menu extends JPanel implements ActionListener {
         buttonPanel = new JPanel(new GridLayout(5, 1, 10, 10));
         buttonPanel.setOpaque(false);
         add(buttonPanel, BorderLayout.CENTER);
-
+        
         // Botones
-        nuevaPartidaButton = createButton(iconoNuevaPartida, iconoNuevaPartida2);
-        cargarPartidaButton = createButton(iconoCargarPartida, iconoCargarPartida2);
-        informacionButton = createButton(iconoInfo, iconoInfo2);
-        resumenButton = createButton(iconoScore, iconoScore2);
-        salirButton = createButton(iconoSalir, iconoSalir2);
+        botones();
 
 
         buttonPanel.add(nuevaPartidaButton);
@@ -122,6 +119,26 @@ class menu extends JPanel implements ActionListener {
         setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
 	}
 
+    public void botones() {
+        imageBotones(iconoNuevaPartida, iconoNuevaPartida2);
+        nuevaPartidaButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));        
+        imageBotones(iconoCargarPartida, iconoCargarPartida2);        
+        cargarPartidaButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));        
+        imageBotones(iconoInfo, iconoInfo2);        
+        informacionButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));        
+        imageBotones(iconoScore, iconoScore2);        
+        resumenButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));
+        imageBotones(iconoSalir, iconoSalir2);        
+        salirButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));
+    }
+    
+    public static void imageBotones(ImageIcon icono, ImageIcon icono2) {
+        imagen_botones = icono.getImage();
+        nuevaImagen = imagen_botones.getScaledInstance(450, 300, Image.SCALE_SMOOTH);
+        imagen_botones = icono2.getImage();
+        nuevaImagen2 = imagen_botones.getScaledInstance(450, 300, Image.SCALE_SMOOTH);
+    }
+    
     public JButton createButton(ImageIcon icono, ImageIcon iconoHover) {
         JButton button = new JButton();
         button.setIcon(icono);
