@@ -17,6 +17,9 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -100,24 +103,35 @@ class game extends JPanel implements ActionListener {
         texto.setForeground(Color.BLUE);
         texto.setBackground(Color.LIGHT_GRAY);
         PrintStream printStream = new PrintStream(new OutputStream() {
-        	@Override
+            @Override
             public void write(int b) throws IOException {
-                texto.append(String.valueOf((char) b));
-
-                int lineCount = texto.getLineCount();
-                if (lineCount > 7) {
-                    try {
-                        int endOfFirstLine = texto.getLineEndOffset(0);
-                        texto.replaceRange("", 0, endOfFirstLine);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
+                new Thread(() -> {
+                    texto.append(String.valueOf((char) b));
+                    int lineCount = texto.getLineCount();
+                    if (lineCount > 7) {
+                        try {
+                            int endOfFirstLine = texto.getLineEndOffset(0);
+                            texto.replaceRange("", 0, endOfFirstLine);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                     }
+                    texto.setCaretPosition(texto.getDocument().getLength());
+                }).start();
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         });
 
-        System.setOut(printStream);
-        System.setErr(printStream);
+        Thread configThread = new Thread(() -> {
+            System.setOut(printStream);
+            System.setErr(printStream);
+        });
+        
+        configThread.start();
         texto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		bottomPanel.add(texto, BorderLayout.CENTER);
 	}
@@ -170,16 +184,20 @@ class game extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 switch (nombre) {
                     case "Alfa":
-                    	desarrolloVacunas(Control_de_datos.Vacuna.get(0) , vacunaFinal);
+                    	Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0) , vacunaFinal));
+                    	VacunaAlfa.start();
                         break;
                     case "Beta":
-                    	desarrolloVacunas(Control_de_datos.Vacuna.get(1) , vacunaFinal);
+                    	Thread VacunaBeta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(1) , vacunaFinal));
+                    	VacunaBeta.start();
                         break;
                     case "Gama":
-                    	desarrolloVacunas(Control_de_datos.Vacuna.get(2) , vacunaFinal);
+                    	Thread VacunaGamma = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(2) , vacunaFinal));
+                    	VacunaGamma.start();
                         break;
                     case "Delta":
-                    	desarrolloVacunas(Control_de_datos.Vacuna.get(3) , vacunaFinal);
+                    	Thread VacunaDelta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(3) , vacunaFinal));
+                    	VacunaDelta.start();
                         break;
                 }
             }
@@ -193,7 +211,6 @@ class game extends JPanel implements ActionListener {
 	
     public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
     	
-    	new Thread(() -> {
     	    int counter = (int) vacuna.getPorcentaje();
     	    vacuna.desarrollarVacuna(valorFloat);
     	    int iteraciones = 0;
@@ -208,7 +225,6 @@ class game extends JPanel implements ActionListener {
     	        counter += 1;
     	        iteraciones++;
     	    }
-    	}).start();
         
     }
 	
