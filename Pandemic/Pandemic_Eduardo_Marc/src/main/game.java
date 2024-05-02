@@ -192,19 +192,24 @@ class game extends JPanel implements ActionListener {
 	}
 	
     public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
-        Timer timer = new Timer(2, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!vacuna.isCompleto()) {
-                    vacuna.desarrollarVacuna(valorFloat);
-                    vacunaFinal.setValue((int) vacuna.getPorcentaje());
-                } else {
-                    ((Timer) e.getSource()).stop();
-                }
-            }
-        });
-        timer.setRepeats(false);
-        timer.start();
+    	
+    	new Thread(() -> {
+    	    int counter = (int) vacuna.getPorcentaje();
+    	    vacuna.desarrollarVacuna(valorFloat);
+    	    int iteraciones = 0;
+
+    	    while (counter < 101 && iteraciones < 21) {
+    	        vacunaFinal.setValue(counter);
+    	        try {
+    	            Thread.sleep(50);
+    	        } catch (InterruptedException e) {
+    	            e.printStackTrace();
+    	        }
+    	        counter += 1;
+    	        iteraciones++;
+    	    }
+    	}).start();
+        
     }
 	
     public void paintComponent(Graphics g) {

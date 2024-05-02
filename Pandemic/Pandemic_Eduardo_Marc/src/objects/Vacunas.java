@@ -1,7 +1,5 @@
 package objects;
 
-import javax.swing.JProgressBar;
-
 public class Vacunas {
 
 	private String nombre;

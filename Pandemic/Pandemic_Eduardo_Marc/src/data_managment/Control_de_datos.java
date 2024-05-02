@@ -35,7 +35,7 @@ public class Control_de_datos {
 
 	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
 	private static final String user = "DAM1_2324_PET_EDU";
-	private static final String password = "X7565598R";
+	private static final String password = "edu";
 	public static Connection con;
 	private static final String ficheroTxt = "src//files//ciudades.txt";
 	private static final String ficheroBin = "src//files//CCP.bin";
