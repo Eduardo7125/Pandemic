@@ -201,7 +201,7 @@ class game extends JPanel implements ActionListener {
     	    while (counter < 101 && iteraciones < 21) {
     	        vacunaFinal.setValue(counter);
     	        try {
-    	            Thread.sleep(50);
+    	            Thread.sleep(30);
     	        } catch (InterruptedException e) {
     	            e.printStackTrace();
     	        }
