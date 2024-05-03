@@ -115,6 +115,7 @@ public class Control_de_datos {
 	            Ciudad ciudad = new Ciudad(x[0], cords, x[1], 0, ciudadesColindantes);
 	            
 	            Ciudades.add(ciudad);
+	            System.out.println("Ciudad agregada: " + ciudad);
 	        }
 	    } catch (IOException e) {
 	        System.out.println("Ha habido un error al intentar leer los datos de Ciudades" + e);

@@ -39,7 +39,6 @@ public class Datos_partida {
 		this.acciones = acciones;
 	}
 
-
 	public ArrayList<Ciudad> getCiudades() {
 		return ciudades;
 	}
