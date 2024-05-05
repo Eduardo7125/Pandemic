@@ -28,10 +28,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import data_managment.Control_de_datos;
-import objects.Ciudad;
+import data_managment.Control_de_partida;
 import objects.Vacunas;
 
 class game extends JPanel implements ActionListener {
@@ -78,17 +79,16 @@ class game extends JPanel implements ActionListener {
 		terminal();
 		bottomPanel.setBackground(Color.black);
 		
+		acciones();
 		vacunasCompletas();
 		
 		rightPanel.setBackground(Color.blue.darker().darker().darker());
 		rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-		
 		brotes();
+		
 		leftPanel.setBackground(new Color(0,0,0,128));
 		
 		middlePanel.setOpaque(false);
-		
-		
 		add(topPanel, BorderLayout.NORTH);
 		add(bottomPanel, BorderLayout.SOUTH);
 		add(rightPanel, BorderLayout.EAST);
@@ -96,6 +96,14 @@ class game extends JPanel implements ActionListener {
 		add(middlePanel, BorderLayout.CENTER);
 		
 	}
+	
+	public void acciones() {
+		if (Control_de_partida.acciones == 0) {
+			Control_de_partida.acciones = 4;
+		}
+		
+	}
+	
 	public void terminal() {
 		JTextArea texto = new JTextArea(7, 50);
 		texto.setEditable(false);
@@ -105,7 +113,7 @@ class game extends JPanel implements ActionListener {
         PrintStream printStream = new PrintStream(new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                new Thread(() -> {
+            	SwingUtilities.invokeLater(() -> {
                     texto.append(String.valueOf((char) b));
                     int lineCount = texto.getLineCount();
                     if (lineCount > 7) {
@@ -117,9 +125,9 @@ class game extends JPanel implements ActionListener {
                         }
                     }
                     texto.setCaretPosition(texto.getDocument().getLength());
-                }).start();
+                });
                 try {
-                    Thread.sleep(25);
+                    Thread.sleep(15);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -132,26 +140,14 @@ class game extends JPanel implements ActionListener {
 	}
 	
 	public void brotes() {
-	    ImageIcon iconoInactivo = new ImageIcon("src//img//brote_inactivo.png");
-	    ImageIcon iconoActivo = new ImageIcon("src//img//brote_activo.png");
-	    Image imagenInactiva = iconoInactivo.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-	    Image imagenActiva = iconoActivo.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-
-	    for (Ciudad ciudad : Control_de_datos.Ciudades) {
-	        for (int i = 0; i < brotesvalor; i++) {
-	            ImageIcon icono;
-	            if (i < ciudad.getInfeccion()) {
-	                icono = new ImageIcon(imagenActiva);
-	            } else {
-	                icono = new ImageIcon(imagenInactiva);
-	            }
-	            Image imagen = icono.getImage();
-	            ImageIcon iconoEscalado = new ImageIcon(imagen);
-	            JLabel brotes = new JLabel(iconoEscalado);
-	            brotes.setSize(75, 75);
-	            leftPanel.add(brotes);
-	        }
-	    }
+		ImageIcon icono = new ImageIcon("src//img//brote_inactivo.png");
+        Image imagen = icono.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado = new ImageIcon(imagen);
+		for (int i = 0; i < brotesvalor; i++) {
+			brotes = new JLabel(iconoEscalado);
+			brotes.setSize(75, 75);
+			leftPanel.add(brotes);
+		}
 	}
 	
 	public void vacunasCompletas() {
@@ -160,7 +156,7 @@ class game extends JPanel implements ActionListener {
 		vacunas("Gama", new Color(118, 248, 150));
 		vacunas("Delta", new Color(236, 248, 118));
 	}
-	public static float valorFloat = (float) 20;
+	public static float valorFloat = (float) 25;
 	public void vacunas(String nombre, Color color) {
 		final JProgressBar vacunaFinal = new JProgressBar();
 		
@@ -189,25 +185,32 @@ class game extends JPanel implements ActionListener {
 		vacunaFinal.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                switch (nombre) {
-                    case "Alfa":
-                    	Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0) , vacunaFinal));
-                    	VacunaAlfa.start();
-                        break;
-                    case "Beta":
-                    	Thread VacunaBeta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(1) , vacunaFinal));
-                    	VacunaBeta.start();
-                        break;
-                    case "Gama":
-                    	Thread VacunaGamma = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(2) , vacunaFinal));
-                    	VacunaGamma.start();
-                        break;
-                    case "Delta":
-                    	Thread VacunaDelta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(3) , vacunaFinal));
-                    	VacunaDelta.start();
-                        break;
+                if (Control_de_partida.acciones == 4) {
+                	Control_de_partida.acciones = 0;
+	                switch (nombre) {
+	                    case "Alfa":
+	                    	Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0) , vacunaFinal));
+	                    	VacunaAlfa.start();
+	                        break;
+	                    case "Beta":
+	                    	Thread VacunaBeta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(1) , vacunaFinal));
+	                    	VacunaBeta.start();
+	                        break;
+	                    case "Gama":
+	                    	Thread VacunaGamma = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(2) , vacunaFinal));
+	                    	VacunaGamma.start();
+	                        break;
+	                    case "Delta":
+	                    	Thread VacunaDelta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(3) , vacunaFinal));
+	                    	VacunaDelta.start();
+	                        break;
                 }
+            }else {
+            	Thread respuesta = new Thread(() -> System.out.println("No tienes las suficientes acciones para realizar esta accion"));
+            	respuesta.start();
             }
+               
+          }
         });
 
 		vacunaFinal.setForeground(color);
@@ -216,41 +219,40 @@ class game extends JPanel implements ActionListener {
 			 
 	}
 	
-	public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
-	    int counter = (int) vacuna.getPorcentaje();
-	    int iteraciones = 0;
+    public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
+    	
+    	    int counter = (int) vacuna.getPorcentaje();
+    	    int iteraciones = 0;
 
-	    // Hilo para ejecutar vacuna.desarrollarVacuna(valorFloat)
-	    Thread vacunaThread = new Thread(new Runnable() {
-	        @Override
-	        public void run() {
-	            vacuna.desarrollarVacuna(valorFloat);
-	        }
-	    });
-	    vacunaThread.start();
-
-	    // Bucle while para actualizar la barra de progreso
-	    while (counter < 101 && iteraciones < 21) {
-	        vacunaFinal.setValue(counter);
-	        try {
-	            Thread.sleep(30);
-	        } catch (InterruptedException e) {
-	            e.printStackTrace();
-	        }
-	        counter += 1;
-	        iteraciones++;
-	    }
-	}
+    	    Thread vacunaThread = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+		    	    vacuna.desarrollarVacuna(valorFloat);
+				}
+				
+			});
+    	    vacunaThread.start();
+    	    while (counter < 101 && iteraciones < 26) {
+    	        vacunaFinal.setValue(counter);
+    	        try {
+    	            Thread.sleep(20);
+    	        } catch (InterruptedException e) {
+    	            e.printStackTrace();
+    	        }
+    	        counter += 1;
+    	        iteraciones++;
+    	    }
+    }
 	
-	public void paintComponent(Graphics g) {
-	    super.paintComponent(g);
-	    Graphics2D g2d = (Graphics2D) g.create();
-	    g2d.translate(middlePanel.getX(), middlePanel.getY());
-	    Image imagenFondo = new ImageIcon("src//img//mapa2.png").getImage();
-	    g2d.drawImage(imagenFondo, 0, 0, middlePanel.getWidth(), middlePanel.getHeight(), this);
-	    g2d.dispose();
-	}
-
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.translate(middlePanel.getX(), middlePanel.getY());
+        Image imagenFondo = new ImageIcon("src//img//mapa2.png").getImage();
+        g2d.drawImage(imagenFondo, 0, 0, middlePanel.getWidth(), middlePanel.getHeight(), this);
+        g2d.dispose();
+    }
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == salirButton) {

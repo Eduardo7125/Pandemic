@@ -1,7 +1,5 @@
 package objects;
 
-import java.util.Arrays;
-
 import data_managment.*;
 
 public class Ciudad {	
@@ -20,21 +18,10 @@ public class Ciudad {
 		this.ciudadesColindantes = ciudadesColindantes;
 	}
 	
-	@Override
-	public String toString() {
-	    return "Ciudad{" +
-	            "nombre='" + nombre + '\'' +
-	            ", coordenadas=[" + coordenadas[0] + "," + coordenadas[1] + "]" +
-	            ", enfermedad='" + enfermedad + '\'' +
-	            ", infeccion=" + infeccion +
-	            ", ciudadesColindantes=" + Arrays.toString(ciudadesColindantes) +
-	            '}';
-	}
-	
 	public void aumentarInfeccion() {
 		this.infeccion += 1;
 		if (this.infeccion > 3) {
-			infeccion = 3;
+			this.infeccion = 3;
 			propagarInfeccion();
 		}
 	}
@@ -64,6 +51,14 @@ public class Ciudad {
 	        }
 	    }
 	    return null;
+	}
+	
+	public void comprobarInfeccion() {
+		if (this.getInfeccion() == 4) {
+			
+			propagarInfeccion();
+		}
+		this.getInfeccion();
 	}
 	
 	public String getNombre() {
@@ -105,4 +100,6 @@ public class Ciudad {
 	public void setCiudadesColindantes(String[] ciudadesColindantes) {
 		this.ciudadesColindantes = ciudadesColindantes;
 	}
+	
+	
 }

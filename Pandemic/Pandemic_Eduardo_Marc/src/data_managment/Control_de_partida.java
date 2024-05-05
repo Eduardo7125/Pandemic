@@ -2,6 +2,7 @@ package data_managment;
 
 public class Control_de_partida {
 
+	public static int acciones = 4;
 	public void iniciarPartida() {
 		
 	}

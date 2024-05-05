@@ -152,7 +152,7 @@ class info extends JPanel implements ActionListener {
                 tituloLabel.setText("END");
                 informacion = "<html><p>At the end of each round, it is checked whether the player has won, lost, or it is unknown.<br>"
                         + "You win by curing all infections.<br>"
-                        + "If X outbreaks occur, the game is lost.</p></html>";
+                        + "If all the outbreaks occur, the game is lost.</p></html>";
                 break;
             case "MENU":
     			setVisible(false); 

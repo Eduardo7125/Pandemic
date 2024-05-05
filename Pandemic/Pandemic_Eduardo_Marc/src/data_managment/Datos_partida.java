@@ -16,7 +16,7 @@ public class Datos_partida {
 	private float pDesarrolloBeta = 0;
 	private float pDesarrolloGama = 0;
 	private float pDesarrolloDelta = 0;
-	private int acciones = 4;
+	public int acciones = 4;
 	
 	public void cargarDatos() {
 		this.ciudades = Control_de_datos.cargarCiudades();
@@ -38,6 +38,7 @@ public class Datos_partida {
 		this.pDesarrolloDelta = pDesarrolloDelta;
 		this.acciones = acciones;
 	}
+
 
 	public ArrayList<Ciudad> getCiudades() {
 		return ciudades;
