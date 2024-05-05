@@ -128,12 +128,20 @@ class game extends JPanel implements ActionListener {
     }
 
     public void printInfection() {
+        // Deshabilitar el botón "NEXT ROUND"
+        nextRoundButton.setEnabled(false);
+
         // Método para imprimir la información de la infección de manera progresiva
         JTextArea texto = (JTextArea) bottomPanel.getComponent(0); // Obtener el JTextArea de bottomPanel
 
         // Simular una nueva impresión de línea con un pequeño retraso entre caracteres
         Runnable printInfection = () -> {
             Control_de_partida.gestionarInfeccion(); // Llamar a la función de gestión de infección
+
+            // Habilitar nuevamente el botón "NEXT ROUND" al finalizar la impresión de la infección
+            SwingUtilities.invokeLater(() -> {
+                nextRoundButton.setEnabled(true);
+            });
         };
 
         // Ejecutar la impresión en un hilo separado para no bloquear la interfaz de usuario
