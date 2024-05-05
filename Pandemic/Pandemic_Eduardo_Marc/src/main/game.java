@@ -17,7 +17,6 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -29,91 +28,112 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
 import objects.Vacunas;
 
 class game extends JPanel implements ActionListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7725219079694206212L;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 7725219079694206212L;
 
-	ImageIcon background;
-	
-	JButton salirButton;
-	
-	JPanel topPanel;
-	JPanel leftPanel;
-	JPanel rightPanel;
-	JPanel bottomPanel;
-	JPanel middlePanel;
-	
-	JLabel LabelImagen;
-	JLabel menuLabel1;
-	JLabel brotes;
-	
-	JProgressBar vacunas;
+    ImageIcon background;
 
-	private static game instance;
-	int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
-	
-	game(){
-		
-		setLayout(new BorderLayout());
-		
-		topPanel = new JPanel(new BorderLayout());
-		bottomPanel = new JPanel();
-		leftPanel = new JPanel(new GridLayout(brotesvalor, 0, 10, 10));
-		rightPanel = new JPanel(new GridBagLayout());
-		middlePanel = new JPanel();
+    JButton salirButton;
+    JButton nextRoundButton; // Nuevo botón para el siguiente round
 
-		salirButton = new JButton("sdsd");
-		salirButton.addActionListener(this);
-		topPanel.add(salirButton, BorderLayout.EAST);
-		topPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
-		topPanel.setBackground(Color.white);
-		
-		terminal();
-		bottomPanel.setBackground(Color.black);
-		
-		acciones();
-		vacunasCompletas();
-		
-		rightPanel.setBackground(Color.blue.darker().darker().darker());
-		rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-		brotes();
-		
-		leftPanel.setBackground(new Color(0,0,0,128));
-		
-		middlePanel.setOpaque(false);
-		add(topPanel, BorderLayout.NORTH);
-		add(bottomPanel, BorderLayout.SOUTH);
-		add(rightPanel, BorderLayout.EAST);
-		add(leftPanel, BorderLayout.WEST);
-		add(middlePanel, BorderLayout.CENTER);
-		
-	}
-	
-	public void acciones() {
-		if (Control_de_partida.acciones == 0) {
-			Control_de_partida.acciones = 4;
-		}
-		
-	}
-	
-	public void terminal() {
-		JTextArea texto = new JTextArea(7, 50);
-		texto.setEditable(false);
+    JPanel topPanel;
+    JPanel leftPanel;
+    JPanel rightPanel;
+    JPanel bottomPanel;
+    JPanel middlePanel;
+
+    JLabel LabelImagen;
+    JLabel menuLabel1;
+    JLabel brotes;
+
+    JProgressBar vacunas;
+
+    private static game instance;
+    int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
+
+    game() {
+
+        setLayout(new BorderLayout());
+
+        topPanel = new JPanel(new BorderLayout());
+        bottomPanel = new JPanel();
+        leftPanel = new JPanel(new GridLayout(brotesvalor, 0, 10, 10));
+        rightPanel = new JPanel(new GridBagLayout());
+        middlePanel = new JPanel();
+
+        salirButton = new JButton("MENU");
+        salirButton.addActionListener(this);
+        topPanel.add(salirButton, BorderLayout.EAST);
+        topPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
+        topPanel.setBackground(Color.white);
+
+        terminal();
+        bottomPanel.setBackground(Color.black);
+
+        vacunasCompletas();
+
+        rightPanel.setBackground(Color.blue.darker().darker().darker());
+        rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
+        brotes();
+
+        leftPanel.setBackground(new Color(0, 0, 0, 128));
+
+        middlePanel.setOpaque(false);
+        add(topPanel, BorderLayout.NORTH);
+        add(bottomPanel, BorderLayout.SOUTH);
+        add(rightPanel, BorderLayout.EAST);
+        add(leftPanel, BorderLayout.WEST);
+        add(middlePanel, BorderLayout.CENTER);
+
+        // Creación del botón y configuración de su ActionListener
+        nextRoundButton = new JButton("NEXT ROUND");
+        nextRoundButton.addActionListener(this); // El ActionListener es esta misma clase
+        rightPanel.add(nextRoundButton); // Agregar el botón al panel derecho junto con las vacunas
+    }
+
+    public void acciones() {
+        Control_de_partida.acciones = 4;
+        Control_de_partida.gestionarTurno();
+
+        // Método para imprimir el texto de manera progresiva
+        JTextArea texto = (JTextArea) bottomPanel.getComponent(0); // Obtener el JTextArea de bottomPanel
+
+        // Simular una nueva impresión de línea con un pequeño retraso entre caracteres
+        Runnable printRound = () -> {
+            for (char c : ("Round: " + Control_de_partida.turno + "\n").toCharArray()) {
+                texto.append(String.valueOf(c));
+                try {
+                    Thread.sleep(15); // Pequeño retraso entre caracteres para la impresión progresiva
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        // Ejecutar la impresión en un hilo separado para no bloquear la interfaz de usuario
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(printRound);
+        executor.shutdown();
+    }
+
+    public void terminal() {
+        JTextArea texto = new JTextArea(7, 50);
+        texto.setEditable(false);
         texto.setFont(new Font("Arial", Font.BOLD, 14));
         texto.setForeground(Color.BLUE);
         texto.setBackground(Color.LIGHT_GRAY);
         PrintStream printStream = new PrintStream(new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-            	SwingUtilities.invokeLater(() -> {
+                SwingUtilities.invokeLater(() -> {
                     texto.append(String.valueOf((char) b));
                     int lineCount = texto.getLineCount();
                     if (lineCount > 7) {
@@ -135,116 +155,125 @@ class game extends JPanel implements ActionListener {
         });
         System.setOut(printStream);
         System.setErr(printStream);
+        texto.append("Round: " + Control_de_partida.turno + "\n"); // Imprimir turno al iniciar
         texto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		bottomPanel.add(texto, BorderLayout.CENTER);
-	}
-	
-	public void brotes() {
-		ImageIcon icono = new ImageIcon("src//img//brote_inactivo.png");
+        bottomPanel.add(texto, BorderLayout.CENTER);
+    }
+
+
+    public void brotes() {
+        ImageIcon icono = new ImageIcon("src//img//brote_inactivo.png");
         Image imagen = icono.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
         ImageIcon iconoEscalado = new ImageIcon(imagen);
-		for (int i = 0; i < brotesvalor; i++) {
-			brotes = new JLabel(iconoEscalado);
-			brotes.setSize(75, 75);
-			leftPanel.add(brotes);
-		}
-	}
-	
-	public void vacunasCompletas() {
-		vacunas("Alfa", new Color(118, 189, 248));
-		vacunas("Beta", new Color(248, 118, 118));
-		vacunas("Gama", new Color(118, 248, 150));
-		vacunas("Delta", new Color(236, 248, 118));
-	}
-	public static float valorFloat = (float) 25;
-	public void vacunas(String nombre, Color color) {
-		final JProgressBar vacunaFinal = new JProgressBar();
-		
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = GridBagConstraints.RELATIVE;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(5, 5, 5, 5);
+        for (int i = 0; i < brotesvalor; i++) {
+            brotes = new JLabel(iconoEscalado);
+            brotes.setSize(75, 75);
+            leftPanel.add(brotes);
+        }
+    }
 
-		ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
-		Image imagen = icono.getImage().getScaledInstance(75, 39, Image.SCALE_SMOOTH);
-		ImageIcon iconoEscalado = new ImageIcon(imagen);
+    public void vacunasCompletas() {
+        vacunas("Alfa", new Color(118, 189, 248));
+        vacunas("Beta", new Color(248, 118, 118));
+        vacunas("Gama", new Color(118, 248, 150));
+        vacunas("Delta", new Color(236, 248, 118));
+    }
 
-		vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
-			protected Color getSelectionForeground() {
-				return Color.DARK_GRAY;
-			}
-		});
+    public static float valorFloat = (float) 25;
 
-		vacunaFinal.setMinimum(0);
-		vacunaFinal.setMaximum(100);
-		vacunaFinal.setStringPainted(true);
-		vacunaFinal.setOpaque(false);
-		vacunaFinal.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
-		
-		vacunaFinal.addMouseListener(new MouseAdapter() {
+    public void vacunas(String nombre, Color color) {
+        final JProgressBar vacunaFinal = new JProgressBar();
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
+        Image imagen = icono.getImage().getScaledInstance(75, 39, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado = new ImageIcon(imagen);
+
+        vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
+            protected Color getSelectionForeground() {
+                return Color.DARK_GRAY;
+            }
+        });
+
+        vacunaFinal.setMinimum(0);
+        vacunaFinal.setMaximum(100);
+        vacunaFinal.setStringPainted(true);
+        vacunaFinal.setOpaque(false);
+        vacunaFinal.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
+
+        vacunaFinal.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (Control_de_partida.acciones == 4) {
-                	Control_de_partida.acciones = 0;
-	                switch (nombre) {
-	                    case "Alfa":
-	                    	Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0) , vacunaFinal));
-	                    	VacunaAlfa.start();
-	                        break;
-	                    case "Beta":
-	                    	Thread VacunaBeta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(1) , vacunaFinal));
-	                    	VacunaBeta.start();
-	                        break;
-	                    case "Gama":
-	                    	Thread VacunaGamma = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(2) , vacunaFinal));
-	                    	VacunaGamma.start();
-	                        break;
-	                    case "Delta":
-	                    	Thread VacunaDelta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(3) , vacunaFinal));
-	                    	VacunaDelta.start();
-	                        break;
+                    Control_de_partida.acciones = 0;
+                    switch (nombre) {
+                        case "Alfa":
+                            Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0),
+                                    vacunaFinal));
+                            VacunaAlfa.start();
+                            break;
+                        case "Beta":
+                            Thread VacunaBeta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(1),
+                                    vacunaFinal));
+                            VacunaBeta.start();
+                            break;
+                        case "Gama":
+                            Thread VacunaGamma = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(2),
+                                    vacunaFinal));
+                            VacunaGamma.start();
+                            break;
+                        case "Delta":
+                            Thread VacunaDelta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(3),
+                                    vacunaFinal));
+                            VacunaDelta.start();
+                            break;
+                    }
+                } else {
+                    Thread respuesta = new Thread(() -> System.out
+                            .println("No tienes las suficientes acciones para realizar esta accion"));
+                    respuesta.start();
                 }
-            }else {
-            	Thread respuesta = new Thread(() -> System.out.println("No tienes las suficientes acciones para realizar esta accion"));
-            	respuesta.start();
+
             }
-               
-          }
         });
 
-		vacunaFinal.setForeground(color);
-		vacunaFinal.setName(nombre);
-		rightPanel.add(vacunaFinal, gbc);
-			 
-	}
-	
-    public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
-    	
-    	    int counter = (int) vacuna.getPorcentaje();
-    	    int iteraciones = 0;
+        vacunaFinal.setForeground(color);
+        vacunaFinal.setName(nombre);
+        rightPanel.add(vacunaFinal, gbc);
 
-    	    Thread vacunaThread = new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-		    	    vacuna.desarrollarVacuna(valorFloat);
-				}
-				
-			});
-    	    vacunaThread.start();
-    	    while (counter < 101 && iteraciones < 26) {
-    	        vacunaFinal.setValue(counter);
-    	        try {
-    	            Thread.sleep(20);
-    	        } catch (InterruptedException e) {
-    	            e.printStackTrace();
-    	        }
-    	        counter += 1;
-    	        iteraciones++;
-    	    }
     }
-	
+
+    public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
+
+        int counter = (int) vacuna.getPorcentaje();
+        int iteraciones = 0;
+
+        Thread vacunaThread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                vacuna.desarrollarVacuna(valorFloat);
+            }
+
+        });
+        vacunaThread.start();
+        while (counter < 101 && iteraciones < 26) {
+            vacunaFinal.setValue(counter);
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            counter += 1;
+            iteraciones++;
+        }
+    }
+
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
@@ -253,20 +282,24 @@ class game extends JPanel implements ActionListener {
         g2d.drawImage(imagenFondo, 0, 0, middlePanel.getWidth(), middlePanel.getHeight(), this);
         g2d.dispose();
     }
-	public void actionPerformed(ActionEvent e) {
-		
-		if (e.getSource() == salirButton) {
-			setVisible(false); 
-	        menu menu = main.menu.getInstance();
-	        menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	        menu.setVisible(true);
-	        getParent().add(menu);
-	        
-	        getParent().revalidate();
-	        getParent().repaint();
-		}
-		
-	}
+
+    public void actionPerformed(ActionEvent e) {
+
+        if (e.getSource() == salirButton) {
+            setVisible(false);
+            menu menu = main.menu.getInstance();
+            menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+            menu.setVisible(true);
+            getParent().add(menu);
+
+            getParent().revalidate();
+            getParent().repaint();
+        } else if (e.getSource() == nextRoundButton) {
+            // Si el evento proviene del botón "NEXT ROUND"
+            acciones();
+        }
+    }
+
     public static game getInstance() {
         if (instance == null) {
             instance = new game();

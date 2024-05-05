@@ -2,6 +2,7 @@ package data_managment;
 
 public class Control_de_partida {
 
+	public static int turno = 1;
 	public static int acciones = 4;
 	public void iniciarPartida() {
 		
@@ -11,8 +12,8 @@ public class Control_de_partida {
 		
 	}
 	
-	public void gestionarTurno() {
-		
+	public static void gestionarTurno() {
+		turno++;
 	}
 	
 	public void gestionarVacuna() {
