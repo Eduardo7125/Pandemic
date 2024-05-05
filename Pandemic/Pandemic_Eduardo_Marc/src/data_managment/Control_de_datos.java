@@ -57,14 +57,14 @@ public class Control_de_datos {
 	        Class.forName("oracle.jdbc.driver.OracleDriver");
 	        con = DriverManager.getConnection(url, user, password);
 	        if (con != null) {
-	            System.out.println("Conexión establecida correctamente.");
+	            System.out.println("Connection established successfully.");
 	        } else {
-	            System.out.println("No se pudo establecer la conexión.");
+	            System.out.println("The connection could not be established.");
 	        }
 	    } catch (ClassNotFoundException e) {
-	        System.out.println("No se ha encontrado el driver " + e);
+	        System.out.println("The driver not found " + e);
 	    } catch (SQLException e) {
-	        System.out.println("Error en las credenciales o en la URL " + e);
+	        System.out.println("Error in credentials or URL " + e);
 	    }
 	    return con;
 	}
@@ -89,11 +89,11 @@ public class Control_de_datos {
 
 					p.add(rank);				}
 			} else {
-				System.out.println("No he encontrado nada");
+				System.out.println("Nothing has been found.");
 			}	
 
 		} catch (SQLException e) {
-			System.out.println("Ha habido un error al intentar leer los datos" + e);
+			System.out.println("There was an error while trying to read the data " + e);
 		}
 		
 		return p;
@@ -117,7 +117,7 @@ public class Control_de_datos {
 	            Ciudades.add(ciudad);
 	        }
 	    } catch (IOException e) {
-	        System.out.println("Ha habido un error al intentar leer los datos de Ciudades" + e);
+	        System.out.println("There was an error while trying to read the data for Cities " + e);
 	    }
 	    
 	    return Ciudades;
@@ -159,9 +159,9 @@ public class Control_de_datos {
 		    } catch (EOFException e1) {
 		        System.out.println();
 		    } catch (FileNotFoundException e) {
-		        System.out.println("Fichero no encontrado " + e);
+		        System.out.println("File not found " + e);
 		    } catch (IOException e) {
-		        System.out.println("Ha habido un error de lectura " + e);
+		        System.out.println("There was a reading error " + e);
 		    }
 		    return Virus;
 	}
@@ -200,7 +200,7 @@ public class Control_de_datos {
 		    return new int[]{Integer.parseInt(CiudadesInfectadasInicio),Integer.parseInt(CiudadesInfectadasInicio),
 		    		Integer.parseInt(EnfermedadesActivasDerrota),Integer.parseInt(NumBrotesDerrota)};
 		} catch (Exception e) {
-			System.out.println("Ha habido un error al intentar leer los datos" + e);
+			System.out.println("There was an error while trying to read the data " + e);
 		}
 		return null;
 		
@@ -239,7 +239,7 @@ public class Control_de_datos {
 		            	bufferedWriter.write(virus.getColor()+"\n");
 		            }	
 				} catch (IOException e) {
-					System.out.println("Ha habido un error al intentar abrir el fichero" + e);
+					System.out.println("There was an error while trying to open the file " + e);
 				}
 	}
 	
@@ -250,9 +250,9 @@ public class Control_de_datos {
 	        if (con != null) {
 	            try {
 	                con.close();
-	                System.out.println("Conexión cerrada correctamente.");
+	                System.out.println("Connection closed successfully.");
 	            } catch (SQLException e) {
-	                System.out.println("Error al cerrar la conexión " + e);
+	                System.out.println("Error when closing the connection " + e);
 	            }
 	        }
 	    }
