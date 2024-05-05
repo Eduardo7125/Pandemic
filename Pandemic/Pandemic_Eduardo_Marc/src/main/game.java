@@ -103,6 +103,31 @@ class game extends JPanel implements ActionListener {
         Control_de_partida.acciones = 4;
         Control_de_partida.gestionarTurno();
         
+        // Método para imprimir la información de la ronda de manera progresiva
+        JTextArea texto = (JTextArea) bottomPanel.getComponent(0); // Obtener el JTextArea de bottomPanel
+
+        // Simular una nueva impresión de línea con un pequeño retraso entre caracteres
+        Runnable printRound = () -> {
+            for (char c : ("Round: " + Control_de_partida.turno + "\n").toCharArray()) {
+                texto.append(String.valueOf(c));
+                try {
+                    Thread.sleep(15); // Pequeño retraso entre caracteres para la impresión progresiva
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Después de imprimir la información de la ronda, llamar al método para imprimir la información de las ciudades infectadas
+            printInfection();
+        };
+
+        // Ejecutar la impresión en un hilo separado para no bloquear la interfaz de usuario
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.submit(printRound);
+        executor.shutdown();
+    }
+
+    public void printInfection() {
         // Método para imprimir la información de la infección de manera progresiva
         JTextArea texto = (JTextArea) bottomPanel.getComponent(0); // Obtener el JTextArea de bottomPanel
 
