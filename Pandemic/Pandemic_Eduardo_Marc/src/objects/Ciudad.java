@@ -81,6 +81,20 @@ public class Ciudad {
 		return enfermedad;
 	}
 	
+	public String getNombreEnfermedad() {
+        // Obtiene el número de virus
+        String numeroVirus = enfermedad;
+        
+        // Busca el virus correspondiente en el ArrayList de Virus en Control_de_datos
+        for (Virus virus : Control_de_datos.Virus) {
+            if (virus.getIdentificador().equals(numeroVirus)) {
+                return virus.getNombre(); // Devuelve el nombre del virus
+            }
+        }
+        
+        return "Virus Desconocido"; // Si no se encuentra el virus, devuelve un mensaje predeterminado
+    }
+	
 	public void setEnfermedad(String enfermedad) {
 		this.enfermedad = enfermedad;
 	}
