@@ -57,6 +57,18 @@ public class Control_de_partida {
 
         return ciudadesAleatorias;
     }
+        //TESTEO
+	/*
+	private static ArrayList<Ciudad> seleccionarCuatroCiudades(ArrayList<Ciudad> ciudades) {
+	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
+	    // Simplemente agregamos la misma ciudad cuatro veces
+	    for (int i = 0; i < 4; i++) {
+	        Ciudad ciudad = ciudades.get(0); // Tomamos la primera ciudad de la lista
+	        ciudadesAleatorias.add(ciudad);
+	    }
+	    return ciudadesAleatorias;
+	}
+	*/
 	
 	public void gestionarBrote() {
 		
