@@ -39,7 +39,7 @@ class Marco extends JFrame{
             setResizable(false);
             graphicsDevice.setFullScreenWindow(this);
         } else {
-            System.out.println("El modo de pantalla completa no es soportado por este dispositivo.");
+            System.out.println("The full-screen mode is not supported by this device.");
         }
 
         menu menu = main.menu.getInstance();

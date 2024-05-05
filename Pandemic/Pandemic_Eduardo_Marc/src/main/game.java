@@ -253,7 +253,7 @@ class game extends JPanel implements ActionListener {
                     }
                 } else {
                     Thread respuesta = new Thread(() -> System.out
-                            .println("No tienes las suficientes acciones para realizar esta accion"));
+                            .println("You don't have enough actions to perform this action."));
                     respuesta.start();
                 }
 
