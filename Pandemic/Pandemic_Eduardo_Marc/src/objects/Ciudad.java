@@ -20,10 +20,6 @@ public class Ciudad {
 	
 	public void aumentarInfeccion() {
 		this.infeccion += 1;
-		if (this.infeccion > 3) {
-			this.infeccion = 3;
-			propagarInfeccion();
-		}
 	}
 	
 	boolean cantInfect;
@@ -37,10 +33,15 @@ public class Ciudad {
 	}
 	
 	public void propagarInfeccion() {
+		System.out.println("INFECTED CITIES BY THE OUTBREAK: ");
 		for (String colindantes : this.ciudadesColindantes) {
 			Ciudad ciudad = obtenerCiudad(colindantes);
 			
 	        ciudad.aumentarInfeccion();
+	        System.out.println("Name: " + ciudad.getNombre());
+	        System.out.println("Virus: " + ciudad.getNombreEnfermedad());
+	        System.out.println("Infection: " + ciudad.getInfeccion());
+	        System.out.println();
 		}
 	}
 	
@@ -51,14 +52,6 @@ public class Ciudad {
 	        }
 	    }
 	    return null;
-	}
-	
-	public void comprobarInfeccion() {
-		if (this.getInfeccion() == 4) {
-			
-			propagarInfeccion();
-		}
-		this.getInfeccion();
 	}
 	
 	public String getNombre() {

@@ -33,7 +33,7 @@ import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
 import objects.Vacunas;
 
-class game extends JPanel implements ActionListener {
+public class game extends JPanel implements ActionListener {
     /**
      * 
      */
@@ -45,7 +45,7 @@ class game extends JPanel implements ActionListener {
     JButton nextRoundButton; // Nuevo botón para el siguiente round
 
     JPanel topPanel;
-    JPanel leftPanel;
+    static JPanel leftPanel;
     JPanel rightPanel;
     JPanel bottomPanel;
     JPanel middlePanel;
@@ -57,7 +57,7 @@ class game extends JPanel implements ActionListener {
     JProgressBar vacunas;
 
     private static game instance;
-    int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
+    static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
 
     game() {
 
@@ -186,16 +186,26 @@ class game extends JPanel implements ActionListener {
         bottomPanel.add(texto, BorderLayout.CENTER);
     }
 
+    public static void brotes() {
+        leftPanel.removeAll(); // Limpiar el panel antes de agregar los nuevos JLabel
 
-    public void brotes() {
-        ImageIcon icono = new ImageIcon("src//img//brote_inactivo.png");
-        Image imagen = icono.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-        ImageIcon iconoEscalado = new ImageIcon(imagen);
         for (int i = 0; i < brotesvalor; i++) {
-            brotes = new JLabel(iconoEscalado);
+            ImageIcon icono;
+            if (Control_de_partida.outbreak > 0 && i < Control_de_partida.outbreak) {
+                icono = new ImageIcon("src//img//brote_activo.png");
+            } else {
+                icono = new ImageIcon("src//img//brote_inactivo.png");
+            }
+            Image imagen = icono.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+            ImageIcon iconoEscalado = new ImageIcon(imagen);
+            JLabel brotes = new JLabel(iconoEscalado);
             brotes.setSize(75, 75);
             leftPanel.add(brotes);
         }
+
+        // Asegurarse de que el panel se actualice
+        leftPanel.revalidate();
+        leftPanel.repaint();
     }
 
     public void vacunasCompletas() {
