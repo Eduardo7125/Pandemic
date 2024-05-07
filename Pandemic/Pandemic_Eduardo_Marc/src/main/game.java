@@ -76,6 +76,7 @@ public class game extends JPanel implements ActionListener {
         topPanel.setBackground(Color.white);
 
         terminal();
+        startinfection();
         bottomPanel.setBackground(Color.black);
 
         vacunasCompletas();
@@ -84,7 +85,7 @@ public class game extends JPanel implements ActionListener {
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         brotes();
 
-        leftPanel.setBackground(new Color(0, 0, 0, 128));
+        leftPanel.setBackground(Color.gray);
 
         middlePanel.setOpaque(false);
         add(topPanel, BorderLayout.NORTH);
@@ -185,6 +186,10 @@ public class game extends JPanel implements ActionListener {
         texto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         bottomPanel.add(texto, BorderLayout.CENTER);
     }
+    
+    static void startinfection() {
+        Control_de_partida.InfeccionInicial();
+    } 
 
     public static void brotes() {
         leftPanel.removeAll(); // Limpiar el panel antes de agregar los nuevos JLabel
