@@ -80,7 +80,7 @@ public class game extends JPanel implements ActionListener {
         bottomPanel.setBackground(Color.black);
 
         vacunasCompletas();
-        ciudades();
+
         rightPanel.setBackground(Color.blue.darker().darker().darker());
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         brotes();
@@ -103,21 +103,47 @@ public class game extends JPanel implements ActionListener {
         nextRoundButton = new JButton("NEXT ROUND");
         nextRoundButton.addActionListener(this);
         rightPanel.add(nextRoundButton, gbc);
+        
         Thread infection = new Thread(() -> startinfection());
         infection.start();
+        ciudades();
+        actualizarEstadoCiudades();
+        
     }
-
+    public void actualizarEstadoCiudades() {
+        for (Component component : middlePanel.getComponents()) {
+            if (component instanceof JButton) {
+                JButton button = (JButton) component;
+                String cityName = button.getName();
+                objects.Ciudad ciudad = obtenerCiudadPorNombre(cityName);
+                if (ciudad != null) {
+                    if (ciudad.getInfeccion() > 0) {
+                        button.setEnabled(true);
+                    } else {
+                        button.setEnabled(false);
+                    }
+                }
+            }
+        }
+    }
+    public objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
+        for (objects.Ciudad ciudad : Control_de_datos.Ciudades) {
+            if (ciudad.getNombre().equals(nombreCiudad)) {
+                return ciudad;
+            }
+        }
+        return null;
+    }
     public void ciudades() {
     	middlePanel.setLayout(null);
     	
     	for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
     		int[] coordenadas = ciudades.getCoordenadas();
     		String[] colindantes = ciudades.getCiudadesColindantes();
-			JButton ciudad = new JButton();
-			ciudad.setName(ciudades.getNombre());
+			JButton ciudad = new JButton(ciudades.getNombre());
 			ciudad.setBounds(coordenadas[0], coordenadas[1], 100, 50);
 			for (String colindante : colindantes) {
-				createLine(middlePanel, ciudad, colindante);
+//				createLine(middlePanel, ciudad, colindante);
 			}
 			ciudad.addActionListener(e -> {
 	        	System.out.println(ciudades.getNombre());
@@ -126,23 +152,6 @@ public class game extends JPanel implements ActionListener {
 			middlePanel.add(ciudad);
 	        
 		}
-    }
-    private void createLine(JPanel middlePanel, JButton fromButton, String toCityName) {
-        JButton toButton = findButtonByName(toCityName);
-        if (toButton != null) {
-            middlePanel.add(new Line(middlePanel, fromButton, toButton));
-        }
-    }
-    private JButton findButtonByName(String cityName) {
-        for (Component component : middlePanel.getComponents()) {
-            if (component instanceof JButton) {
-                JButton button = (JButton) component;
-                if (button.getName().equals(cityName)) {
-                    return button;
-                }
-            }
-        }
-        return null;
     }
     public void acciones() {
         Control_de_partida.acciones = 4;
@@ -368,32 +377,9 @@ public class game extends JPanel implements ActionListener {
             getParent().revalidate();
             getParent().repaint();
         } else if (e.getSource() == nextRoundButton) {
-            // Si el evento proviene del botón "NEXT ROUND"
+        	Thread estados = new Thread(() -> actualizarEstadoCiudades());
+        	estados.start();
             acciones();
         }
-    }
-}
-class Line extends JComponent {
-    private JButton fromButton;
-    private JButton toButton;
-    private JPanel middlePanel;
-
-    public Line(JPanel middlePanel, JButton fromButton, JButton toButton) {
-        this.middlePanel = middlePanel;
-        this.fromButton = fromButton;
-        this.toButton = toButton;
-        setBounds(0, 0, middlePanel.getWidth(), middlePanel.getHeight());
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(Color.RED);
-        int x1 = fromButton.getX() + fromButton.getWidth() / 2;
-        int y1 = fromButton.getY() + fromButton.getHeight() / 2;
-        int x2 = toButton.getX() + toButton.getWidth() / 2;
-        int y2 = toButton.getY() + toButton.getHeight() / 2;
-        g2d.drawLine(x1, y1, x2, y2);
     }
 }

@@ -18,10 +18,10 @@ public class Vacunas {
 			int nuevoValor = (int) (this.getPorcentaje() + (int) porcentaje);
 			if (nuevoValor <= 100) {
 				this.setPorcentaje(nuevoValor);
-				System.out.println("Se aumento el valor de la vacuna " + this.getNombre() + " a " + nuevoValor);
+				System.out.println("The value of vaccine " + this.getNombre() + " has been increased to " + nuevoValor);
 			} else {
 				completo = true;
-				System.out.println("La vacuna " + this.getNombre() + " ya esta completamente desarrollada.");
+				System.out.println("Vaccine " + this.getNombre() + " is already fully developed.");
 			}	
 		
 	}
