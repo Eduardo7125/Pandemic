@@ -35,6 +35,8 @@ class menu extends JPanel implements ActionListener {
      */
     @Serial
     private static final long serialVersionUID = -5124796854119688429L;
+    
+    public static boolean a = true;
     ImageIcon icono;
     ImageIcon iconoEscalado;
     ImageIcon iconoNuevaPartida;
@@ -228,7 +230,10 @@ class menu extends JPanel implements ActionListener {
                     atrasButton.setVisible(false);
                 }
             });
+            if(a == true) {
             dificultad.add(atrasButton);
+            }
+            a = false;
 
             // Calcular las coordenadas para centrar el popup
             int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
