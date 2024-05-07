@@ -13,8 +13,8 @@ import java.io.Serial;
 
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
-	    Thread cargaPartidaThread = new Thread(() -> Control_de_datos.cargarPartida());
-	    cargaPartidaThread.start();
+//	    Thread cargaPartidaThread = new Thread(() -> Control_de_datos.cargarPartida());
+//	    cargaPartidaThread.start();
 
 	    SwingUtilities.invokeLater(() -> {
 	        Marco mimimarco = new Marco();
