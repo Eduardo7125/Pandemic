@@ -278,7 +278,7 @@ class menu extends JPanel implements ActionListener {
     private void iniciarNuevaPartida() {
         setVisible(false);
         dificultad.setVisible(false);
-        game juego = game.getInstance();
+        game juego = new game();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
 

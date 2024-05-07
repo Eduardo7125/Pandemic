@@ -48,9 +48,9 @@ public class Control_de_partida {
 	public static void InfeccionInicial() {
         // Accede a la lista de ciudades desde Control_de_datos
         ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
-
+        
         // Selecciona aleatoriamente cuatro ciudades
-        ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudades(ciudades);
+        ArrayList<Ciudad> ciudadesAleatorias = InfeccionInicial(ciudades);
 
         // Ejecuta el método aumentarInfeccion() en cada una de las cuatro ciudades seleccionadas
         for (Ciudad ciudad : ciudadesAleatorias) {
@@ -61,9 +61,9 @@ public class Control_de_partida {
     }
 
 	
-    private static ArrayList<Ciudad> InfeccionInicial(ArrayList<Ciudad> ciudades) {
+    public static ArrayList<Ciudad> InfeccionInicial(ArrayList<Ciudad> ciudades) {
         ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
-        Random rand = new Random();
+        Random rand = new Random(Control_de_datos.Ciudades.size());
     	int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasInicio);
         // Selecciona cuatro índices únicos aleatorios
         for (int i = 0; i < infect; i++) {
@@ -104,9 +104,8 @@ public class Control_de_partida {
     // Método para seleccionar aleatoriamente cuatro ciudades de la lista
     private static ArrayList<Ciudad> seleccionarCiudades(ArrayList<Ciudad> ciudades) {
         ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
-        Random rand = new Random();
+        Random rand = new Random(Control_de_datos.Ciudades.size());
     	int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasRonda);
-        // Selecciona cuatro índices únicos aleatorios
         for (int i = 0; i < infect; i++) {
             int index = rand.nextInt(ciudades.size());
             Ciudad ciudad = ciudades.get(index);

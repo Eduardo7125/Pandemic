@@ -2,6 +2,7 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,6 +24,7 @@ import java.util.concurrent.Executors;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
@@ -56,7 +58,6 @@ public class game extends JPanel implements ActionListener {
 
     JProgressBar vacunas;
 
-    private static game instance;
     static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
 
     game() {
@@ -76,11 +77,10 @@ public class game extends JPanel implements ActionListener {
         topPanel.setBackground(Color.white);
 
         terminal();
-        startinfection();
         bottomPanel.setBackground(Color.black);
 
         vacunasCompletas();
-
+        ciudades();
         rightPanel.setBackground(Color.blue.darker().darker().darker());
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         brotes();
@@ -94,58 +94,91 @@ public class game extends JPanel implements ActionListener {
         add(leftPanel, BorderLayout.WEST);
         add(middlePanel, BorderLayout.CENTER);
 
-        // Creación del botón y configuración de su ActionListener
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(200, 45, 5, 5);
+        
         nextRoundButton = new JButton("NEXT ROUND");
-        nextRoundButton.addActionListener(this); // El ActionListener es esta misma clase
-        rightPanel.add(nextRoundButton); // Agregar el botón al panel derecho junto con las vacunas
+        nextRoundButton.addActionListener(this);
+        rightPanel.add(nextRoundButton, gbc);
+        Thread infection = new Thread(() -> startinfection());
+        infection.start();
     }
 
+    public void ciudades() {
+    	middlePanel.setLayout(null);
+    	
+    	for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
+    		int[] coordenadas = ciudades.getCoordenadas();
+    		String[] colindantes = ciudades.getCiudadesColindantes();
+			JButton ciudad = new JButton();
+			ciudad.setName(ciudades.getNombre());
+			ciudad.setBounds(coordenadas[0], coordenadas[1], 100, 50);
+			for (String colindante : colindantes) {
+				createLine(middlePanel, ciudad, colindante);
+			}
+			ciudad.addActionListener(e -> {
+	        	System.out.println(ciudades.getNombre());
+	        });
+	        
+			middlePanel.add(ciudad);
+	        
+		}
+    }
+    private void createLine(JPanel middlePanel, JButton fromButton, String toCityName) {
+        JButton toButton = findButtonByName(toCityName);
+        if (toButton != null) {
+            middlePanel.add(new Line(middlePanel, fromButton, toButton));
+        }
+    }
+    private JButton findButtonByName(String cityName) {
+        for (Component component : middlePanel.getComponents()) {
+            if (component instanceof JButton) {
+                JButton button = (JButton) component;
+                if (button.getName().equals(cityName)) {
+                    return button;
+                }
+            }
+        }
+        return null;
+    }
     public void acciones() {
         Control_de_partida.acciones = 4;
         Control_de_partida.gestionarTurno();
         
-        // Método para imprimir la información de la ronda de manera progresiva
-        JTextArea texto = (JTextArea) bottomPanel.getComponent(0); // Obtener el JTextArea de bottomPanel
+        JTextArea texto = (JTextArea) bottomPanel.getComponent(0);
 
-        // Simular una nueva impresión de línea con un pequeño retraso entre caracteres
         Runnable printRound = () -> {
             for (char c : ("Round: " + Control_de_partida.turno + "\n").toCharArray()) {
                 texto.append(String.valueOf(c));
                 try {
-                    Thread.sleep(15); // Pequeño retraso entre caracteres para la impresión progresiva
+                    Thread.sleep(15);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
 
-            // Después de imprimir la información de la ronda, llamar al método para imprimir la información de las ciudades infectadas
             printInfection();
         };
 
-        // Ejecutar la impresión en un hilo separado para no bloquear la interfaz de usuario
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(printRound);
         executor.shutdown();
     }
 
     public void printInfection() {
-        // Deshabilitar el botón "NEXT ROUND"
         nextRoundButton.setEnabled(false);
 
-        // Método para imprimir la información de la infección de manera progresiva
-        JTextArea texto = (JTextArea) bottomPanel.getComponent(0); // Obtener el JTextArea de bottomPanel
-
-        // Simular una nueva impresión de línea con un pequeño retraso entre caracteres
         Runnable printInfection = () -> {
-            Control_de_partida.gestionarInfeccion(); // Llamar a la función de gestión de infección
+            Control_de_partida.gestionarInfeccion();
 
-            // Habilitar nuevamente el botón "NEXT ROUND" al finalizar la impresión de la infección
             SwingUtilities.invokeLater(() -> {
                 nextRoundButton.setEnabled(true);
             });
         };
 
-        // Ejecutar la impresión en un hilo separado para no bloquear la interfaz de usuario
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(printInfection);
         executor.shutdown();
@@ -182,7 +215,7 @@ public class game extends JPanel implements ActionListener {
         });
         System.setOut(printStream);
         System.setErr(printStream);
-        texto.append("Round: " + Control_de_partida.turno + "\n"); // Imprimir turno al iniciar
+        texto.append("Round: " + Control_de_partida.turno + "\n");
         texto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         bottomPanel.add(texto, BorderLayout.CENTER);
     }
@@ -192,7 +225,7 @@ public class game extends JPanel implements ActionListener {
     } 
 
     public static void brotes() {
-        leftPanel.removeAll(); // Limpiar el panel antes de agregar los nuevos JLabel
+        leftPanel.removeAll();
 
         for (int i = 0; i < brotesvalor; i++) {
             ImageIcon icono;
@@ -208,7 +241,6 @@ public class game extends JPanel implements ActionListener {
             leftPanel.add(brotes);
         }
 
-        // Asegurarse de que el panel se actualice
         leftPanel.revalidate();
         leftPanel.repaint();
     }
@@ -340,11 +372,28 @@ public class game extends JPanel implements ActionListener {
             acciones();
         }
     }
+}
+class Line extends JComponent {
+    private JButton fromButton;
+    private JButton toButton;
+    private JPanel middlePanel;
 
-    public static game getInstance() {
-        if (instance == null) {
-            instance = new game();
-        }
-        return instance;
+    public Line(JPanel middlePanel, JButton fromButton, JButton toButton) {
+        this.middlePanel = middlePanel;
+        this.fromButton = fromButton;
+        this.toButton = toButton;
+        setBounds(0, 0, middlePanel.getWidth(), middlePanel.getHeight());
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.RED);
+        int x1 = fromButton.getX() + fromButton.getWidth() / 2;
+        int y1 = fromButton.getY() + fromButton.getHeight() / 2;
+        int x2 = toButton.getX() + toButton.getWidth() / 2;
+        int y2 = toButton.getY() + toButton.getHeight() / 2;
+        g2d.drawLine(x1, y1, x2, y2);
     }
 }
