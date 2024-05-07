@@ -227,7 +227,7 @@ class menu extends JPanel implements ActionListener {
                 atrasButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dificultad.remove(atrasButton);
-                        atrasButton = null;
+                        atrasButton = null; 
                         dificultad.setVisible(false);          
                     }
                 });
