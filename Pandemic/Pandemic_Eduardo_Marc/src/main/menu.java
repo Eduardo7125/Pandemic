@@ -36,7 +36,6 @@ class menu extends JPanel implements ActionListener {
     @Serial
     private static final long serialVersionUID = -5124796854119688429L;
     
-    public static boolean a = true;
     ImageIcon icono;
     ImageIcon iconoEscalado;
     ImageIcon iconoNuevaPartida;
@@ -218,23 +217,25 @@ class menu extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+    	
         if (e.getSource() == nuevaPartidaButton) {
-            // Crear y agregar el botón atrasButton
-            atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
-            atrasButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    // Cerrar el popup de dificultad
-                    dificultad.setVisible(false);
-                    // Hacer desaparecer el botón atrasButton
-                    atrasButton.setVisible(false);
-                }
-            });
-            if(a == true) {
-            dificultad.add(atrasButton);
+            // Verificar si atrasButton ya ha sido creado previamente
+            if (atrasButton == null) {
+                // Crear y agregar el botón atrasButton
+                atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
+                dificultad.add(atrasButton);
+                dificultad.repaint();
+                 
+                atrasButton.addActionListener(new ActionListener() {
+                    public void actionPerformed(ActionEvent e) {
+                        dificultad.remove(atrasButton);
+                        atrasButton = null; // Establecer atrasButton a null para poder crearlo de nuevo la próxima vez
+                        // Cerrar el popup de dificultad
+                        dificultad.setVisible(false);          
+                    }
+                });
             }
-            a = false;
-
+            
             // Calcular las coordenadas para centrar el popup
             int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
             int y = nuevaPartidaButton.getHeight() / 2 + nuevaPartidaButton.getHeight() + 90
