@@ -219,9 +219,7 @@ class menu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
     	
         if (e.getSource() == nuevaPartidaButton) {
-            // Verificar si atrasButton ya ha sido creado previamente
             if (atrasButton == null) {
-                // Crear y agregar el botón atrasButton
                 atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
                 dificultad.add(atrasButton);
                 dificultad.repaint();
@@ -229,8 +227,7 @@ class menu extends JPanel implements ActionListener {
                 atrasButton.addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         dificultad.remove(atrasButton);
-                        atrasButton = null; // Establecer atrasButton a null para poder crearlo de nuevo la próxima vez
-                        // Cerrar el popup de dificultad
+                        atrasButton = null;
                         dificultad.setVisible(false);          
                     }
                 });
