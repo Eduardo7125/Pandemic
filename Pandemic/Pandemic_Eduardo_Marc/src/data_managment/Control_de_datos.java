@@ -39,7 +39,7 @@ public class Control_de_datos {
 	public static Connection con;
 	private static final String ficheroTxt = "src//files//ciudades.txt";
 	private static final String ficheroBin = "src//files//CCP.bin";
-	public static String ficheroXML = "src//files//parametrosFacil.xml";
+	public static String ficheroXML;
 	
     static int contador = 0;
 	public static String CiudadesInfectadasInicio;
@@ -167,13 +167,6 @@ public class Control_de_datos {
 	}
 	
 	public static int[] cargarXML() {
-//		if (e.getsource = dificil) {
-//			ficheroXML = "src//files//parametrosDificil.xml";
-//		}else if(e.getsource = medio){
-//			ficheroXML = "src//files//parametrosMedio.xml";
-//		}else if(e.getsource = facil){
-//			ficheroXML = "src//files//parametrosFacil.xml";
-//		}
 		try {
 		    File inputFile = new File(ficheroXML);
 		    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
