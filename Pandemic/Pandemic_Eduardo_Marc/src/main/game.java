@@ -3,6 +3,7 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,6 +12,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -33,6 +36,7 @@ import javax.swing.SwingUtilities;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
+import objects.Ciudad;
 import objects.Vacunas;
 
 public class game extends JPanel implements ActionListener {
@@ -114,24 +118,20 @@ public class game extends JPanel implements ActionListener {
         for (Component component : middlePanel.getComponents()) {
             if (component instanceof JButton) {
                 JButton button = (JButton) component;
-                String cityName = button.getText(); // Obtener el nombre del botón en lugar del nombre
+                String cityName = button.getText();
                 objects.Ciudad ciudad = obtenerCiudadPorNombre(cityName);
                 if (ciudad != null) {
                     int infeccion = ciudad.getInfeccion();
                     button.setEnabled(infeccion >= 1);
-
                     if (infeccion == 1) {
-                        // Infección nivel 1: activado y fondo normal
-                        button.setBackground(null); // Restablecer color de fondo
-                        button.setForeground(Color.BLACK); // Restablecer color del texto
+                        button.setBackground(null);
+                        button.setForeground(Color.BLACK);
                     } else if (infeccion == 2) {
-                        // Infección nivel 2: activado y fondo amarillo
                         button.setBackground(Color.YELLOW);
-                        button.setForeground(Color.BLACK); // Restablecer color del texto
+                        button.setForeground(Color.BLACK);
                     } else if (infeccion == 3) {
-                        // Infección nivel 3: activado y fondo rojo
                         button.setBackground(Color.RED);
-                        button.setForeground(Color.BLACK); // Restablecer color del texto
+                        button.setForeground(Color.BLACK);
                     } else if (infeccion > 3) {
                         button.setBackground(Color.BLACK);
                         button.setForeground(Color.RED);
@@ -150,16 +150,22 @@ public class game extends JPanel implements ActionListener {
         return null;
     }
     public void ciudades() {
+
     	middlePanel.setLayout(null);
+    	Double[] resol = resoluciones();
     	
     	for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
     		int[] coordenadas = ciudades.getCoordenadas();
     		String[] colindantes = ciudades.getCiudadesColindantes();
 			JButton ciudad = new JButton(ciudades.getNombre());
-			ciudad.setBounds(coordenadas[0], coordenadas[1], 50, 25);
-			for (String colindante : colindantes) {
-//				createLine(middlePanel, ciudad, colindante);
-			}
+			
+		    int x = (int) (coordenadas[0] * resol[0]);
+		    int y = (int) (coordenadas[1] * resol[1]);
+		    
+			ciudad.setBounds(x, y, 50, 25);
+//			for (String colindante : colindantes) {
+////				createLine(middlePanel, ciudad, colindante);
+//			}
 			ciudad.addActionListener(e -> {
 	        	System.out.println(ciudades.getNombre());
 	        });
@@ -168,6 +174,20 @@ public class game extends JPanel implements ActionListener {
 	        
 		}
     }
+    
+    public Double[] resoluciones() {
+        Double[] resultado = new Double[2];
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = toolkit.getScreenSize();
+        
+        System.out.println("Resolucion de pantalla: " + screenSize.width + "x" + screenSize.height);
+        double x = (double) screenSize.width / 1920;
+        double y = (double) screenSize.height / 1080;
+        resultado[0] = x;
+        resultado[1] = y;
+        return resultado;
+    }
+    
     public void acciones() {
         Control_de_partida.acciones = 4;
         Control_de_partida.gestionarTurno();
