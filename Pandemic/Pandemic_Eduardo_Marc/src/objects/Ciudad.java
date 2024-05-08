@@ -37,6 +37,13 @@ public class Ciudad {
 		}
 	}
 	
+	public void disminuirInfeccionConVacuna() {
+			this.infeccion = 0;
+			Control_de_partida.acciones--;
+			Control_de_partida.infectedcities--;
+			return;
+	}
+	
 	public void propagarInfeccion() {
 	    System.out.println("INFECTED CITIES BY THE OUTBREAK: ");
 	    for (String colindantes : this.ciudadesColindantes) {
