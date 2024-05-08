@@ -144,13 +144,14 @@ public class game extends JPanel implements ActionListener {
                             button.setForeground(Color.RED);
                         }
                     }
+                    
+                    // Establecer el color del borde según el virus de la ciudad
+                    Color colorBorde = obtenerColorBorde(ciudad.getEnfermedad());
+                    button.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
                 }
             }
         }
     }
-
-
-
 
     public static objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
         for (objects.Ciudad ciudad : Control_de_datos.Ciudades) {
@@ -160,30 +161,43 @@ public class game extends JPanel implements ActionListener {
         }
         return null;
     }
-    public void ciudades() {
 
-    	middlePanel.setLayout(null);
-    	Double[] resol = resoluciones();
-    	
-    	for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
-    		int[] coordenadas = ciudades.getCoordenadas();
-    		String[] colindantes = ciudades.getCiudadesColindantes();
-			JButton ciudad = new JButton(ciudades.getNombre());
-			
-		    int x = (int) (coordenadas[0] * resol[0]);
-		    int y = (int) (coordenadas[1] * resol[1]);
-		    Dimension size = ciudad.getPreferredSize();
-			ciudad.setBounds(x, y, size.width, size.height);
-//			for (String colindante : colindantes) {
-////				createLine(middlePanel, ciudad, colindante);
-//			}
-			ciudad.addActionListener(e -> {
-	        	System.out.println(ciudades.getNombre());
-	        });
-	        
-			middlePanel.add(ciudad);
-	        
-		}
+    public static Color obtenerColorBorde(String identificadorVirus) {
+        switch (identificadorVirus) {
+            case "0":
+                return Color.BLUE;
+            case "1":
+                return Color.RED;
+            case "2":
+                return Color.GREEN;
+            case "3":
+                return Color.YELLOW;
+            default:
+                return Color.BLACK;
+        }
+    }
+
+    public void ciudades() {
+        middlePanel.setLayout(null);
+        Double[] resol = resoluciones();
+        
+        for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
+            int[] coordenadas = ciudades.getCoordenadas();
+            String[] colindantes = ciudades.getCiudadesColindantes();
+            JButton ciudad = new JButton(ciudades.getNombre());
+            int x = (int) (coordenadas[0] * resol[0]);
+            int y = (int) (coordenadas[1] * resol[1]);
+            Dimension size = ciudad.getPreferredSize();
+            ciudad.setBounds(x, y, size.width, size.height);
+            for (String colindante : colindantes) {
+            }
+            ciudad.addActionListener(e -> {
+                System.out.println(ciudades.getNombre());
+            });
+            
+            middlePanel.add(ciudad);
+            
+        }
     }
     
     public Double[] resoluciones() {
