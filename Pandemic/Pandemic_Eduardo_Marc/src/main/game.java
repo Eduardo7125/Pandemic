@@ -105,7 +105,6 @@ public class game extends JPanel implements ActionListener {
         nextRoundButton = new JButton("NEXT ROUND");
         nextRoundButton.addActionListener(this);
         rightPanel.add(nextRoundButton, gbc);
-        
         Thread infection = new Thread(() -> startinfection());
         infection.start();
         ciudades();
@@ -113,35 +112,42 @@ public class game extends JPanel implements ActionListener {
         
     }
     public static void actualizarEstadoCiudades() {
+        Color verdeSuave = new Color(144, 238, 144); // Verde suave
+
         for (Component component : middlePanel.getComponents()) {
             if (component instanceof JButton) {
                 JButton button = (JButton) component;
-                String cityName = button.getText(); // Obtener el nombre del botón en lugar del nombre
+                String cityName = button.getText();
                 objects.Ciudad ciudad = obtenerCiudadPorNombre(cityName);
                 if (ciudad != null) {
                     int infeccion = ciudad.getInfeccion();
                     button.setEnabled(infeccion >= 1);
 
-                    if (infeccion == 1) {
-                        // Infección nivel 1: activado y fondo normal
-                        button.setBackground(null); // Restablecer color de fondo
-                        button.setForeground(Color.BLACK); // Restablecer color del texto
-                    } else if (infeccion == 2) {
-                        // Infección nivel 2: activado y fondo amarillo
-                        button.setBackground(Color.YELLOW);
-                        button.setForeground(Color.BLACK); // Restablecer color del texto
-                    } else if (infeccion == 3) {
-                        // Infección nivel 3: activado y fondo rojo
-                        button.setBackground(Color.RED);
-                        button.setForeground(Color.BLACK); // Restablecer color del texto
-                    } else if (infeccion > 3) {
-                        button.setBackground(Color.BLACK);
-                        button.setForeground(Color.RED);
+                    if (!button.isEnabled()) {
+                        button.setBackground(verdeSuave);
+                        button.setForeground(Color.BLACK);
+                    } else {
+                        if (infeccion == 1) {
+                            button.setBackground(null);
+                            button.setForeground(Color.BLACK);
+                        } else if (infeccion == 2) {
+                            button.setBackground(Color.YELLOW);
+                            button.setForeground(Color.BLACK);
+                        } else if (infeccion == 3) {
+                            button.setBackground(Color.RED);
+                            button.setForeground(Color.BLACK);
+                        } else if (infeccion > 3) {
+                            button.setBackground(Color.BLACK);
+                            button.setForeground(Color.RED);
+                        }
                     }
                 }
             }
         }
     }
+
+
+
 
     public static objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
         for (objects.Ciudad ciudad : Control_de_datos.Ciudades) {

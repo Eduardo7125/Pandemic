@@ -51,6 +51,7 @@ public class Ciudad {
 	            if (ciudad.getInfeccion() > 3) {
 	                ciudad.setInfeccion(3);
 	                propagarInfeccion2(ciudad);
+	                System.out.println("----------------------------------");
 	            }
 	            System.out.println();
 	        }
@@ -58,6 +59,8 @@ public class Ciudad {
 	}
 
 	public void propagarInfeccion2(Ciudad ciudad) { 
+		System.out.println("");
+		System.out.println("NEW OUTBREAK HAS HAPPENED");
 	    System.out.println("INFECTED CITIES BY THE OUTBREAK: ");
 	    for (String colindantes : ciudad.getCiudadesColindantes()) {
 	        Ciudad ciudadColindante = obtenerCiudad(colindantes);
