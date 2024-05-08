@@ -3,6 +3,7 @@ package main;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -29,6 +30,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import data_managment.Control_de_datos;
@@ -150,26 +152,31 @@ public class game extends JPanel implements ActionListener {
         return null;
     }
     public void ciudades() {
-    	middlePanel.setLayout(null);
-    	
-    	for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
-    		int[] coordenadas = ciudades.getCoordenadas();
-    		String[] colindantes = ciudades.getCiudadesColindantes();
-			JButton ciudad = new JButton(ciudades.getNombre());
-			ciudad.setBounds(coordenadas[0], coordenadas[1], 50, 25);
-			for (String colindante : colindantes) {
-//				createLine(middlePanel, ciudad, colindante);
-			}
-			ciudad.addActionListener(e -> {
-	        	System.out.println(ciudades.getNombre());
-	        });
-	        
-			middlePanel.add(ciudad);
-	        
-		}
+        middlePanel.setLayout(null);
+        
+        for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
+            int[] coordenadas = ciudades.getCoordenadas();
+            String[] colindantes = ciudades.getCiudadesColindantes();
+            JButton ciudad = new JButton(ciudades.getNombre());
+            // Obtener el tamaño preferido del botón según el texto
+            Dimension size = ciudad.getPreferredSize();
+            ciudad.setBounds(coordenadas[0], coordenadas[1], size.width, size.height);
+            for (String colindante : colindantes) {
+                // createLine(middlePanel, ciudad, colindante);
+            }
+            ciudad.addActionListener(e -> {
+                System.out.println(ciudades.getNombre());
+            });
+            
+            middlePanel.add(ciudad);
+            
+        }
     }
+
+
     public void acciones() {
         Control_de_partida.acciones = 4;
+        Control_de_partida.ResetOutbreak();
         Control_de_partida.gestionarTurno();
         
         JTextArea texto = (JTextArea) bottomPanel.getComponent(0);

@@ -85,6 +85,7 @@ public class Control_de_partida {
 	        System.out.println();
 	        game.actualizarEstadoCiudades();
 	        if (ciudad.getInfeccion() > 3) {
+	        	ciudad.setOutbreakHappened(true);
 	            outbreak++;
 	            game.brotes();
 	            System.out.println("AN OUTBREAK IS HAPPENING");
@@ -92,7 +93,7 @@ public class Control_de_partida {
 	            game.actualizarEstadoCiudades();
 	            ciudad.propagarInfeccion();
 	        }
-	        if (outbreak >= Integer.parseInt(Control_de_datos.NumBrotesDerrota) || outbreak >= Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
+	        if (outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
 	            mostrarPantallaError();
 	        }
 	    }
@@ -161,6 +162,14 @@ public class Control_de_partida {
 
         errorFrame.setVisible(true);
     }
+    
+	public static void ResetOutbreak() {
+	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
+
+	    for (Ciudad ciudad : ciudades) {
+	    	ciudad.setOutbreakHappened(false);
+	        }
+	}
 	
 	public void gestionarFinPartida() {
 		

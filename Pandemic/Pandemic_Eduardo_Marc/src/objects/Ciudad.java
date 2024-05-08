@@ -10,13 +10,15 @@ public class Ciudad {
 	private String enfermedad;
 	private int infeccion;
 	private String[] ciudadesColindantes;
+	private boolean OutbreakHappened;
 	
-	public Ciudad(String nombre, int[] coordenadas, String enfermedad, int infeccion, String[] ciudadesColindantes) {
+	public Ciudad(String nombre, int[] coordenadas, String enfermedad, int infeccion, String[] ciudadesColindantes, boolean OutbreakHappened) {
 		this.nombre = nombre;
 		this.coordenadas = coordenadas;
 		this.enfermedad = enfermedad;
 		this.infeccion = infeccion;
 		this.ciudadesColindantes = ciudadesColindantes;
+		this.OutbreakHappened = OutbreakHappened;
 	}
 	
 	public void aumentarInfeccion() {
@@ -36,22 +38,45 @@ public class Ciudad {
 	}
 	
 	public void propagarInfeccion() {
-		System.out.println("INFECTED CITIES BY THE OUTBREAK: ");
-		for (String colindantes : this.ciudadesColindantes) {
-			Ciudad ciudad = obtenerCiudad(colindantes);
-			
-	        ciudad.aumentarInfeccion();
-	        System.out.println("Name: " + ciudad.getNombre());
-	        System.out.println("Virus: " + ciudad.getNombreEnfermedad());
-	        System.out.println("Infection: " + ciudad.getInfeccion());
-	        game.actualizarEstadoCiudades();
-	        if (ciudad.getInfeccion() > 3) {
-	        	ciudad.setInfeccion(3);
+	    System.out.println("INFECTED CITIES BY THE OUTBREAK: ");
+	    for (String colindantes : this.ciudadesColindantes) {
+	        Ciudad ciudad = obtenerCiudad(colindantes);
+	        if (!ciudad.getOutbreakHappened()) {
+	            ciudad.aumentarInfeccion();
+	            System.out.println("Name: " + ciudad.getNombre());
+	            System.out.println("Virus: " + ciudad.getNombreEnfermedad());
+	            System.out.println("Infection: " + ciudad.getInfeccion());
+	            game.actualizarEstadoCiudades();
+	            ciudad.setOutbreakHappened(true);
+	            if (ciudad.getInfeccion() > 3) {
+	                ciudad.setInfeccion(3);
+	                propagarInfeccion2(ciudad);
+	            }
+	            System.out.println();
 	        }
-	        System.out.println();
-		}
+	    }
 	}
-	
+
+	public void propagarInfeccion2(Ciudad ciudad) { 
+	    System.out.println("INFECTED CITIES BY THE OUTBREAK: ");
+	    for (String colindantes : ciudad.getCiudadesColindantes()) {
+	        Ciudad ciudadColindante = obtenerCiudad(colindantes);
+	        if (!ciudadColindante.getOutbreakHappened()) {
+	            ciudadColindante.aumentarInfeccion();
+	            System.out.println("Name: " + ciudadColindante.getNombre());
+	            System.out.println("Virus: " + ciudadColindante.getNombreEnfermedad());
+	            System.out.println("Infection: " + ciudadColindante.getInfeccion());
+	            game.actualizarEstadoCiudades();
+	            ciudadColindante.setOutbreakHappened(true);
+	            if (ciudadColindante.getInfeccion() > 3) {
+	                ciudadColindante.setInfeccion(3);
+	                propagarInfeccion2(ciudadColindante);
+	            }
+	            System.out.println();
+	        }
+	    }
+	}
+
 	public static void resetValues() {
 		for (Ciudad ciudad : Control_de_datos.Ciudades) {
 			ciudad.setInfeccion(0);
@@ -117,6 +142,14 @@ public class Ciudad {
 	
 	public void setCiudadesColindantes(String[] ciudadesColindantes) {
 		this.ciudadesColindantes = ciudadesColindantes;
+	}
+
+	public boolean getOutbreakHappened() {
+		return OutbreakHappened;
+	}
+
+	public void setOutbreakHappened(boolean outbreakHappened) {
+		OutbreakHappened = outbreakHappened;
 	}
 	
 	

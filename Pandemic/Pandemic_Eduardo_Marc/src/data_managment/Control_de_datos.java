@@ -112,7 +112,9 @@ public class Control_de_datos {
 	            
 	            String[] ciudadesColindantes = x[3].split(",");
 	            
-	            Ciudad ciudad = new Ciudad(x[0], cords, x[1], 0, ciudadesColindantes);
+	            boolean OutbreakHappened = false;
+	            
+	            Ciudad ciudad = new Ciudad(x[0], cords, x[1], 0, ciudadesColindantes, OutbreakHappened);
 	            
 	            Ciudades.add(ciudad);
 	        }
