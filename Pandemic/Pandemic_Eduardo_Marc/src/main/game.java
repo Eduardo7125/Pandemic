@@ -44,13 +44,13 @@ public class game extends JPanel implements ActionListener {
     ImageIcon background;
 
     JButton salirButton;
-    JButton nextRoundButton; // Nuevo botón para el siguiente round
+    static JButton nextRoundButton; // Nuevo botón para el siguiente round
 
     JPanel topPanel;
     static JPanel leftPanel;
     JPanel rightPanel;
     JPanel bottomPanel;
-    JPanel middlePanel;
+    static JPanel middlePanel;
 
     JLabel LabelImagen;
     JLabel menuLabel1;
@@ -110,23 +110,38 @@ public class game extends JPanel implements ActionListener {
         actualizarEstadoCiudades();
         
     }
-    public void actualizarEstadoCiudades() {
+    public static void actualizarEstadoCiudades() {
         for (Component component : middlePanel.getComponents()) {
             if (component instanceof JButton) {
                 JButton button = (JButton) component;
-                String cityName = button.getName();
+                String cityName = button.getText(); // Obtener el nombre del botón en lugar del nombre
                 objects.Ciudad ciudad = obtenerCiudadPorNombre(cityName);
                 if (ciudad != null) {
-                    if (ciudad.getInfeccion() > 0) {
-                        button.setEnabled(true);
-                    } else {
-                        button.setEnabled(false);
+                    int infeccion = ciudad.getInfeccion();
+                    button.setEnabled(infeccion >= 1);
+
+                    if (infeccion == 1) {
+                        // Infección nivel 1: activado y fondo normal
+                        button.setBackground(null); // Restablecer color de fondo
+                        button.setForeground(Color.BLACK); // Restablecer color del texto
+                    } else if (infeccion == 2) {
+                        // Infección nivel 2: activado y fondo amarillo
+                        button.setBackground(Color.YELLOW);
+                        button.setForeground(Color.BLACK); // Restablecer color del texto
+                    } else if (infeccion == 3) {
+                        // Infección nivel 3: activado y fondo rojo
+                        button.setBackground(Color.RED);
+                        button.setForeground(Color.BLACK); // Restablecer color del texto
+                    } else if (infeccion > 3) {
+                        button.setBackground(Color.BLACK);
+                        button.setForeground(Color.RED);
                     }
                 }
             }
         }
     }
-    public objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
+
+    public static objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
         for (objects.Ciudad ciudad : Control_de_datos.Ciudades) {
             if (ciudad.getNombre().equals(nombreCiudad)) {
                 return ciudad;
@@ -230,7 +245,9 @@ public class game extends JPanel implements ActionListener {
     }
     
     static void startinfection() {
+    	nextRoundButton.setEnabled(false);
         Control_de_partida.InfeccionInicial();
+        nextRoundButton.setEnabled(true);
     } 
 
     public static void brotes() {

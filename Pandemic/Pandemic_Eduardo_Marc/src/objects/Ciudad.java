@@ -1,6 +1,7 @@
 package objects;
 
 import data_managment.*;
+import main.game;
 
 public class Ciudad {	
 
@@ -43,6 +44,10 @@ public class Ciudad {
 	        System.out.println("Name: " + ciudad.getNombre());
 	        System.out.println("Virus: " + ciudad.getNombreEnfermedad());
 	        System.out.println("Infection: " + ciudad.getInfeccion());
+	        game.actualizarEstadoCiudades();
+	        if (ciudad.getInfeccion() > 3) {
+	        	ciudad.setInfeccion(3);
+	        }
 	        System.out.println();
 		}
 	}

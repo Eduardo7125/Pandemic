@@ -46,99 +46,97 @@ public class Control_de_partida {
 	}
 	
 	public static void InfeccionInicial() {
-        // Accede a la lista de ciudades desde Control_de_datos
-        ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
-        
-        // Selecciona aleatoriamente cuatro ciudades
-        ArrayList<Ciudad> ciudadesAleatorias = InfeccionInicial(ciudades);
+	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
+	    
+	    ArrayList<Ciudad> ciudadesAleatorias = SelecionarCiudadesInfeccionInicial(ciudades);
 
-        // Ejecuta el método aumentarInfeccion() en cada una de las cuatro ciudades seleccionadas
-        for (Ciudad ciudad : ciudadesAleatorias) {
-            ciudad.aumentarInfeccion();
-            System.out.println("Name: " + ciudad.getNombre() + " Virus: " + ciudad.getNombreEnfermedad());
-        }
-        System.out.println();
-    }
+	    for (Ciudad ciudad : ciudadesAleatorias) {
+	        ciudad.aumentarInfeccion();
+	        System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad());
+	        game.actualizarEstadoCiudades();
+	    }
+	    System.out.println();
+	}
 
-	
-    public static ArrayList<Ciudad> InfeccionInicial(ArrayList<Ciudad> ciudades) {
-        ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
-        Random rand = new Random(Control_de_datos.Ciudades.size());
-    	int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasInicio);
-        // Selecciona cuatro índices únicos aleatorios
-        for (int i = 0; i < infect; i++) {
-            int index = rand.nextInt(ciudades.size());
-            Ciudad ciudad = ciudades.get(index);
-            ciudadesAleatorias.add(ciudad);
-        }
+	public static ArrayList<Ciudad> SelecionarCiudadesInfeccionInicial(ArrayList<Ciudad> ciudades) {
+	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
+	    Random rand = new Random();
+	    int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasInicio);
+	    for (int i = 0; i < infect; i++) {
+	        int index = rand.nextInt(ciudades.size());
+	        Ciudad ciudad = ciudades.get(index);
+	        ciudadesAleatorias.add(ciudad);
+	    }
 
-        return ciudadesAleatorias;
-    }
+	    return ciudadesAleatorias;
+	}
     
 	
 	public static void gestionarInfeccion() {
-        ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
+	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
 
-        ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudades(ciudades);
+	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion(ciudades);
 
-        for (Ciudad ciudad : ciudadesAleatorias) {
-            ciudad.aumentarInfeccion();
-            System.out.println("Name: " + ciudad.getNombre());
-            System.out.println("Virus: " + ciudad.getNombreEnfermedad());
-            System.out.println("Infection: " + ciudad.getInfeccion());
-            System.out.println();
-            if (ciudad.getInfeccion() > 3) {
-            	outbreak++;
-            	game.brotes();
-        		System.out.println("AN OUTBREAK IS HAPPENING");
-        		ciudad.setInfeccion(3);
-        		ciudad.propagarInfeccion();
-        		gestionarInfeccion();
-            }
-            if (outbreak >= Integer.parseInt(Control_de_datos.NumBrotesDerrota) || outbreak >= Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
-            	mostrarPantallaError();
-            }
-        }
-    }
+	    for (Ciudad ciudad : ciudadesAleatorias) {
+	        ciudad.aumentarInfeccion();
+	        System.out.println("Name: " + ciudad.getNombre());
+	        System.out.println("Virus: " + ciudad.getNombreEnfermedad());
+	        System.out.println("Infection: " + ciudad.getInfeccion());
+	        System.out.println();
+	        game.actualizarEstadoCiudades();
+	        if (ciudad.getInfeccion() > 3) {
+	            outbreak++;
+	            game.brotes();
+	            System.out.println("AN OUTBREAK IS HAPPENING");
+	            ciudad.setInfeccion(3);
+	            game.actualizarEstadoCiudades();
+	            ciudad.propagarInfeccion();
+	        }
+	        if (outbreak >= Integer.parseInt(Control_de_datos.NumBrotesDerrota) || outbreak >= Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
+	            mostrarPantallaError();
+	        }
+	    }
+	}
 
-    // Método para seleccionar aleatoriamente cuatro ciudades de la lista
-    private static ArrayList<Ciudad> seleccionarCiudades(ArrayList<Ciudad> ciudades) {
-        ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
-        Random rand = new Random(Control_de_datos.Ciudades.size());
-    	int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasRonda);
-        for (int i = 0; i < infect; i++) {
-            int index = rand.nextInt(ciudades.size());
-            Ciudad ciudad = ciudades.get(index);
-            ciudadesAleatorias.add(ciudad);
-        }
-
-        return ciudadesAleatorias;
-    }
-    
-
-//	private static ArrayList<Ciudad> seleccionarCiudades(ArrayList<Ciudad> ciudades) {
+//	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
 //	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
-//	    // Simplemente agregamos la misma ciudad cuatro veces
-//	    for (int i = 0; i < 1; i++) {
-//	        Ciudad ciudad = ciudades.get(0); // Tomamos la primera ciudad de la lista
-//	        ciudadesAleatorias.add(ciudad);
+//	    Random rand = new Random();
+//	    int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasRonda);
+//	    int count = 0;
+//	    while (count < infect) {
+//	        int index = rand.nextInt(ciudades.size());
+//	        Ciudad ciudad = ciudades.get(index);
+//	        if (!ciudadesAleatorias.contains(ciudad)) {
+//	            ciudadesAleatorias.add(ciudad);
+//	            count++;
+//	        }
 //	    }
 //	    return ciudadesAleatorias;
 //	}
+    
+
+	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
+	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
+	    for (int i = 0; i < 1; i++) {	
+	        Ciudad ciudad = ciudades.get(0);
+	        ciudadesAleatorias.add(ciudad);
+	    }
+	    return ciudadesAleatorias;
+	}
 	
     private static void mostrarPantallaError() {
         JFrame errorFrame = new JFrame();
         errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        errorFrame.setUndecorated(true); // Sin bordes
-        errorFrame.setResizable(false); // No se puede redimensionar
-        errorFrame.setAlwaysOnTop(true); // Siempre al frente
+        errorFrame.setUndecorated(true);
+        errorFrame.setResizable(false);
+        errorFrame.setAlwaysOnTop(true);
 
-        // Pantalla completa
+        
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         GraphicsDevice device = env.getDefaultScreenDevice();
         device.setFullScreenWindow(errorFrame);
 
-        // Panel de mensajes de error
+        
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
@@ -150,18 +148,18 @@ public class Control_de_partida {
         panel.add(errorMessage, BorderLayout.CENTER);
         errorFrame.add(panel);
 
-        // Timer para cerrar el panel después de cierto tiempo
+        
         Timer timer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                errorFrame.dispose(); // Cerrar el panel de error
-                System.exit(0); // Terminar la aplicación
+                errorFrame.dispose();
+                System.exit(0);
             }
         });
-        timer.setRepeats(false); // Ejecutar solo una vez
+        timer.setRepeats(false);
         timer.start();
 
-        errorFrame.setVisible(true); // Mostrar el panel de error
+        errorFrame.setVisible(true);
     }
 	
 	public void gestionarFinPartida() {
