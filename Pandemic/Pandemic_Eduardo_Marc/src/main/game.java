@@ -189,14 +189,18 @@ public class game extends JPanel implements ActionListener {
             int y = (int) (coordenadas[1] * resol[1]);
             Dimension size = ciudad.getPreferredSize();
             ciudad.setBounds(x, y, size.width, size.height);
-            for (String colindante : colindantes) {
-            }
+            
             ciudad.addActionListener(e -> {
-                System.out.println(ciudades.getNombre());
+            	ciudades.disminuirInfeccion();
+            	if (Control_de_partida.acciones > 0) {
+                System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
+                actualizarEstadoCiudades(); 
+            	} else {
+    				System.out.println("You don't have enough actions to perform this action.");
+    			}
             });
             
             middlePanel.add(ciudad);
-            
         }
     }
     
@@ -205,7 +209,7 @@ public class game extends JPanel implements ActionListener {
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = toolkit.getScreenSize();
         
-        System.out.println("Resolucion de pantalla: " + screenSize.width + "x" + screenSize.height);
+        System.out.println("Screen resolution: " + screenSize.width + "x" + screenSize.height);
         double x = (double) screenSize.width / 1920;
         double y = (double) screenSize.height / 1080;
         resultado[0] = x;

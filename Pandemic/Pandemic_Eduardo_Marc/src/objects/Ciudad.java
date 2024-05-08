@@ -26,15 +26,13 @@ public class Ciudad {
 		Control_de_partida.infectedcities++;
 	}
 	
-	boolean cantInfect;
 	public void disminuirInfeccion() {
-		cantInfect = false;
-		if (this.infeccion < 1) {
-			cantInfect = true;
+		if (this.infeccion > 0) {
+			this.infeccion -= 1;
+			Control_de_partida.acciones--;
+			Control_de_partida.infectedcities--;
 			return;
 		}
-		this.infeccion -= 1;
-		Control_de_partida.infectedcities--;
 	}
 	
 	public void propagarInfeccion() {
@@ -119,7 +117,7 @@ public class Ciudad {
             }
         }
         
-        return "Virus Desconocido";
+        return "Unkown virus";
     }
 	
 	public void setEnfermedad(String enfermedad) {
