@@ -52,6 +52,12 @@ public class Ciudad {
 		}
 	}
 	
+	public static void resetValues() {
+		for (Ciudad ciudad : Control_de_datos.Ciudades) {
+			ciudad.setInfeccion(0);
+		}
+	}
+	
 	public Ciudad obtenerCiudad(String ciudadColindante) {
 		for (Ciudad ciudad : Control_de_datos.Ciudades) {
 	        if (ciudad.getNombre().equals(ciudadColindante)) {

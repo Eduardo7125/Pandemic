@@ -156,7 +156,7 @@ public class game extends JPanel implements ActionListener {
     		int[] coordenadas = ciudades.getCoordenadas();
     		String[] colindantes = ciudades.getCiudadesColindantes();
 			JButton ciudad = new JButton(ciudades.getNombre());
-			ciudad.setBounds(coordenadas[0], coordenadas[1], 100, 50);
+			ciudad.setBounds(coordenadas[0], coordenadas[1], 50, 25);
 			for (String colindante : colindantes) {
 //				createLine(middlePanel, ciudad, colindante);
 			}

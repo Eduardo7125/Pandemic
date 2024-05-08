@@ -27,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import data_managment.Control_de_datos;
+import objects.Ciudad;
 
 class menu extends JPanel implements ActionListener {
 
@@ -278,10 +279,11 @@ class menu extends JPanel implements ActionListener {
     private void iniciarNuevaPartida() {
         setVisible(false);
         dificultad.setVisible(false);
+        Ciudad.resetValues();
         game juego = new game();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
-
+        game.actualizarEstadoCiudades();
         getParent().add(juego);
         getParent().revalidate();
         getParent().repaint();
