@@ -1,6 +1,7 @@
 package objects;
 
 import data_managment.*;
+import main.game;
 
 public class Ciudad {	
 
@@ -20,6 +21,7 @@ public class Ciudad {
 	
 	public void aumentarInfeccion() {
 		this.infeccion += 1;
+		Control_de_partida.infectedcities++;
 	}
 	
 	boolean cantInfect;
@@ -30,6 +32,7 @@ public class Ciudad {
 			return;
 		}
 		this.infeccion -= 1;
+		Control_de_partida.infectedcities--;
 	}
 	
 	public void propagarInfeccion() {
@@ -41,6 +44,10 @@ public class Ciudad {
 	        System.out.println("Name: " + ciudad.getNombre());
 	        System.out.println("Virus: " + ciudad.getNombreEnfermedad());
 	        System.out.println("Infection: " + ciudad.getInfeccion());
+	        game.actualizarEstadoCiudades();
+	        if (ciudad.getInfeccion() > 3) {
+	        	ciudad.setInfeccion(3);
+	        }
 	        System.out.println();
 		}
 	}
@@ -75,17 +82,15 @@ public class Ciudad {
 	}
 	
 	public String getNombreEnfermedad() {
-        // Obtiene el número de virus
         String numeroVirus = enfermedad;
         
-        // Busca el virus correspondiente en el ArrayList de Virus en Control_de_datos
         for (Virus virus : Control_de_datos.Virus) {
             if (virus.getIdentificador().equals(numeroVirus)) {
-                return virus.getNombre(); // Devuelve el nombre del virus
+                return virus.getNombre();
             }
         }
         
-        return "Virus Desconocido"; // Si no se encuentra el virus, devuelve un mensaje predeterminado
+        return "Virus Desconocido";
     }
 	
 	public void setEnfermedad(String enfermedad) {

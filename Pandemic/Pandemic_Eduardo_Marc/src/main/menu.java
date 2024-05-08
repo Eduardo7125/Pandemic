@@ -261,12 +261,15 @@ class menu extends JPanel implements ActionListener {
             System.exit(0);
         } else if (e.getSource() == facilItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosFacil.xml";
+            Control_de_datos.cargarPartida();
             iniciarNuevaPartida();
         } else if (e.getSource() == medioItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosMedio.xml";
+            Control_de_datos.cargarPartida();
             iniciarNuevaPartida();
         } else if (e.getSource() == dificilItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosDificil.xml";
+            Control_de_datos.cargarPartida();
             iniciarNuevaPartida();
         }
 
@@ -275,7 +278,7 @@ class menu extends JPanel implements ActionListener {
     private void iniciarNuevaPartida() {
         setVisible(false);
         dificultad.setVisible(false);
-        game juego = game.getInstance();
+        game juego = new game();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
 
