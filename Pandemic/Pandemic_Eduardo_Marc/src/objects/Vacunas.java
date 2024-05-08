@@ -9,7 +9,7 @@ public class Vacunas {
 	public Vacunas(String nombre, String color, float porcentaje) {
 		this.nombre = nombre;
 		this.color = color;
-		this.porcentaje = porcentaje;
+		this.porcentaje = porcentaje;	
 	}
 	
 	boolean completo;

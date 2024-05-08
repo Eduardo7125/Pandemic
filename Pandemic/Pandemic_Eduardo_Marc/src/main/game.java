@@ -145,7 +145,6 @@ public class game extends JPanel implements ActionListener {
                         }
                     }
                     
-                    // Establecer el color del borde según el virus de la ciudad
                     Color colorBorde = obtenerColorBorde(ciudad.getEnfermedad());
                     button.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
                 }
