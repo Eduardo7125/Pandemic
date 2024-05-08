@@ -191,13 +191,17 @@ public class game extends JPanel implements ActionListener {
             ciudad.setBounds(x, y, size.width, size.height);
             
             ciudad.addActionListener(e -> {
-            	ciudades.disminuirInfeccion();
-            	if (Control_de_partida.acciones > 0) {
-                System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
-                actualizarEstadoCiudades(); 
-            	} else {
-    				System.out.println("You don't have enough actions to perform this action.");
-    			}
+                if (Control_de_partida.turno == 1) {
+                    System.out.println("You can't heal cities in round 1");
+                } else {
+                    ciudades.disminuirInfeccion();
+                    if (Control_de_partida.acciones > 0) {
+                        System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
+                        actualizarEstadoCiudades(); 
+                    } else {
+                        System.out.println("You don't have enough actions to perform this action.");
+                    }
+                }
             });
             
             middlePanel.add(ciudad);
