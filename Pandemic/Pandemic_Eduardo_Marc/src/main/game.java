@@ -32,6 +32,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import data_managment.Control_de_datos;
@@ -107,7 +108,6 @@ public class game extends JPanel implements ActionListener {
         nextRoundButton = new JButton("NEXT ROUND");
         nextRoundButton.addActionListener(this);
         rightPanel.add(nextRoundButton, gbc);
-        
         Thread infection = new Thread(() -> startinfection());
         infection.start();
         ciudades();
@@ -115,6 +115,8 @@ public class game extends JPanel implements ActionListener {
         
     }
     public static void actualizarEstadoCiudades() {
+        Color verdeSuave = new Color(144, 238, 144); // Verde suave
+
         for (Component component : middlePanel.getComponents()) {
             if (component instanceof JButton) {
                 JButton button = (JButton) component;
@@ -123,23 +125,32 @@ public class game extends JPanel implements ActionListener {
                 if (ciudad != null) {
                     int infeccion = ciudad.getInfeccion();
                     button.setEnabled(infeccion >= 1);
-                    if (infeccion == 1) {
-                        button.setBackground(null);
+
+                    if (!button.isEnabled()) {
+                        button.setBackground(verdeSuave);
                         button.setForeground(Color.BLACK);
-                    } else if (infeccion == 2) {
-                        button.setBackground(Color.YELLOW);
-                        button.setForeground(Color.BLACK);
-                    } else if (infeccion == 3) {
-                        button.setBackground(Color.RED);
-                        button.setForeground(Color.BLACK);
-                    } else if (infeccion > 3) {
-                        button.setBackground(Color.BLACK);
-                        button.setForeground(Color.RED);
+                    } else {
+                        if (infeccion == 1) {
+                            button.setBackground(null);
+                            button.setForeground(Color.BLACK);
+                        } else if (infeccion == 2) {
+                            button.setBackground(Color.YELLOW);
+                            button.setForeground(Color.BLACK);
+                        } else if (infeccion == 3) {
+                            button.setBackground(Color.RED);
+                            button.setForeground(Color.BLACK);
+                        } else if (infeccion > 3) {
+                            button.setBackground(Color.BLACK);
+                            button.setForeground(Color.RED);
+                        }
                     }
                 }
             }
         }
     }
+
+
+
 
     public static objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
         for (objects.Ciudad ciudad : Control_de_datos.Ciudades) {
@@ -190,6 +201,7 @@ public class game extends JPanel implements ActionListener {
     
     public void acciones() {
         Control_de_partida.acciones = 4;
+        Control_de_partida.ResetOutbreak();
         Control_de_partida.gestionarTurno();
         
         JTextArea texto = (JTextArea) bottomPanel.getComponent(0);
