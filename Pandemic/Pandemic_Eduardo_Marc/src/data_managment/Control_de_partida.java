@@ -98,31 +98,30 @@ public class Control_de_partida {
 	    }
 	}
 
-//	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
-//	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
-//	    Random rand = new Random();
-//	    int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasRonda);
-//	    int count = 0;
-//	    while (count < infect) {
-//	        int index = rand.nextInt(ciudades.size());
-//	        Ciudad ciudad = ciudades.get(index);
-//	        if (!ciudadesAleatorias.contains(ciudad)) {
-//	            ciudadesAleatorias.add(ciudad);
-//	            count++;
-//	        }
-//	    }
-//	    return ciudadesAleatorias;
-//	}
-    
-
 	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
 	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
-	    for (int i = 0; i < 1; i++) {	
-	        Ciudad ciudad = ciudades.get(0);
-	        ciudadesAleatorias.add(ciudad);
+	    Random rand = new Random();
+	    int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasRonda);
+	    int count = 0;
+	    while (count < infect) {
+	        int index = rand.nextInt(ciudades.size());
+	        Ciudad ciudad = ciudades.get(index);
+	        if (!ciudadesAleatorias.contains(ciudad)) {
+	            ciudadesAleatorias.add(ciudad);
+	            count++;
+	        }
 	    }
 	    return ciudadesAleatorias;
 	}
+    
+//	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
+//	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
+//	    for (int i = 0; i < 1; i++) {	
+//	        Ciudad ciudad = ciudades.get(0);
+//	        ciudadesAleatorias.add(ciudad);
+//	    }
+//	    return ciudadesAleatorias;
+//	}
 	
     private static void mostrarPantallaError() {
         JFrame errorFrame = new JFrame();

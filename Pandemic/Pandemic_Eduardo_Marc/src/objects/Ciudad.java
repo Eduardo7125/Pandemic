@@ -52,7 +52,7 @@ public class Ciudad {
 	            ciudad.aumentarInfeccion();
 	            System.out.println("Name: " + ciudad.getNombre());
 	            System.out.println("Virus: " + ciudad.getNombreEnfermedad());
-	            System.out.println("Infection: " + ciudad.getInfeccion()+"/n");
+	            System.out.println("Infection: " + ciudad.getInfeccion());
 	            game.actualizarEstadoCiudades();
 	            ciudad.setOutbreakHappened(true);
 	            if (ciudad.getInfeccion() > 3) {
@@ -71,7 +71,7 @@ public class Ciudad {
 	            ciudadColindante.aumentarInfeccion();
 	            System.out.println("Name: " + ciudadColindante.getNombre());
 	            System.out.println("Virus: " + ciudadColindante.getNombreEnfermedad());
-	            System.out.println("Infection: " + ciudadColindante.getInfeccion()+"/n");
+	            System.out.println("Infection: " + ciudadColindante.getInfeccion());
 	            game.actualizarEstadoCiudades();
 	            ciudadColindante.setOutbreakHappened(true);
 	            if (ciudadColindante.getInfeccion() > 3) {
