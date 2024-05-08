@@ -81,8 +81,7 @@ public class Control_de_partida {
 	        ciudad.aumentarInfeccion();
 	        System.out.println("Name: " + ciudad.getNombre());
 	        System.out.println("Virus: " + ciudad.getNombreEnfermedad());
-	        System.out.println("Infection: " + ciudad.getInfeccion());
-	        System.out.println();
+	        System.out.println("Infection: " + ciudad.getInfeccion()+"\n");
 	        game.actualizarEstadoCiudades();
 	        if (ciudad.getInfeccion() > 3) {
 	        	ciudad.setOutbreakHappened(true);

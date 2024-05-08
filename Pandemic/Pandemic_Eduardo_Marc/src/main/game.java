@@ -172,8 +172,8 @@ public class game extends JPanel implements ActionListener {
 			
 		    int x = (int) (coordenadas[0] * resol[0]);
 		    int y = (int) (coordenadas[1] * resol[1]);
-		    
-			ciudad.setBounds(x, y, 50, 25);
+		    Dimension size = ciudad.getPreferredSize();
+			ciudad.setBounds(x, y, size.width, size.height);
 //			for (String colindante : colindantes) {
 ////				createLine(middlePanel, ciudad, colindante);
 //			}

@@ -45,16 +45,16 @@ public class Ciudad {
 	            ciudad.aumentarInfeccion();
 	            System.out.println("Name: " + ciudad.getNombre());
 	            System.out.println("Virus: " + ciudad.getNombreEnfermedad());
-	            System.out.println("Infection: " + ciudad.getInfeccion());
+	            System.out.println("Infection: " + ciudad.getInfeccion()+"/n");
 	            game.actualizarEstadoCiudades();
 	            ciudad.setOutbreakHappened(true);
 	            if (ciudad.getInfeccion() > 3) {
 	                ciudad.setInfeccion(3);
 	                propagarInfeccion2(ciudad);
 	            }
-	            System.out.println();
 	        }
 	    }
+	    System.out.println();
 	}
 
 	public void propagarInfeccion2(Ciudad ciudad) { 
@@ -64,14 +64,13 @@ public class Ciudad {
 	            ciudadColindante.aumentarInfeccion();
 	            System.out.println("Name: " + ciudadColindante.getNombre());
 	            System.out.println("Virus: " + ciudadColindante.getNombreEnfermedad());
-	            System.out.println("Infection: " + ciudadColindante.getInfeccion());
+	            System.out.println("Infection: " + ciudadColindante.getInfeccion()+"/n");
 	            game.actualizarEstadoCiudades();
 	            ciudadColindante.setOutbreakHappened(true);
 	            if (ciudadColindante.getInfeccion() > 3) {
 	                ciudadColindante.setInfeccion(3);
 	                propagarInfeccion2(ciudadColindante);
 	            }
-	            System.out.println();
 	        }
 	    }
 	}
