@@ -123,43 +123,43 @@ public class Control_de_partida {
 //	    return ciudadesAleatorias;
 //	}
 	
-    private static void mostrarPantallaError() {
-        JFrame errorFrame = new JFrame();
-        errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        errorFrame.setUndecorated(true);
-        errorFrame.setResizable(false);
-        errorFrame.setAlwaysOnTop(true);
+	 private static void mostrarPantallaError() {
+	        JFrame errorFrame = new JFrame();
+	        errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        errorFrame.setUndecorated(true);
+	        errorFrame.setResizable(false);
+	        errorFrame.setAlwaysOnTop(true);
 
-        
-        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice device = env.getDefaultScreenDevice();
-        device.setFullScreenWindow(errorFrame);
+	        
+	        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	        GraphicsDevice device = env.getDefaultScreenDevice();
+	        device.setFullScreenWindow(errorFrame);
 
-        
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
+	        
+	        JPanel panel = new JPanel();
+	        panel.setLayout(new BorderLayout());
 
-        JLabel errorMessage = new JLabel("GAME OVER");
-        errorMessage.setForeground(Color.RED);
-        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        errorMessage.setFont(new Font("Arial", Font.PLAIN, 40));
+	        JLabel errorMessage = new JLabel("GAME OVER");
+	        errorMessage.setForeground(Color.RED);
+	        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+	        errorMessage.setFont(new Font("Arial", Font.PLAIN, 40));
 
-        panel.add(errorMessage, BorderLayout.CENTER);
-        errorFrame.add(panel);
+	        panel.add(errorMessage, BorderLayout.CENTER);
+	        errorFrame.add(panel);
 
-        
-        Timer timer = new Timer(2000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                errorFrame.dispose();
-                System.exit(0);
-            }
-        });
-        timer.setRepeats(false);
-        timer.start();
+	        
+	        Timer timer = new Timer(2000, new ActionListener() {
+	            @Override
+	            public void actionPerformed(ActionEvent e) {
+	                errorFrame.dispose();
+	                System.exit(0);
+	            }
+	        });
+	        timer.setRepeats(false);
+	        timer.start();
 
-        errorFrame.setVisible(true);
-    }
+	        errorFrame.setVisible(true);
+	    }
     
 	public static void ResetOutbreak() {
 	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;

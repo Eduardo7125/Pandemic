@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -73,7 +72,7 @@ class menu extends JPanel implements ActionListener {
     JButton informacionButton;
     JButton resumenButton;
     static JButton salirButton;
-    JButton atrasButton; // Cambié el nombre de salirButton2 a atrasButton
+    JButton atrasButton;
 
     Marco marco;
 
@@ -220,30 +219,27 @@ class menu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
     	
         if (e.getSource() == nuevaPartidaButton) {
-            if (atrasButton == null) {
-                atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
-                dificultad.add(atrasButton);
-                dificultad.repaint();
-                 
-                atrasButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        dificultad.remove(atrasButton);
-                        atrasButton = null; 
-                        dificultad.setVisible(false);          
-                    }
-                });
-            }
-            
-            // Calcular las coordenadas para centrar el popup
-            int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
-            int y = nuevaPartidaButton.getHeight() / 2 + nuevaPartidaButton.getHeight() + 90
-                    - dificultad.getPreferredSize().height / 2;
-            
-            // Ajustar la posición del popup para centrar el botón
-            x += nuevaPartidaButton.getLocationOnScreen().x;
-            y += nuevaPartidaButton.getLocationOnScreen().y;
+        	if (atrasButton == null) {
+        	    atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
+        	    add(atrasButton, BorderLayout.NORTH);
+        	    atrasButton.setBounds(getWidth() - atrasButton.getPreferredSize().width - 10, 10, atrasButton.getPreferredSize().width, atrasButton.getPreferredSize().height);
+        	    atrasButton.addActionListener(new ActionListener() {
+        	        public void actionPerformed(ActionEvent e) {
+        	            dificultad.setVisible(false);
+        	            atrasButton.setVisible(false);
+        	            atrasButton = null;
+        	        }
+        	    });
+        	}
 
-            dificultad.show(menu.this, x, y);
+        	int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
+        	int y = nuevaPartidaButton.getHeight() / 2 + nuevaPartidaButton.getHeight() + 90
+        	        - dificultad.getPreferredSize().height / 2;
+
+        	x += nuevaPartidaButton.getLocationOnScreen().x;
+        	y += nuevaPartidaButton.getLocationOnScreen().y;
+
+        	dificultad.show(menu.this, x, y);
         } else if (e.getSource() == cargarPartidaButton) {
             System.exit(0);
         } else if (e.getSource() == informacionButton) {
@@ -289,8 +285,18 @@ class menu extends JPanel implements ActionListener {
         getParent().repaint();
     }
 
-    private void initializePopupMenu() {
-        dificultad = new JPopupMenu();
+    @SuppressWarnings("serial")
+	private void initializePopupMenu() {
+        dificultad = new JPopupMenu() {
+        	@Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                Image imagenFondo = new ImageIcon("src//img//fondo_dificultad.png").getImage();
+                g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
+                g2d.dispose();
+            }
+        };
 
         ImageIcon facilIcon1 = new ImageIcon(
                 new ImageIcon("src//img//easy.png").getImage().getScaledInstance(84, 67, Image.SCALE_SMOOTH));
@@ -299,6 +305,7 @@ class menu extends JPanel implements ActionListener {
         facilItem = new JMenuItemMenuItemPersonalizado("EASY", facilIcon1);
         facilItem.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 0));
         facilItem.addActionListener(this);
+        facilItem.setOpaque(false);
         dificultad.add(facilItem);
 
         ImageIcon medioIcon1 = new ImageIcon(
@@ -308,6 +315,7 @@ class menu extends JPanel implements ActionListener {
         medioItem = new JMenuItemMenuItemPersonalizado("NORMAL", medioIcon1);
         medioItem.setBorder(BorderFactory.createEmptyBorder(0, 120, 0, 0));
         medioItem.addActionListener(this);
+        medioItem.setOpaque(false);
         dificultad.add(medioItem);
 
         ImageIcon dificilIcon1 = new ImageIcon(
@@ -317,6 +325,7 @@ class menu extends JPanel implements ActionListener {
         dificilItem = new JMenuItemMenuItemPersonalizado("HARD", dificilIcon1);
         dificilItem.setBorder(BorderFactory.createEmptyBorder(0, 80, 0, 0));
         dificilItem.addActionListener(this);
+        dificilItem.setOpaque(false);
         dificultad.add(dificilItem);
 
         Timer timer = new Timer(1000, new ActionListener() {
@@ -337,8 +346,9 @@ class menu extends JPanel implements ActionListener {
             }
         });
         timer.start();
-
-        dificultad.setPreferredSize(new Dimension(800, 550));
+        dificultad.setOpaque(false);
+        dificultad.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        dificultad.setPreferredSize(new Dimension(1000, 550));
     }
 
     private static menu instance;

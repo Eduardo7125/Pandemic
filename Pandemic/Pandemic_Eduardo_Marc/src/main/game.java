@@ -18,12 +18,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -88,7 +91,8 @@ public class game extends JPanel implements ActionListener {
 
         rightPanel.setBackground(Color.blue.darker().darker().darker());
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-        brotes();
+        
+		brotes();
 
         leftPanel.setBackground(Color.gray);
 
@@ -115,7 +119,7 @@ public class game extends JPanel implements ActionListener {
         
     }
     public static void actualizarEstadoCiudades() {
-        Color verdeSuave = new Color(144, 238, 144); // Verde suave
+        Color verdeSuave = new Color(144, 238, 144);
 
         for (Component component : middlePanel.getComponents()) {
             if (component instanceof JButton) {
@@ -330,7 +334,6 @@ public class game extends JPanel implements ActionListener {
         });
         System.setOut(printStream);
         System.setErr(printStream);
-        texto.append("Round: " + Control_de_partida.turno + "\n");
         texto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         bottomPanel.add(texto, BorderLayout.CENTER);
     }
@@ -344,18 +347,18 @@ public class game extends JPanel implements ActionListener {
     public static void brotes() {
         leftPanel.removeAll();
 
+        String imagePath = (Control_de_partida.outbreak > 0 && brotesvalor > Control_de_partida.outbreak)
+                ? "src/img/brote_activo.png"
+                : "src/img/brote_inactivo.png";
+
+        ImageIcon icon = new ImageIcon(imagePath);
+        Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(image);
+
         for (int i = 0; i < brotesvalor; i++) {
-            ImageIcon icono;
-            if (Control_de_partida.outbreak > 0 && i < Control_de_partida.outbreak) {
-                icono = new ImageIcon("src//img//brote_activo.png");
-            } else {
-                icono = new ImageIcon("src//img//brote_inactivo.png");
-            }
-            Image imagen = icono.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-            ImageIcon iconoEscalado = new ImageIcon(imagen);
-            JLabel brotes = new JLabel(iconoEscalado);
-            brotes.setSize(75, 75);
-            leftPanel.add(brotes);
+            JLabel brote = new JLabel(scaledIcon);
+            brote.setPreferredSize(new Dimension(75, 75));
+            leftPanel.add(brote);
         }
 
         leftPanel.revalidate();
@@ -443,15 +446,9 @@ public class game extends JPanel implements ActionListener {
         int counter = (int) vacuna.getPorcentaje();
         int iteraciones = 0;
 
-        Thread vacunaThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                vacuna.desarrollarVacuna(valorFloat);
-            }
-
-        });
+        Thread vacunaThread = new Thread(() -> vacuna.desarrollarVacuna(valorFloat));
         vacunaThread.start();
+        
         while (counter < 101 && iteraciones < 26) {
             vacunaFinal.setValue(counter);
             try {
