@@ -196,11 +196,11 @@ public class game extends JPanel implements ActionListener {
             ciudad.addActionListener(e -> {
                 if (Control_de_partida.turno == 1) {
                     System.out.println("You can't heal cities in round 1");
-                } else if (porcentajeVacuna == 100) {
+                } else if (porcentajeVacuna > 99) {
                     ciudades.disminuirInfeccionConVacuna();
                     System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
                     actualizarEstadoCiudades();
-                } else if (Control_de_partida.acciones > 0) {
+                } else if (Control_de_partida.acciones > 0 && porcentajeVacuna < 99) {
                     ciudades.disminuirInfeccion();
                     System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
                     actualizarEstadoCiudades(); 
@@ -411,14 +411,7 @@ public class game extends JPanel implements ActionListener {
         int counter = (int) vacuna.getPorcentaje();
         int iteraciones = 0;
 
-        Thread vacunaThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                vacuna.desarrollarVacuna(valorFloat);
-            }
-
-        });
+        Thread vacunaThread = new Thread(() -> vacuna.desarrollarVacuna(valorFloat));
         vacunaThread.start();
         while (counter < 101 && iteraciones < 26) {
             vacunaFinal.setValue(counter);

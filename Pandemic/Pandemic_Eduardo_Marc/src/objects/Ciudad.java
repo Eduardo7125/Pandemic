@@ -38,9 +38,9 @@ public class Ciudad {
 	}
 	
 	public void disminuirInfeccionConVacuna() {
-			this.infeccion = 0;
 			Control_de_partida.acciones--;
-			Control_de_partida.infectedcities--;
+			Control_de_partida.infectedcities = Control_de_partida.infectedcities - this.infeccion;
+			this.infeccion = 0;
 			return;
 	}
 	
