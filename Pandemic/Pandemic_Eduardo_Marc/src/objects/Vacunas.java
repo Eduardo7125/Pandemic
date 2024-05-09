@@ -14,6 +14,7 @@ public class Vacunas {
 	
 	boolean completo;
 	public void desarrollarVacuna(float porcentaje) {
+		
 			completo = false;
 			int nuevoValor = (int) (this.getPorcentaje() + (int) porcentaje);
 			if (nuevoValor <= 100) {

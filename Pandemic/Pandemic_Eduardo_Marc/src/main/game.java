@@ -49,7 +49,7 @@ public class game extends JPanel implements ActionListener {
     ImageIcon background;
 
     JButton salirButton;
-    static JButton nextRoundButton; // Nuevo botón para el siguiente round
+    static JButton nextRoundButton;
 
     JPanel topPanel;
     static JPanel leftPanel;
@@ -189,24 +189,31 @@ public class game extends JPanel implements ActionListener {
             Dimension size = ciudad.getPreferredSize();
             ciudad.setBounds(x, y, size.width, size.height);
             
-            int enfermedad = Integer.parseInt(ciudades.getEnfermedad());
-            Vacunas vacuna = Control_de_datos.Vacuna.get(enfermedad);
-            float porcentajeVacuna = vacuna.getPorcentaje();
             
             ciudad.addActionListener(e -> {
-                if (Control_de_partida.turno == 1) {
-                    System.out.println("You can't heal cities in round 1");
-                } else if (porcentajeVacuna == 100) {
-                    ciudades.disminuirInfeccionConVacuna();
-                    System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
-                    actualizarEstadoCiudades();
-                } else if (Control_de_partida.acciones > 0) {
-                    ciudades.disminuirInfeccion();
-                    System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
-                    actualizarEstadoCiudades(); 
-                } else {
-                    System.out.println("You don't have enough actions to perform this action.");
-                }
+            	for(objects.Vacunas vacunas : Control_de_datos.Vacuna) {
+            		
+            		for(objects.Virus virus : Control_de_datos.Virus) {
+            			
+            			while(vacunas.getNombre() == virus.getNombre()) {
+                    		if (Control_de_partida.turno == 1) {
+                                System.out.println("You can't heal cities in round 1");
+                            } else if (vacunas.getPorcentaje() > 99) {
+                                ciudades.disminuirInfeccionConVacuna(vacunas.getNombre());
+                                actualizarEstadoCiudades();
+                            } else if (Control_de_partida.acciones > 0 && vacunas.getPorcentaje() < 99) {
+                                ciudades.disminuirInfeccion();
+                                System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
+                                actualizarEstadoCiudades(); 
+                            } else {
+                                System.out.println("You don't have enough actions to perform this action.");
+                            }
+            			}            			
+            			
+            		}            		
+
+            	}
+                
             });
             
             middlePanel.add(ciudad);
