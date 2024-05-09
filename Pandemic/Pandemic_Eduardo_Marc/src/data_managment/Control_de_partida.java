@@ -1,6 +1,5 @@
 package data_managment;
 import main.game;
-import main.menu;
 
 import main.game;
 
@@ -128,73 +127,81 @@ public class Control_de_partida {
 //	    return ciudadesAleatorias;
 //	}
 	
-	private static void GameOver() {
-	    JFrame errorFrame = new JFrame();
-	    errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    errorFrame.setUndecorated(true);
-	    errorFrame.setResizable(false);
-	    errorFrame.setAlwaysOnTop(true);
+    private static void GameOver() {
+        JFrame errorFrame = new JFrame();
+        errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        errorFrame.setUndecorated(true);
+        errorFrame.setResizable(false);
+        errorFrame.setAlwaysOnTop(true);
 
-	    GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	    GraphicsDevice device = env.getDefaultScreenDevice();
-	    device.setFullScreenWindow(errorFrame);
+        
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice device = env.getDefaultScreenDevice();
+        device.setFullScreenWindow(errorFrame);
 
-	    JPanel panel = new JPanel();
-	    panel.setLayout(new BorderLayout());
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
 
-	    JLabel errorMessage = new JLabel("GAME OVER");
-	    errorMessage.setForeground(Color.RED);
-	    errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
-	    errorMessage.setFont(new Font("Arial", Font.PLAIN, 100));
+        JLabel errorMessage = new JLabel("GAME OVER");
+        errorMessage.setForeground(Color.RED);
+        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        errorMessage.setFont(new Font("Arial", Font.PLAIN, 100));
 
-	    panel.add(errorMessage, BorderLayout.CENTER);
-	    errorFrame.add(panel);
+        panel.add(errorMessage, BorderLayout.CENTER);
+        errorFrame.add(panel);
 
-	    Timer timer = new Timer(2000, new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            
-	        }
-	    });
-	    timer.setRepeats(false);
-	    timer.start();
+        
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                errorFrame.dispose();
+                System.exit(0);
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
 
-	    errorFrame.setVisible(true);
-	}
+        errorFrame.setVisible(true);
+    }
+    
+    private static void Victory() {
+        JFrame errorFrame = new JFrame();
+        errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        errorFrame.setUndecorated(true);
+        errorFrame.setResizable(false);
+        errorFrame.setAlwaysOnTop(true);
 
-	private static void Victory() {
-	    JFrame errorFrame = new JFrame();
-	    errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	    errorFrame.setUndecorated(true);
-	    errorFrame.setResizable(false);
-	    errorFrame.setAlwaysOnTop(true);
+        
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice device = env.getDefaultScreenDevice();
+        device.setFullScreenWindow(errorFrame);
 
-	    GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	    GraphicsDevice device = env.getDefaultScreenDevice();
-	    device.setFullScreenWindow(errorFrame);
+        
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
 
-	    JPanel panel = new JPanel();
-	    panel.setLayout(new BorderLayout());
+        JLabel errorMessage = new JLabel("YOU HAVE WON");
+        errorMessage.setForeground(Color.GREEN);
+        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
+        errorMessage.setFont(new Font("Arial", Font.PLAIN, 100));
 
-	    JLabel errorMessage = new JLabel("YOU HAVE WON");
-	    errorMessage.setForeground(Color.GREEN);
-	    errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
-	    errorMessage.setFont(new Font("Arial", Font.PLAIN, 100));
+        panel.add(errorMessage, BorderLayout.CENTER);
+        errorFrame.add(panel);
 
-	    panel.add(errorMessage, BorderLayout.CENTER);
-	    errorFrame.add(panel);
+        
+        Timer timer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                errorFrame.dispose();
+                System.exit(0);
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
 
-	    Timer timer = new Timer(2000, new ActionListener() {
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            
-	        }
-	    });
-	    timer.setRepeats(false);
-	    timer.start();
-
-	    errorFrame.setVisible(true);
-	}
+        errorFrame.setVisible(true);
+    }
     
 	public static void ResetOutbreak() {
 	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
