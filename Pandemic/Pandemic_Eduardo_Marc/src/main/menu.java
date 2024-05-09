@@ -29,7 +29,7 @@ import javax.swing.Timer;
 import data_managment.Control_de_datos;
 import objects.Ciudad;
 
-class menu extends JPanel implements ActionListener {
+public class menu extends JPanel implements ActionListener {
 
     /**
      * 
