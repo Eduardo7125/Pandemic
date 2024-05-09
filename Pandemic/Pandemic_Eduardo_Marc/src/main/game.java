@@ -467,7 +467,6 @@ public class game extends JPanel implements ActionListener {
             getParent().revalidate();
             getParent().repaint();
         } else if (e.getSource() == nextRoundButton) {
-        	System.out.println("");
         	System.out.println("-----------------------------------------------------------");
         	Thread estados = new Thread(() -> actualizarEstadoCiudades());
         	estados.start();
