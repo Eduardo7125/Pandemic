@@ -27,7 +27,9 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import data_managment.Control_de_datos;
+import data_managment.Control_de_partida;
 import objects.Ciudad;
+import objects.Vacunas;
 
 public class menu extends JPanel implements ActionListener {
 
@@ -257,17 +259,27 @@ public class menu extends JPanel implements ActionListener {
         } else if (e.getSource() == facilItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosFacil.xml";
             Control_de_datos.cargarPartida();
+            resetvalores();
             iniciarNuevaPartida();
         } else if (e.getSource() == medioItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosMedio.xml";
             Control_de_datos.cargarPartida();
+            resetvalores();
             iniciarNuevaPartida();
         } else if (e.getSource() == dificilItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosDificil.xml";
             Control_de_datos.cargarPartida();
+            resetvalores();
             iniciarNuevaPartida();
         }
 
+    }
+    
+    private void resetvalores() {
+    	Control_de_partida.turno = 1;
+    	Control_de_partida.acciones = 4;
+        Control_de_partida.infectedcities = 0;
+        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota);
     }
 
     private void iniciarNuevaPartida() {

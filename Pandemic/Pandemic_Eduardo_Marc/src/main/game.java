@@ -61,6 +61,7 @@ public class game extends JPanel implements ActionListener {
     JLabel brotes;
     
     static JLabel RoundNumber;
+    static JLabel ActionNumber;
     static JLabel infectedCitiesLabel;
     static JLabel infectedCitiesGameOverLabel;
 
@@ -69,9 +70,6 @@ public class game extends JPanel implements ActionListener {
     static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
 
     game() {
-    	Control_de_partida.turno = 1;
-        Control_de_partida.infectedcities = 0;
-        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota);
         setLayout(new BorderLayout());
 
         topPanel = new JPanel(new BorderLayout());
@@ -120,20 +118,24 @@ public class game extends JPanel implements ActionListener {
         gbc.insets = new Insets(-690, 45, 5, 5);
         rightPanel.add(RoundNumber, gbc);
         
+        ActionNumber = new JLabel("Actions left: " + Control_de_partida.acciones);
+        ActionNumber.setForeground(Color.WHITE);
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(-660, 45, 5, 5);
+        rightPanel.add(ActionNumber, gbc);
+        
         infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesLabel.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-660, 45, 5, 5);
+        gbc.insets = new Insets(-630, 45, 5, 5);
         rightPanel.add(infectedCitiesLabel, gbc);
         
         infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
         infectedCitiesGameOverLabel.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-630, 45, 5, 5);
+        gbc.insets = new Insets(-600, 45, 5, 5);
         rightPanel.add(infectedCitiesGameOverLabel, gbc);
         RoundNumber.setText("Round: " + Control_de_partida.turno);
-        infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
-        infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
         
         Thread infection = new Thread(() -> startinfection());
         infection.start();
@@ -179,6 +181,7 @@ public class game extends JPanel implements ActionListener {
         }
         Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Control_de_partida.infectedcities;
         RoundNumber.setText("Round: " + Control_de_partida.turno);
+        ActionNumber.setText("Actions left: " + Control_de_partida.acciones);
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
     }
@@ -390,6 +393,7 @@ public class game extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 if (Control_de_partida.acciones == 4) {
                     Control_de_partida.acciones = 0;
+                    ActionNumber.setText("Actions left: " + Control_de_partida.acciones);
                     switch (nombre) {
                         case "Alfa":
                             Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0),
