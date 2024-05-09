@@ -172,10 +172,9 @@ public class game extends JPanel implements ActionListener {
                 }
             }
         }
-        
+        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Control_de_partida.infectedcities;
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
-        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Integer.parseInt(infectedCitiesLabel.getText().substring(16));
-        infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_datos.EnfermedadesActivasDerrota);
+        infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
     }
 
     public static objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
