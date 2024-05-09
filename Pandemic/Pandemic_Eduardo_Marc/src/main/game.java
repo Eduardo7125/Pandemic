@@ -223,24 +223,56 @@ public class game extends JPanel implements ActionListener {
             Dimension size = ciudad.getPreferredSize();
             ciudad.setBounds(x, y, size.width, size.height);
             
-            int enfermedad = Integer.parseInt(ciudades.getEnfermedad());
-            Vacunas vacuna = Control_de_datos.Vacuna.get(enfermedad);
-            float porcentajeVacuna = vacuna.getPorcentaje();
             
             ciudad.addActionListener(e -> {
-                if (Control_de_partida.turno == 1) {
+            	
+                if (Control_de_partida.turno == 1) {                	
                     System.out.println("You can't heal cities in round 1");
-                } else if (porcentajeVacuna > 99) {
-                    ciudades.disminuirInfeccionConVacuna();
-                    System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
-                    actualizarEstadoCiudades();
-                } else if (Control_de_partida.acciones > 0 && porcentajeVacuna < 99) {
+                    return;                    
+                }
+                
+                if (Control_de_partida.acciones <= 0) {
+                    System.out.println("You don't have enough actions to perform this action.");
+                    return;                   
+                }
+                
+                boolean vacunaUtilizada = false;
+                
+// VAMOS A USAR ESTE CODIGO               for (objects.Vacunas vacunas : Control_de_datos.Vacuna) {
+//                    for (objects.Virus virus : Control_de_datos.Virus) {
+//                        if (vacunas.getNombre().equalsIgnoreCase(virus.getNombre())) {
+//                            if (vacunas.getPorcentaje() > 99) {
+//                                Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna(virus.getIdentificador()));
+//                                curar.start();
+//                                System.out.println("Se han curado todas las ciudades con el virus: " + virus.getNombre());
+//                                vacunaUtilizada = true;
+//                            }
+//                            break;
+//                        }
+//                    }
+//                }
+                
+                for (objects.Vacunas vacunas : Control_de_datos.Vacuna) {
+                    for (objects.Virus virus : Control_de_datos.Virus) {
+                        if (vacunas.getNombre().equalsIgnoreCase(virus.getNombre())) {
+                            if (vacunas.getPorcentaje() > 99) {
+                                Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna(virus.getIdentificador()));
+                                curar.start();
+                                System.out.println("Name: " + ciudades.getNombre() + " | Infection: Curada");
+                                vacunaUtilizada = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+                
+                if (!vacunaUtilizada) {
                     ciudades.disminuirInfeccion();
                     System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
-                    actualizarEstadoCiudades(); 
-                } else {
-                    System.out.println("You don't have enough actions to perform this action.");
                 }
+                
+                actualizarEstadoCiudades();
+                
             });
             
             middlePanel.add(ciudad);

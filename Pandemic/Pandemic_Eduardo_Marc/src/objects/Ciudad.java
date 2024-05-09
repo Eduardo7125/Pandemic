@@ -41,23 +41,23 @@ public class Ciudad {
 	}
 	
 	public void disminuirInfeccion() {
+		if (this.infeccion > 0) {
 			this.infeccion -= 1;
 			Control_de_partida.acciones--;
 			Control_de_partida.infectedcities--;
-			if (Control_de_partida.infectedcities == 0) {
-				Victory();
-	        }
 			return;
+		}
 	}
 	
-	public void disminuirInfeccionConVacuna() {
-			Control_de_partida.acciones--;
-			Control_de_partida.infectedcities = Control_de_partida.infectedcities - this.infeccion;
-			this.infeccion = 0;
-			if (Control_de_partida.infectedcities == 0) {
-				Victory();
-	        }
-			return;
+	public void disminuirInfeccionConVacuna(String identificador) {
+	    Control_de_partida.acciones--;
+	    this.setInfeccion(0);
+//	 VAMOS A USAR ESTE CODIGO    for (Ciudad ciudad : Control_de_datos.Ciudades) {
+//	        if (ciudad.getEnfermedad().equalsIgnoreCase(identificador)) {
+//	            Control_de_partida.infectedcities -= ciudad.getInfeccion();
+//	            ciudad.setInfeccion(0);
+//	        }
+//	    }
 	}
 	
 	private static void Victory() {

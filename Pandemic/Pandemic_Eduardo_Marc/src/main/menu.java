@@ -295,8 +295,18 @@ public class menu extends JPanel implements ActionListener {
         getParent().repaint();
     }
 
-    private void initializePopupMenu() {
-        dificultad = new JPopupMenu();
+    @SuppressWarnings("serial")
+	private void initializePopupMenu() {
+        dificultad = new JPopupMenu() {
+        	@Override
+            public void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                Image imagenFondo = new ImageIcon("src//img//fondo_dificultad.png").getImage();
+                g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
+                g2d.dispose();
+            }
+        };
 
         ImageIcon facilIcon1 = new ImageIcon(
                 new ImageIcon("src//img//easy.png").getImage().getScaledInstance(84, 67, Image.SCALE_SMOOTH));
@@ -305,6 +315,7 @@ public class menu extends JPanel implements ActionListener {
         facilItem = new JMenuItemMenuItemPersonalizado("EASY", facilIcon1);
         facilItem.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 0));
         facilItem.addActionListener(this);
+        facilItem.setOpaque(false);
         dificultad.add(facilItem);
 
         ImageIcon medioIcon1 = new ImageIcon(
@@ -314,6 +325,7 @@ public class menu extends JPanel implements ActionListener {
         medioItem = new JMenuItemMenuItemPersonalizado("NORMAL", medioIcon1);
         medioItem.setBorder(BorderFactory.createEmptyBorder(0, 120, 0, 0));
         medioItem.addActionListener(this);
+        medioItem.setOpaque(false);
         dificultad.add(medioItem);
 
         ImageIcon dificilIcon1 = new ImageIcon(
@@ -323,6 +335,7 @@ public class menu extends JPanel implements ActionListener {
         dificilItem = new JMenuItemMenuItemPersonalizado("HARD", dificilIcon1);
         dificilItem.setBorder(BorderFactory.createEmptyBorder(0, 80, 0, 0));
         dificilItem.addActionListener(this);
+        dificilItem.setOpaque(false);
         dificultad.add(dificilItem);
 
         Timer timer = new Timer(1000, new ActionListener() {
@@ -343,9 +356,11 @@ public class menu extends JPanel implements ActionListener {
             }
         });
         timer.start();
-
-        dificultad.setPreferredSize(new Dimension(800, 550));
+        dificultad.setOpaque(false);
+        dificultad.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        dificultad.setPreferredSize(new Dimension(1000, 550));
     }
+
 
     private static menu instance;
 
