@@ -108,7 +108,7 @@ public class game extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = GridBagConstraints.RELATIVE;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(-750, 45, 5, 5);
+        gbc.insets = new Insets(-740, 45, 5, 5);
         
         nextRoundButton = new JButton("NEXT ROUND");
         nextRoundButton.addActionListener(this);
@@ -117,19 +117,19 @@ public class game extends JPanel implements ActionListener {
         RoundNumber = new JLabel("Round: " + Control_de_partida.turno);
         RoundNumber.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-700, 45, 5, 5);
+        gbc.insets = new Insets(-690, 45, 5, 5);
         rightPanel.add(RoundNumber, gbc);
         
         infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesLabel.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-670, 45, 5, 5);
+        gbc.insets = new Insets(-660, 45, 5, 5);
         rightPanel.add(infectedCitiesLabel, gbc);
         
         infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
         infectedCitiesGameOverLabel.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-640, 45, 5, 5);
+        gbc.insets = new Insets(-630, 45, 5, 5);
         rightPanel.add(infectedCitiesGameOverLabel, gbc);
         RoundNumber.setText("Round: " + Control_de_partida.turno);
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
