@@ -264,21 +264,12 @@ public class game extends JPanel implements ActionListener {
         
         JTextArea texto = (JTextArea) bottomPanel.getComponent(0);
 
-        Runnable printRound = () -> {
-            for (char c : ("Round: " + Control_de_partida.turno + "\n").toCharArray()) {
-                texto.append(String.valueOf(c));
-                try {
-                    Thread.sleep(15);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
+        Runnable printInfection = () -> {
             printInfection();
         };
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(printRound);
+        executor.submit(printInfection);
         executor.shutdown();
     }
 
@@ -329,7 +320,6 @@ public class game extends JPanel implements ActionListener {
         });
         System.setOut(printStream);
         System.setErr(printStream);
-        texto.append("Round: " + Control_de_partida.turno + "\n");
         texto.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         bottomPanel.add(texto, BorderLayout.CENTER);
     }
@@ -477,6 +467,8 @@ public class game extends JPanel implements ActionListener {
             getParent().revalidate();
             getParent().repaint();
         } else if (e.getSource() == nextRoundButton) {
+        	System.out.println("");
+        	System.out.println("-----------------------------------------------------------");
         	Thread estados = new Thread(() -> actualizarEstadoCiudades());
         	estados.start();
             acciones();
