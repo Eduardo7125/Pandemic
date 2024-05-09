@@ -73,7 +73,7 @@ class menu extends JPanel implements ActionListener {
     JButton informacionButton;
     JButton resumenButton;
     static JButton salirButton;
-    JButton atrasButton; // Cambié el nombre de salirButton2 a atrasButton
+    JButton atrasButton;
 
     Marco marco;
 
@@ -98,7 +98,6 @@ class menu extends JPanel implements ActionListener {
 
         menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
 
-        // Etiqueta del menú
         menuLabel1 = new JLabel(
                 "<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
 
@@ -109,8 +108,6 @@ class menu extends JPanel implements ActionListener {
         buttonPanel.setOpaque(false);
         add(buttonPanel, BorderLayout.CENTER);
 
-        // Botones
-
         botonesCreacion();
         initializePopupMenu();
 
@@ -120,7 +117,6 @@ class menu extends JPanel implements ActionListener {
         version = new JLabel(
                 "<html><div style='text-align:center;color: white;'><p>Eduardo/Marc</p><p>Version 1.0</p></div>");
 
-        // Panel inferior y etiqueta de versión
         bottomPanel = new JPanel();
         JLabel version = new JLabel(
                 "<html><font color='white'><p>Euardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
@@ -234,12 +230,10 @@ class menu extends JPanel implements ActionListener {
                 });
             }
             
-            // Calcular las coordenadas para centrar el popup
             int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
             int y = nuevaPartidaButton.getHeight() / 2 + nuevaPartidaButton.getHeight() + 90
                     - dificultad.getPreferredSize().height / 2;
             
-            // Ajustar la posición del popup para centrar el botón
             x += nuevaPartidaButton.getLocationOnScreen().x;
             y += nuevaPartidaButton.getLocationOnScreen().y;
 

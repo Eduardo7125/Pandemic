@@ -69,7 +69,9 @@ public class game extends JPanel implements ActionListener {
     static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
 
     game() {
-
+    	Control_de_partida.turno = 1;
+        Control_de_partida.infectedcities = 0;
+        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota);
         setLayout(new BorderLayout());
 
         topPanel = new JPanel(new BorderLayout());
@@ -129,6 +131,9 @@ public class game extends JPanel implements ActionListener {
         gbc.gridy = GridBagConstraints.RELATIVE;
         gbc.insets = new Insets(-640, 45, 5, 5);
         rightPanel.add(infectedCitiesGameOverLabel, gbc);
+        RoundNumber.setText("Round: " + Control_de_partida.turno);
+        infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
+        infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
         
         Thread infection = new Thread(() -> startinfection());
         infection.start();
@@ -173,6 +178,7 @@ public class game extends JPanel implements ActionListener {
             }
         }
         Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Control_de_partida.infectedcities;
+        RoundNumber.setText("Round: " + Control_de_partida.turno);
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
     }
