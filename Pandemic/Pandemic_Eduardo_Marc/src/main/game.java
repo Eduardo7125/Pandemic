@@ -12,7 +12,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,8 +48,8 @@ public class game extends JPanel implements ActionListener {
     ImageIcon background;
 
     JButton salirButton;
-    static JButton nextRoundButton; // Nuevo botón para el siguiente round
-
+    static JButton nextRoundButton;
+    
     JPanel topPanel;
     static JPanel leftPanel;
     JPanel rightPanel;
@@ -60,6 +59,10 @@ public class game extends JPanel implements ActionListener {
     JLabel LabelImagen;
     JLabel menuLabel1;
     JLabel brotes;
+    
+    static JLabel RoundNumber;
+    static JLabel infectedCitiesLabel;
+    static JLabel infectedCitiesGameOverLabel;
 
     JProgressBar vacunas;
 
@@ -103,11 +106,30 @@ public class game extends JPanel implements ActionListener {
         gbc.gridx = 0;
         gbc.gridy = GridBagConstraints.RELATIVE;
         gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(200, 45, 5, 5);
+        gbc.insets = new Insets(-750, 45, 5, 5);
         
         nextRoundButton = new JButton("NEXT ROUND");
         nextRoundButton.addActionListener(this);
         rightPanel.add(nextRoundButton, gbc);
+        
+        RoundNumber = new JLabel("Round: " + Control_de_partida.turno);
+        RoundNumber.setForeground(Color.WHITE);
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(-700, 45, 5, 5);
+        rightPanel.add(RoundNumber, gbc);
+        
+        infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
+        infectedCitiesLabel.setForeground(Color.WHITE);
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(-670, 45, 5, 5);
+        rightPanel.add(infectedCitiesLabel, gbc);
+        
+        infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
+        infectedCitiesGameOverLabel.setForeground(Color.WHITE);
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(-640, 45, 5, 5);
+        rightPanel.add(infectedCitiesGameOverLabel, gbc);
+        
         Thread infection = new Thread(() -> startinfection());
         infection.start();
         ciudades();
@@ -115,7 +137,7 @@ public class game extends JPanel implements ActionListener {
         
     }
     public static void actualizarEstadoCiudades() {
-        Color verdeSuave = new Color(144, 238, 144); // Verde suave
+        Color verdeSuave = new Color(144, 238, 144);
 
         for (Component component : middlePanel.getComponents()) {
             if (component instanceof JButton) {
@@ -150,6 +172,10 @@ public class game extends JPanel implements ActionListener {
                 }
             }
         }
+        
+        infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
+        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Integer.parseInt(infectedCitiesLabel.getText().substring(16));
+        infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_datos.EnfermedadesActivasDerrota);
     }
 
     public static objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {

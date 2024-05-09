@@ -28,6 +28,7 @@ public class Control_de_partida {
 	public static int acciones = 4;
 	public static int outbreak = 0;
 	public static int infectedcities = 0;
+	public static int citiesleft;
 	
 	public void iniciarPartida() {
 		
@@ -93,7 +94,7 @@ public class Control_de_partida {
 	            ciudad.propagarInfeccion();
 	        }
 	        if (outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
-	            mostrarPantallaError();
+	        	GameOver();
 	        }
 	    }
 	}
@@ -123,7 +124,7 @@ public class Control_de_partida {
 //	    return ciudadesAleatorias;
 //	}
 	
-    private static void mostrarPantallaError() {
+    private static void GameOver() {
         JFrame errorFrame = new JFrame();
         errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         errorFrame.setUndecorated(true);
