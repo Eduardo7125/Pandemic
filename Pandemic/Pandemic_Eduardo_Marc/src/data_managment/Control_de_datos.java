@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,22 +26,26 @@ import org.w3c.dom.NodeList;
 import objects.Ciudad;
 import objects.Vacunas;
 import objects.Virus;
+import oracle.jdbc.OracleConnection;
 
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Struct;
 
 public class Control_de_datos {
 
-	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
+	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
 	private static final String user = "DAM1_2324_PET_EDU";
 	private static final String password = "edu";
 	public static Connection con;
 	private static final String ficheroTxt = "src//files//ciudades.txt";
 	private static final String ficheroBin = "src//files//CCP.bin";
-	public static String ficheroXML;
+	public static String ficheroXML = "src//files//parametrosMedio.xml";
 	
     static int contador = 0;
 	public static String CiudadesInfectadasInicio;
@@ -70,33 +76,124 @@ public class Control_de_datos {
 	}
 	
 
-	private static ArrayList<Ranking> select(Connection con) {
-		String sql = "SELECT p.* FROM RANKING_PANDEMIC p";
-		ArrayList<Ranking> p = new ArrayList<>();
+	private static void select(Connection con) {
+	    try (Connection conn = con) {
+	        PreparedStatement pstmt = conn.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones FROM PANDEMIC_SAVEFILES WHERE identificador =?");
+	        pstmt.setObject(1, 1);
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            Array ciudadArray = (Array) rs.getArray(1);
+	            Object[] ciudadObjects = (Object[]) ciudadArray.getArray();
+	            Ciudades.clear();
+	            for (Object ciudadObject : ciudadObjects) {
+	                Object[] ciudadAttributes = (Object[]) ciudadObject;
+	                Ciudad ciudad = new Ciudad(
+	                    (String) ciudadAttributes[0],
+	                    (int[]) ciudadAttributes[1],
+	                    (String) ciudadAttributes[2],
+	                    (int) ciudadAttributes[3],
+	                    (String[]) ciudadAttributes[4],
+	                	false	
+	                );
+	                Ciudades.add(ciudad);
+	            }
+	            
+	            Array virusArray = (Array) rs.getArray(2);
+	            Struct[] virusStructs = (Struct[]) virusArray.getArray();
+	            Virus.clear();
+	            for (Struct virusStruct : virusStructs) {
+	                Object[] virusAttributes = virusStruct.getAttributes();
+	                Virus virus = new Virus(
+	                    (String) virusAttributes[0],
+	                    (String) virusAttributes[1],
+	                    (String) virusAttributes[2]
+	                );
+	                Virus.add(virus);
+	            }
+	            
+	            Array vacunaArray = (Array) rs.getArray(3);
+	            Struct[] vacunaStructs = (Struct[]) vacunaArray.getArray();
+	            Vacuna.clear();
+	            for (Struct vacunaStruct : vacunaStructs) {
+	                Object[] vacunaAttributes = vacunaStruct.getAttributes();
+	                Vacunas vacuna = new Vacunas(
+	                    (String) vacunaAttributes[0],
+	                    (String) vacunaAttributes[1],
+	                    (int) vacunaAttributes[2]
+	                );
+	                Vacuna.add(vacuna);
+	            }
+	            
+	            Control_de_partida.outbreak = rs.getInt(4);
+	            Control_de_partida.turno = rs.getInt(5);
+	            Control_de_partida.acciones = rs.getInt(7);
 
-		try {
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(sql);
-
-			if (rs.isBeforeFirst()) {
-				while (rs.next()) {
-					int rondas = rs.getInt("NºRondas");
-					String nombre = rs.getString("Nombre");
-					Date fecha = rs.getDate("Fecha");
-					int resultado = rs.getInt("Resultado");
-					int puntuacion = rs.getInt("Puntuacion");
-					Ranking rank = new Ranking(rondas, nombre, fecha, resultado, puntuacion);
-
-					p.add(rank);				}
-			} else {
-				System.out.println("Nothing has been found.");
-			}	
-
-		} catch (SQLException e) {
-			System.out.println("There was an error while trying to read the data " + e);
-		}
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	private static void insertarPersona(Connection con) {
 		
-		return p;
+		try (Connection conn = con) {
+			OracleConnection oracleConn = (OracleConnection) conn;
+            Struct[] ciudadStructs = new Struct[Ciudades.size()];
+            for (int i = 0; i < Ciudades.size(); i++) {
+                Ciudad ciudad = Ciudades.get(i);
+                Object[] ciudadAttributes = new Object[] {
+                    ciudad.getNombre(),
+                    new Object[] { ciudad.getCoordenadas()[0], ciudad.getCoordenadas()[1] },
+                    ciudad.getEnfermedad(),
+                    ciudad.getInfeccion(),
+                    Arrays.toString(ciudad.getCiudadesColindantes())
+                };
+                ciudadStructs[i] = oracleConn.createStruct("CIUDAD", ciudadAttributes);
+            }
+
+            Array ciudadArray = oracleConn.createOracleArray("ARRAY_CIUDADES_OBJ", ciudadStructs);
+
+            Struct[] virusStructs = new Struct[Virus.size()];
+            for (int i = 0; i < Virus.size(); i++) {
+                Virus virus = Virus.get(i);
+                Object[] virusAttributes = new Object[] {
+                    virus.getIdentificador(),
+                    virus.getNombre(),
+                    virus.getColor()
+                };
+                virusStructs[i] = oracleConn.createStruct("VIRUS", virusAttributes);
+            }
+
+            Array virusArray = oracleConn.createOracleArray("ARRAY_VIRUS_OBJ", virusStructs);
+
+            Struct[] vacunaStructs = new Struct[ Vacuna.size()];
+            for (int i = 0; i < Vacuna.size(); i++) {
+                Vacunas vacuna = Vacuna.get(i);
+                Object[] vacunaAttributes = new Object[] {
+                    vacuna.getNombre(),
+                    vacuna.getColor(),
+                    vacuna.getPorcentaje()
+                };
+                vacunaStructs[i] = oracleConn.createStruct("VACUNAS", vacunaAttributes);
+            }
+
+            Array vacunasArray = oracleConn.createOracleArray("ARRAY_VACUNAS_OBJ", vacunaStructs);
+
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            pstmt.setObject(1, null);
+            pstmt.setArray(2, ciudadArray);
+            pstmt.setArray(3, virusArray);
+            pstmt.setArray(4, vacunasArray);
+            pstmt.setInt(5, Control_de_partida.outbreak);
+            pstmt.setInt(6, Control_de_partida.turno);
+            pstmt.setInt(7, 25);
+            pstmt.setInt(8, Control_de_partida.acciones);
+
+            pstmt.executeUpdate();
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		}
 	}
 	
 	public static ArrayList<Ciudad> cargarCiudades() {
@@ -211,31 +308,65 @@ public class Control_de_datos {
 
 	public static void main(String []args) {
 		cargarPartida();
-		try (FileWriter fileWriter = new FileWriter("partida");
-        		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
 
-		            for (Ciudad ciudades : Ciudades) {
-		            	bufferedWriter.write(ciudades.getNombre()+"\n");
-		            	bufferedWriter.write(Arrays.toString(ciudades.getCoordenadas())+"\n");
-		            	bufferedWriter.write(ciudades.getEnfermedad()+"\n");
-		            	bufferedWriter.write(ciudades.getInfeccion()+"\n");
-		            	bufferedWriter.write(Arrays.toString(ciudades.getCiudadesColindantes()) +"\n");
-		            }
-		            bufferedWriter.newLine();
-		            for (Vacunas vacuna : Vacuna) {
-		            	bufferedWriter.write(vacuna.getNombre()+"\n");
-		            	bufferedWriter.write(vacuna.getColor()+"\n");
-		            	bufferedWriter.write(vacuna.getPorcentaje()+"\n");
-		            }
-		            bufferedWriter.newLine();
-		            for (Virus virus : Virus) {
-		            	bufferedWriter.write(virus.getIdentificador()+"\n");
-		            	bufferedWriter.write(virus.getNombre()+"\n");
-		            	bufferedWriter.write(virus.getColor()+"\n");
-		            }	
-				} catch (IOException e) {
-					System.out.println("There was an error while trying to open the file " + e);
-				}
+		con = conectarBaseDatos();
+		select(con);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+//		try (FileWriter fileWriter = new FileWriter("partida");
+//        		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter)){
+//
+//		            for (Ciudad ciudades : Ciudades) {
+//		            	bufferedWriter.write(ciudades.getNombre()+"\n");
+//		            	bufferedWriter.write(Arrays.toString(ciudades.getCoordenadas())+"\n");
+//		            	bufferedWriter.write(ciudades.getEnfermedad()+"\n");
+//		            	bufferedWriter.write(ciudades.getInfeccion()+"\n");
+//		            	bufferedWriter.write(Arrays.toString(ciudades.getCiudadesColindantes()) +"\n");
+//		            }
+//		            bufferedWriter.newLine();
+//		            for (Vacunas vacuna : Vacuna) {
+//		            	bufferedWriter.write(vacuna.getNombre()+"\n");
+//		            	bufferedWriter.write(vacuna.getColor()+"\n");
+//		            	bufferedWriter.write(vacuna.getPorcentaje()+"\n");
+//		            }
+//		            bufferedWriter.newLine();
+//		            for (Virus virus : Virus) {
+//		            	bufferedWriter.write(virus.getIdentificador()+"\n");
+//		            	bufferedWriter.write(virus.getNombre()+"\n");
+//		            	bufferedWriter.write(virus.getColor()+"\n");
+//		            }	
+//				} catch (IOException e) {
+//					System.out.println("There was an error while trying to open the file " + e);
+//				}
+		
+		
 	}
 	
 	public static void cargarRecord() {
