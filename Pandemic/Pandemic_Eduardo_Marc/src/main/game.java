@@ -1,42 +1,16 @@
 package main;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-
+import javax.swing.*;
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
-import objects.Ciudad;
 import objects.Vacunas;
 
 public class game extends JPanel implements ActionListener {
@@ -143,6 +117,7 @@ public class game extends JPanel implements ActionListener {
         actualizarEstadoCiudades();
         
     }
+
     public static void actualizarEstadoCiudades() {
         Color verdeSuave = new Color(144, 238, 144);
 
@@ -184,6 +159,83 @@ public class game extends JPanel implements ActionListener {
         ActionNumber.setText("Actions left: " + Control_de_partida.acciones);
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
+
+        Victory();
+        GameOver();
+    }
+
+    public static void Victory() {
+        if (Control_de_partida.infectedcities == 0) {
+            JLabel victoryLabel = new JLabel("YOU HAVE WON");
+            victoryLabel.setForeground(Color.GREEN);
+            victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
+            victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            victoryLabel.setVerticalAlignment(SwingConstants.CENTER);
+            victoryLabel.setOpaque(true);
+            victoryLabel.setBackground(Color.WHITE);
+            victoryLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+            middlePanel.removeAll();
+            middlePanel.setLayout(new GridBagLayout());
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+
+            middlePanel.add(victoryLabel, gbc);
+
+            middlePanel.revalidate();
+            middlePanel.repaint();
+
+            Timer timer = new Timer(3000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+        }
+    }
+    
+    public static void GameOver() {
+    	if (Control_de_partida.outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || Control_de_partida.infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
+            JLabel victoryLabel = new JLabel("GAME OVER");
+            victoryLabel.setForeground(Color.RED);
+            victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
+            victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            victoryLabel.setVerticalAlignment(SwingConstants.CENTER);
+            victoryLabel.setOpaque(true);
+            victoryLabel.setBackground(Color.WHITE);
+            victoryLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+
+            middlePanel.removeAll();
+            middlePanel.setLayout(new GridBagLayout());
+
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0;
+            gbc.gridy = 0;
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.weightx = 1.0;
+            gbc.weighty = 1.0;
+
+            middlePanel.add(victoryLabel, gbc);
+
+            middlePanel.revalidate();
+            middlePanel.repaint();
+            
+            Timer timer = new Timer(3000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.exit(0);
+                }
+            });
+            timer.setRepeats(false);
+            timer.start();
+        }
     }
 
     public static objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
@@ -216,7 +268,6 @@ public class game extends JPanel implements ActionListener {
         
         for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
             int[] coordenadas = ciudades.getCoordenadas();
-            String[] colindantes = ciudades.getCiudadesColindantes();
             JButton ciudad = new JButton(ciudades.getNombre());
             int x = (int) (coordenadas[0] * resol[0]);
             int y = (int) (coordenadas[1] * resol[1]);
@@ -237,20 +288,6 @@ public class game extends JPanel implements ActionListener {
                 }
                 
                 boolean vacunaUtilizada = false;
-                
-// VAMOS A USAR ESTE CODIGO               for (objects.Vacunas vacunas : Control_de_datos.Vacuna) {
-//                    for (objects.Virus virus : Control_de_datos.Virus) {
-//                        if (vacunas.getNombre().equalsIgnoreCase(virus.getNombre())) {
-//                            if (vacunas.getPorcentaje() > 99) {
-//                                Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna(virus.getIdentificador()));
-//                                curar.start();
-//                                System.out.println("Se han curado todas las ciudades con el virus: " + virus.getNombre());
-//                                vacunaUtilizada = true;
-//                            }
-//                            break;
-//                        }
-//                    }
-//                }
                 
                 for (objects.Vacunas vacunas : Control_de_datos.Vacuna) {
                     for (objects.Virus virus : Control_de_datos.Virus) {
@@ -296,8 +333,6 @@ public class game extends JPanel implements ActionListener {
         Control_de_partida.acciones = 4;
         Control_de_partida.ResetOutbreak();
         Control_de_partida.gestionarTurno();
-        
-        JTextArea texto = (JTextArea) bottomPanel.getComponent(0);
 
         Runnable printInfection = () -> {
             printInfection();

@@ -6,8 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
-import data_managment.Control_de_datos;
-
 import java.awt.*;
 import java.io.Serial;
 
@@ -52,7 +50,6 @@ class Marco extends JFrame{
 
         setVisible(true);
 	}
-	
 }
 
 class CustomProgressBarUI extends BasicProgressBarUI {

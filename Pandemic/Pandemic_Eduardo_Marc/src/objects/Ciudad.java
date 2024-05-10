@@ -1,19 +1,5 @@
 package objects;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.Timer;
-
 import data_managment.*;
 import main.game;
 
@@ -52,51 +38,13 @@ public class Ciudad {
 	public void disminuirInfeccionConVacuna(String identificador) {
 	    Control_de_partida.acciones--;
 	    this.setInfeccion(0);
-//	 VAMOS A USAR ESTE CODIGO    for (Ciudad ciudad : Control_de_datos.Ciudades) {
+//	    for (Ciudad ciudad : Control_de_datos.Ciudades) {
 //	        if (ciudad.getEnfermedad().equalsIgnoreCase(identificador)) {
 //	            Control_de_partida.infectedcities -= ciudad.getInfeccion();
 //	            ciudad.setInfeccion(0);
 //	        }
 //	    }
 	}
-	
-	private static void Victory() {
-        JFrame errorFrame = new JFrame();
-        errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        errorFrame.setUndecorated(true);
-        errorFrame.setResizable(false);
-        errorFrame.setAlwaysOnTop(true);
-
-        
-        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice device = env.getDefaultScreenDevice();
-        device.setFullScreenWindow(errorFrame);
-
-        
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-
-        JLabel errorMessage = new JLabel("YOU HAVE WON");
-        errorMessage.setForeground(Color.GREEN);
-        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
-        errorMessage.setFont(new Font("Arial", Font.PLAIN, 100));
-
-        panel.add(errorMessage, BorderLayout.CENTER);
-        errorFrame.add(panel);
-
-        
-        Timer timer = new Timer(2000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                errorFrame.dispose();
-                System.exit(0);
-            }
-        });
-        timer.setRepeats(false);
-        timer.start();
-
-        errorFrame.setVisible(true);
-    }
 	
 	public void propagarInfeccion() {
 	    System.out.println("INFECTED CITIES BY THE OUTBREAK: ");

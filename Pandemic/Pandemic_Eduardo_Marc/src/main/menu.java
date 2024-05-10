@@ -8,7 +8,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -29,7 +28,6 @@ import javax.swing.Timer;
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
 import objects.Ciudad;
-import objects.Vacunas;
 
 public class menu extends JPanel implements ActionListener {
 
@@ -121,7 +119,7 @@ public class menu extends JPanel implements ActionListener {
 
         bottomPanel = new JPanel();
         JLabel version = new JLabel(
-                "<html><font color='white'><p>Euardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
+                "<html><font color='white'><p>Eduardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
 
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
