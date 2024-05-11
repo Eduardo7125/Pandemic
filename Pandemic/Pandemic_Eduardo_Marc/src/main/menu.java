@@ -18,10 +18,12 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
@@ -36,6 +38,10 @@ public class menu extends JPanel implements ActionListener {
      */
     @Serial
     private static final long serialVersionUID = -5124796854119688429L;
+    
+    private JDialog playerNameDialog;
+    private JTextField playerNameField;
+    JButton okButton;
     
     ImageIcon icono;
     ImageIcon iconoEscalado;
@@ -82,8 +88,6 @@ public class menu extends JPanel implements ActionListener {
 
         dificultad = new JPopupMenu();
 
-        // Iconos
-
         icono = new ImageIcon("src//img//icon.png");
         iconoNuevaPartida = new ImageIcon("src//img//nueva_partida.png");
         iconoNuevaPartida2 = new ImageIcon("src//img//nueva_partida2.png");
@@ -127,6 +131,32 @@ public class menu extends JPanel implements ActionListener {
         add(bottomPanel, BorderLayout.SOUTH);
 
         setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
+        
+        playerNameDialog = new JDialog();
+        playerNameDialog.setModal(false);
+        playerNameDialog.setTitle("PLAYER NAME");
+        playerNameDialog.setSize(300, 100);
+        playerNameDialog.setLocationRelativeTo(null);
+        playerNameDialog.setLayout(new BorderLayout());
+
+        playerNameField = new JTextField();
+        playerNameField.addActionListener(this);
+        playerNameField.setFont(new Font("Arial", Font.PLAIN, 20));
+        playerNameDialog.add(playerNameField, BorderLayout.CENTER);
+
+        okButton = new JButton("OK");
+        okButton.addActionListener(this);
+        playerNameDialog.add(okButton, BorderLayout.SOUTH);
+        
+        ImageIcon dialogIcon = new ImageIcon("src//img//icon.png");
+        playerNameDialog.setIconImage(dialogIcon.getImage());
+        
+        playerNameField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                okButton.doClick();
+        }
+        });
     }
 
     public void botonesCreacion() {
@@ -211,33 +241,41 @@ public class menu extends JPanel implements ActionListener {
             }
         });
     }
-
-    @Override
+    
+    @ Override
     public void actionPerformed(ActionEvent e) {
-    	
         if (e.getSource() == nuevaPartidaButton) {
-            if (atrasButton == null) {
-                atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
-                dificultad.add(atrasButton);
-                dificultad.repaint();
-                 
-                atrasButton.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        dificultad.remove(atrasButton);
-                        atrasButton = null; 
-                        dificultad.setVisible(false);          
-                    }
-                });
-            }
-            
-            int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
-            int y = nuevaPartidaButton.getHeight() / 2 + nuevaPartidaButton.getHeight() + 90
-                    - dificultad.getPreferredSize().height / 2;
-            
-            x += nuevaPartidaButton.getLocationOnScreen().x;
-            y += nuevaPartidaButton.getLocationOnScreen().y;
-
-            dificultad.show(menu.this, x, y);
+            Control_de_partida.playername = null;
+            playerNameField.setText("");
+            playerNameDialog.setVisible(true);
+            playerNameDialog.setAlwaysOnTop(true);
+        } else if (e.getActionCommand().equals("OK")) {
+            String playerName = playerNameField.getText();
+            if (!playerName.isEmpty()) {
+                Control_de_partida.playername = playerName;
+                playerNameDialog.setVisible(false);
+                if (atrasButton == null) {
+                    atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
+                    dificultad.add(atrasButton);
+                    dificultad.repaint();
+                     
+                    atrasButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            dificultad.remove(atrasButton);
+                            atrasButton = null; 
+                            dificultad.setVisible(false);          
+                        }
+                    });
+                }
+                
+                int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
+                int y = nuevaPartidaButton.getHeight() / 2 + nuevaPartidaButton.getHeight() + 90
+                        - dificultad.getPreferredSize().height / 2;
+                
+                x += nuevaPartidaButton.getLocationOnScreen().x;
+                y += nuevaPartidaButton.getLocationOnScreen().y;
+                dificultad.show(menu.this, x, y);
+            } 
         } else if (e.getSource() == cargarPartidaButton) {
             System.exit(0);
         } else if (e.getSource() == informacionButton) {
@@ -270,8 +308,8 @@ public class menu extends JPanel implements ActionListener {
             resetvalores();
             iniciarNuevaPartida();
         }
-
     }
+
     
     private void resetvalores() {
     	Control_de_partida.turno = 1;

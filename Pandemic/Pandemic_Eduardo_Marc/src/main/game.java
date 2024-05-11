@@ -20,9 +20,14 @@ public class game extends JPanel implements ActionListener {
     private static final long serialVersionUID = 7725219079694206212L;
 
     ImageIcon background;
+    
+    JPanel popupPanel;
 
+    JButton SubMenuButton;
     static JButton salirButton;
+    static JButton salirButton2;
     static JButton nextRoundButton;
+    static JDialog popupDialog;
     
     JPanel topPanel;
     static JPanel leftPanel;
@@ -32,8 +37,7 @@ public class game extends JPanel implements ActionListener {
 
     JLabel LabelImagen;
     JLabel menuLabel1;
-    JLabel brotes;
-    
+    JLabel brotes;    
     static JLabel RoundNumber;
     static JLabel ActionNumber;
     static JLabel infectedCitiesLabel;
@@ -51,10 +55,13 @@ public class game extends JPanel implements ActionListener {
         leftPanel = new JPanel(new GridLayout(brotesvalor, 0, 10, 10));
         rightPanel = new JPanel(new GridBagLayout());
         middlePanel = new JPanel();
+        
+        SubMenuButton = new JButton("MENU");
+        SubMenuButton.addActionListener(this);
+        topPanel.add(SubMenuButton, BorderLayout.EAST);
 
         salirButton = new JButton("MENU");
         salirButton.addActionListener(this);
-        topPanel.add(salirButton, BorderLayout.EAST);
         topPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
         topPanel.setBackground(Color.white);
 
@@ -110,6 +117,31 @@ public class game extends JPanel implements ActionListener {
         gbc.insets = new Insets(-600, 45, 5, 5);
         rightPanel.add(infectedCitiesGameOverLabel, gbc);
         RoundNumber.setText("Round: " + Control_de_partida.turno);
+        
+        JLabel labelAlfa = new JLabel("ALFA");
+        labelAlfa.setForeground(new Color(0, 128, 255));
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(-455, 71, 5, 5);
+        rightPanel.add(labelAlfa, gbc);
+
+        JLabel labelBeta = new JLabel("BETA");
+        labelBeta.setForeground(Color.RED);
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(-340, 72, 5, 5);
+        rightPanel.add(labelBeta, gbc);
+
+        JLabel labelGama = new JLabel("GAMMA");
+        labelGama.setForeground(Color.GREEN);
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(-220, 67, 5, 5);
+        rightPanel.add(labelGama, gbc);
+
+        JLabel labelDelta = new JLabel("DELTA");
+        labelDelta.setForeground(Color.YELLOW);
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.insets = new Insets(-105, 70, 5, 5);
+        rightPanel.add(labelDelta, gbc);
+
         
         Thread infection = new Thread(() -> startinfection());
         infection.start();
@@ -202,7 +234,7 @@ public class game extends JPanel implements ActionListener {
     }
     
     public static void GameOver() {
-    	if (Control_de_partida.outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || Control_de_partida.infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
+        if (Control_de_partida.outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || Control_de_partida.infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
             JLabel victoryLabel = new JLabel("GAME OVER");
             victoryLabel.setForeground(Color.RED);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
@@ -276,8 +308,8 @@ public class game extends JPanel implements ActionListener {
             
             
             ciudad.addActionListener(e -> {
-            	
-                if (Control_de_partida.turno == 1) {                	
+                
+                if (Control_de_partida.turno == 1) {                    
                     System.out.println("You can't heal cities in round 1");
                     return;                    
                 }
@@ -395,7 +427,7 @@ public class game extends JPanel implements ActionListener {
     }
     
     static void startinfection() {
-    	nextRoundButton.setEnabled(false);
+        nextRoundButton.setEnabled(false);
         Control_de_partida.InfeccionInicial();
         nextRoundButton.setEnabled(true);
     } 
@@ -516,7 +548,37 @@ public class game extends JPanel implements ActionListener {
             iteraciones++;
         }
     }
+    
+    private void MenuPopup() {
+        if (popupDialog == null) {
+            JFrame mainFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            popupDialog = new JDialog(mainFrame, "OPTIONS MENU", Dialog.ModalityType.APPLICATION_MODAL);
+            popupDialog.setSize(200, 200);
+            popupDialog.setLocationRelativeTo(mainFrame);
+            popupDialog.setResizable(false);
 
+            popupPanel = new JPanel();
+            popupPanel.setLayout(new GridLayout(2, 1));
+
+            JButton exitButton = new JButton("SAVE");
+            exitButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    // Code to handle saving action
+                }
+            });
+            popupPanel.add(exitButton);
+
+            salirButton2 = new JButton("MENU");
+            salirButton2.addActionListener(this);
+            popupPanel.add(salirButton2);
+
+            popupDialog.add(popupPanel);
+        }
+
+        popupDialog.setVisible(true);
+    }
+
+    
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
@@ -527,21 +589,25 @@ public class game extends JPanel implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-
         if (e.getSource() == salirButton) {
+        	popupDialog.dispose();
             setVisible(false);
             menu menu = main.menu.getInstance();
             menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             menu.setVisible(true);
             getParent().add(menu);
-
             getParent().revalidate();
             getParent().repaint();
         } else if (e.getSource() == nextRoundButton) {
-        	System.out.println("-----------------------------------------------------------");
-        	Thread estados = new Thread(() -> actualizarEstadoCiudades());
-        	estados.start();
+            System.out.println("-----------------------------------------------------------");
+            Thread estados = new Thread(() -> actualizarEstadoCiudades());
+            estados.start();
             acciones();
+        } else if (e.getSource() == SubMenuButton) {
+        	MenuPopup();
+        } else if (e.getSource() == salirButton2) {
+        	popupDialog.dispose();
+        	salirButton.doClick();
         }
     }
 }
