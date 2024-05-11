@@ -9,6 +9,7 @@ import objects.Ciudad;
 
 public class Control_de_partida {
 
+	public static String playername;
 	public static int turno = 1;
 	public static int acciones = 4;
 	public static int outbreak = 0;
@@ -41,7 +42,7 @@ public class Control_de_partida {
 	        System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad());
 	        game.actualizarEstadoCiudades();
 	    }
-	    System.out.println();
+	    System.out.println(playername);
 	}
 
 	public static ArrayList<Ciudad> SelecionarCiudadesInfeccionInicial(ArrayList<Ciudad> ciudades) {
