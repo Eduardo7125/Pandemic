@@ -21,7 +21,7 @@ public class game extends JPanel implements ActionListener {
 
     ImageIcon background;
 
-    JButton salirButton;
+    static JButton salirButton;
     static JButton nextRoundButton;
     
     JPanel topPanel;
@@ -193,7 +193,7 @@ public class game extends JPanel implements ActionListener {
             Timer timer = new Timer(3000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
+                	salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -227,10 +227,10 @@ public class game extends JPanel implements ActionListener {
             middlePanel.revalidate();
             middlePanel.repaint();
             
-            Timer timer = new Timer(3000, new ActionListener() {
+            Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    System.exit(0);
+                	salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
