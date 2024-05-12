@@ -225,7 +225,7 @@ public class game extends JPanel implements ActionListener {
             Timer timer = new Timer(3000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	salirButton.doClick();
+                	System.exit(0);
                 }
             });
             timer.setRepeats(false);
@@ -262,7 +262,7 @@ public class game extends JPanel implements ActionListener {
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	salirButton.doClick();
+                	System.exit(0);
                 }
             });
             timer.setRepeats(false);
