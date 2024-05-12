@@ -7,15 +7,13 @@ import objects.Virus;
 
 public class Datos_partida {
 	
+	private int id;
 	private ArrayList<Ciudad> ciudades = new ArrayList<>();
 	private ArrayList<Virus> virus = new ArrayList<>();
 	private ArrayList<Vacunas> vacunas = new ArrayList<>();
-	private int brotes = 0;
-	private int rondas = 0;
-	private float pDesarrolloAlfa = 0;
-	private float pDesarrolloBeta = 0;
-	private float pDesarrolloGama = 0;
-	private float pDesarrolloDelta = 0;
+	public int brotes = 0;
+	public int rondas = 0;
+	private int pDesarrollo = 0;
 	public int acciones = 4;
 	
 	public void cargarDatos() {
@@ -24,18 +22,14 @@ public class Datos_partida {
 		this.vacunas = Control_de_datos.cargarVacunas();
 	}
 	
-	public Datos_partida(ArrayList<Ciudad> ciudades, ArrayList<Virus> virus, ArrayList<Vacunas> vacunas, int brotes,
-			int rondas, float pDesarrolloAlfa, float pDesarrolloBeta, float pDesarrolloGama, float pDesarrolloDelta,
-			int acciones) {
+	public Datos_partida(int id, ArrayList<Ciudad> ciudades, ArrayList<Virus> virus, ArrayList<Vacunas> vacunas, int brotes, int rondas, int pDesarrollo, int acciones) {
+		this.id = id;
 		this.ciudades = ciudades;
 		this.virus = virus;
 		this.vacunas = vacunas;
 		this.brotes = brotes;
 		this.rondas = rondas;
-		this.pDesarrolloAlfa = pDesarrolloAlfa;
-		this.pDesarrolloBeta = pDesarrolloBeta;
-		this.pDesarrolloGama = pDesarrolloGama;
-		this.pDesarrolloDelta = pDesarrolloDelta;
+		this.pDesarrollo = pDesarrollo;
 		this.acciones = acciones;
 	}
 
@@ -90,43 +84,13 @@ public class Datos_partida {
 	}
 
 
-	public float getpDesarrolloAlfa() {
-		return pDesarrolloAlfa;
+	public int getpDesarrollo() {
+		return pDesarrollo;
 	}
 
 
-	public void setpDesarrolloAlfa(float pDesarrolloAlfa) {
-		this.pDesarrolloAlfa = pDesarrolloAlfa;
-	}
-
-
-	public float getpDesarrolloBeta() {
-		return pDesarrolloBeta;
-	}
-
-
-	public void setpDesarrolloBeta(float pDesarrolloBeta) {
-		this.pDesarrolloBeta = pDesarrolloBeta;
-	}
-
-
-	public float getpDesarrolloGama() {
-		return pDesarrolloGama;
-	}
-
-
-	public void setpDesarrolloGama(float pDesarrolloGama) {
-		this.pDesarrolloGama = pDesarrolloGama;
-	}
-
-
-	public float getpDesarrolloDelta() {
-		return pDesarrolloDelta;
-	}
-
-
-	public void setpDesarrolloDelta(float pDesarrolloDelta) {
-		this.pDesarrolloDelta = pDesarrolloDelta;
+	public void setpDesarrollo(int pDesarrolloAlfa) {
+		this.pDesarrollo = pDesarrolloAlfa;
 	}
 
 
@@ -137,6 +101,14 @@ public class Datos_partida {
 
 	public void setAcciones(int acciones) {
 		this.acciones = acciones;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 }
