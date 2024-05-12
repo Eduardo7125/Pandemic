@@ -310,8 +310,8 @@ public class menu extends JPanel implements ActionListener {
         }
     }
 
-    
     private void resetvalores() {
+    	Control_de_partida.resultado = null;
     	Control_de_partida.turno = 1;
     	Control_de_partida.acciones = 4;
         Control_de_partida.infectedcities = 0;

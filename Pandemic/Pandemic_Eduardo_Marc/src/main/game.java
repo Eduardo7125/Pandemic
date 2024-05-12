@@ -198,6 +198,7 @@ public class game extends JPanel implements ActionListener {
 
     public static void Victory() {
         if (Control_de_partida.infectedcities == 0) {
+        	Control_de_partida.resultado = "Victory";
             JLabel victoryLabel = new JLabel("YOU HAVE WON");
             victoryLabel.setForeground(Color.GREEN);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
@@ -235,7 +236,8 @@ public class game extends JPanel implements ActionListener {
     
     public static void GameOver() {
         if (Control_de_partida.outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || Control_de_partida.infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
-            JLabel victoryLabel = new JLabel("GAME OVER");
+        	Control_de_partida.resultado = "Defeat";
+        	JLabel victoryLabel = new JLabel("GAME OVER");
             victoryLabel.setForeground(Color.RED);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
