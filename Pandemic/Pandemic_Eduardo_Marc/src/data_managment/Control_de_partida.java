@@ -15,6 +15,7 @@ public class Control_de_partida {
 	public static int outbreak = 0;
 	public static int infectedcities = 0;
 	public static int citiesleft;
+	public static String resultado;
 	
 	public void iniciarPartida() {
 		
