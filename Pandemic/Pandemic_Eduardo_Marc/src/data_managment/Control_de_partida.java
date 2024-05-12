@@ -42,7 +42,7 @@ public class Control_de_partida {
 	        System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad());
 	        game.actualizarEstadoCiudades();
 	    }
-	    System.out.println(playername);
+	    System.out.println();
 	}
 
 	public static ArrayList<Ciudad> SelecionarCiudadesInfeccionInicial(ArrayList<Ciudad> ciudades) {
