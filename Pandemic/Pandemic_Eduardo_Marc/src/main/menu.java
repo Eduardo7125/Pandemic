@@ -343,35 +343,43 @@ public class menu extends JPanel implements ActionListener {
                 g2d.dispose();
             }
         };
-
+        
+        Font font = new Font("Arial", Font.PLAIN, 30);
+        
         ImageIcon facilIcon1 = new ImageIcon(
                 new ImageIcon("src//img//easy.png").getImage().getScaledInstance(84, 67, Image.SCALE_SMOOTH));
         ImageIcon facilIcon2 = new ImageIcon(
                 new ImageIcon("src//img//easy2.png").getImage().getScaledInstance(84, 67, Image.SCALE_SMOOTH));
-        facilItem = new JMenuItemMenuItemPersonalizado("EASY", facilIcon1);
-        facilItem.setBorder(BorderFactory.createEmptyBorder(0, 150, 0, 0));
+        facilItem = new JMenuItemMenuItemPersonalizado("       EASY", facilIcon1);
+        facilItem.setBorder(BorderFactory.createEmptyBorder(-20, 150, -40, 0));
         facilItem.addActionListener(this);
         facilItem.setOpaque(false);
+        facilItem.setForeground(Color.WHITE);
+        facilItem.setFont(font);
         dificultad.add(facilItem);
 
         ImageIcon medioIcon1 = new ImageIcon(
-                new ImageIcon("src//img//medio.png").getImage().getScaledInstance(150, 125, Image.SCALE_SMOOTH));
+                new ImageIcon("src//img//medio.png").getImage().getScaledInstance(120, 95, Image.SCALE_SMOOTH));
         ImageIcon medioIcon2 = new ImageIcon(
-                new ImageIcon("src//img//medio2.png").getImage().getScaledInstance(150, 125, Image.SCALE_SMOOTH));
-        medioItem = new JMenuItemMenuItemPersonalizado("NORMAL", medioIcon1);
-        medioItem.setBorder(BorderFactory.createEmptyBorder(0, 120, 0, 0));
+                new ImageIcon("src//img//medio2.png").getImage().getScaledInstance(120, 95, Image.SCALE_SMOOTH));
+        medioItem = new JMenuItemMenuItemPersonalizado("          NORMAL", medioIcon1);
+        medioItem.setBorder(BorderFactory.createEmptyBorder(-20, 125, -20, 0));
         medioItem.addActionListener(this);
         medioItem.setOpaque(false);
+        medioItem.setForeground(Color.WHITE);
+        medioItem.setFont(font);
         dificultad.add(medioItem);
 
         ImageIcon dificilIcon1 = new ImageIcon(
-                new ImageIcon("src//img//hard.png").getImage().getScaledInstance(250, 200, Image.SCALE_SMOOTH));
+                new ImageIcon("src//img//hard.png").getImage().getScaledInstance(190, 140, Image.SCALE_SMOOTH));
         ImageIcon dificilIcon2 = new ImageIcon(
-                new ImageIcon("src//img//hard2.png").getImage().getScaledInstance(250, 200, Image.SCALE_SMOOTH));
-        dificilItem = new JMenuItemMenuItemPersonalizado("HARD", dificilIcon1);
-        dificilItem.setBorder(BorderFactory.createEmptyBorder(0, 80, 0, 0));
+                new ImageIcon("src//img//hard2.png").getImage().getScaledInstance(190, 140, Image.SCALE_SMOOTH));
+        dificilItem = new JMenuItemMenuItemPersonalizado("                HARD", dificilIcon1);
+        dificilItem.setBorder(BorderFactory.createEmptyBorder(-20, 80, -20, 0));
         dificilItem.addActionListener(this);
         dificilItem.setOpaque(false);
+        dificilItem.setForeground(Color.WHITE);
+        dificilItem.setFont(font);
         dificultad.add(dificilItem);
 
         Timer timer = new Timer(1000, new ActionListener() {
