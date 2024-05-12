@@ -161,6 +161,8 @@ public class Control_de_datos {
 	public static void selectDatos() {
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones FROM PANDEMIC_SAVEFILES WHERE identificador =?");
+	        
+	        //en el segundo numero hay que poner el id de la partida que quieras cargar
 	        pstmt.setObject(1, 1);
 	        ResultSet rs = pstmt.executeQuery();
 	        
