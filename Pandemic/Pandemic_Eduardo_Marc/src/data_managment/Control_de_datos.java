@@ -43,7 +43,7 @@ public class Control_de_datos {
 	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
 	private static final String user = "DAM1_2324_PET_EDU";
 	private static final String password = "edu";
-	public static Connection con = conectarBaseDatos();
+	public static Connection con;
 	private static final String ficheroTxt = "src//files//ciudades.txt";
 	private static final String ficheroBin = "src//files//CCP.bin";
 	public static String ficheroXML = "src//files//parametrosMedio.xml";
@@ -64,8 +64,8 @@ public class Control_de_datos {
 	public static Date[] RankingDates = new Date[10];
 	public static String[] RankingResult = new String[10];
     
-	private static Connection conectarBaseDatos() {
-		Connection con = null;
+	public static Connection conectarBaseDatos() {
+		con = null;
 	    try {
 	        Class.forName("oracle.jdbc.driver.OracleDriver");
 	        con = DriverManager.getConnection(url, user, password);
@@ -82,10 +82,24 @@ public class Control_de_datos {
 	    return con;
 	}
 	
-	private static void insertarPartida(Connection con) {
-		
-		try (Connection conn = con) {
-			OracleConnection oracleConn = (OracleConnection) conn;
+    public static boolean isConnected() {
+        return con != null;
+    }
+    
+    public static void disconnect() {
+        if (con != null) {
+            try {
+            	con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            con = null;
+        }
+    }
+    
+	private static void insertarPartida() {
+		try {
+			OracleConnection oracleConn = (OracleConnection) con;
             Struct[] ciudadStructs = new Struct[Ciudades.size()];
             for (int i = 0; i < Ciudades.size(); i++) {
                 Ciudad ciudad = Ciudades.get(i);
@@ -127,7 +141,7 @@ public class Control_de_datos {
 
             Array vacunasArray = oracleConn.createOracleArray("ARRAY_VACUNAS_OBJ", vacunaStructs);
 
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             pstmt.setObject(1, null);
             pstmt.setArray(2, ciudadArray);
             pstmt.setArray(3, virusArray);
@@ -139,14 +153,14 @@ public class Control_de_datos {
 
             pstmt.executeUpdate();
             oracleConn.close();
-		} catch (SQLException e) {
-		    e.printStackTrace();
+		}catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 	
-	private static void selectDatos(Connection con) {
-	    try (Connection conn = con) {
-	        PreparedStatement pstmt = conn.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones FROM PANDEMIC_SAVEFILES WHERE identificador =?");
+	private static void selectDatos() {
+		try {
+	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones FROM PANDEMIC_SAVEFILES WHERE identificador =?");
 	        pstmt.setObject(1, 1);
 	        ResultSet rs = pstmt.executeQuery();
 	        
@@ -212,33 +226,29 @@ public class Control_de_datos {
 	            Control_de_partida.acciones = rs.getInt(7);
 
 	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
-	private static void insertarRanking(Connection con) {
-		
-		try (Connection conn = con) {
-			OracleConnection oracleConn = (OracleConnection) conn;
-            
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado) VALUES (?, ?, ?, SYSDATE, ?)");
+	private static void insertarRanking(){
+        try{
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado) VALUES (?, ?, ?, SYSDATE, ?)");
             pstmt.setObject(1, null);
             pstmt.setInt(2, Control_de_partida.turno);
             pstmt.setString(3, Control_de_partida.playername);
             pstmt.setString(4, Control_de_partida.resultado);
 
             pstmt.executeUpdate();
-            oracleConn.close();
-		} catch (SQLException e) {
-		    e.printStackTrace();
+            con.close();
+		}catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 	
-	public static void selectRanking(Connection con) {
-		
-	    try (Connection conn = con) {
-	        PreparedStatement pstmt = conn.prepareStatement("SELECT rondas, nombre, fecha, resultado FROM PANDEMIC_RANKING WHERE ROWNUM <= 10 AND resultado LIKE 'Victory' ORDER BY rondas ASC , fecha ASC");
+	public static void selectRanking(){
+		try {
+	        PreparedStatement pstmt = con.prepareStatement("SELECT rondas, nombre, fecha, resultado FROM PANDEMIC_RANKING WHERE ROWNUM <= 10 AND resultado LIKE 'Victory' ORDER BY rondas ASC , fecha ASC");
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        int i = 0;
@@ -249,10 +259,9 @@ public class Control_de_datos {
 	            RankingResult[i] = rs.getString("resultado");
 	            i++;
 	        }
-	        
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	public static ArrayList<Ciudad> cargarCiudades() {
@@ -377,7 +386,7 @@ public class Control_de_datos {
 		
 //		insertarRanking(con);
 		
-		selectRanking(con);
+		selectRanking();
 		
 	}
 	

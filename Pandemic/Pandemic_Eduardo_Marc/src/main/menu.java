@@ -84,6 +84,8 @@ public class menu extends JPanel implements ActionListener {
     Marco marco;
 
     menu() {
+        Control_de_datos.conectarBaseDatos();
+        
         setLayout(new BorderLayout());
 
         dificultad = new JPopupMenu();
@@ -291,8 +293,7 @@ public class menu extends JPanel implements ActionListener {
         } else if (e.getSource() == resumenButton) {
             setVisible(false);
             
-            Control_de_datos.selectRanking(Control_de_datos.con);
-            
+            Control_de_datos.selectRanking();
             Ranking ranking = new Ranking();
             ranking.setVisible(true);
             getParent().add(ranking);

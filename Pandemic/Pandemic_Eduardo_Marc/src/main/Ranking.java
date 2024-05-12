@@ -1,14 +1,19 @@
 package main;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,16 +23,18 @@ import javax.swing.table.TableColumnModel;
 
 import data_managment.Control_de_datos;
 
-public class Ranking extends JPanel {
+public class Ranking extends JPanel implements ActionListener{
 
     private static final long serialVersionUID = 4806108314364896082L;
 
     private JTable leaderboardTable;
     private ArrayList<LeaderboardEntry> leaderboardData;
-
+    JButton salirButton;
     public Ranking() {
         setLayout(new BorderLayout());
 
+
+        
         // Create a panel to contain the table
         JPanel tablePanel = new JPanel(new GridBagLayout());
 
@@ -87,8 +94,9 @@ public class Ranking extends JPanel {
         add(tablePanel, BorderLayout.CENTER);
 
         // Add a title label
-        JLabel titleLabel = new JLabel("Leaderboard");
-        add(titleLabel, BorderLayout.NORTH);
+        salirButton = new JButton("MENU");
+        salirButton.addActionListener(this);
+        add(salirButton, BorderLayout.NORTH);
     }
 
     private String formatDate(Date date) {
@@ -143,4 +151,20 @@ public class Ranking extends JPanel {
             return result;
         }
     }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getSource() == salirButton) {
+			setVisible(false); 
+	        menu menu = main.menu.getInstance();
+	        menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+	        menu.setVisible(true);
+	        getParent().add(menu);
+	        
+	        getParent().revalidate();
+	        getParent().repaint();
+		}
+
+	}
 }
