@@ -77,7 +77,7 @@ public class menu extends JPanel implements ActionListener {
     JButton nuevaPartidaButton;
     JButton cargarPartidaButton;
     JButton informacionButton;
-    JButton resumenButton;
+    JButton rankingButton;
     static JButton salirButton;
     JButton atrasButton;
 
@@ -167,7 +167,7 @@ public class menu extends JPanel implements ActionListener {
         buttonPanel.add(nuevaPartidaButton);
         buttonPanel.add(cargarPartidaButton);
         buttonPanel.add(informacionButton);
-        buttonPanel.add(resumenButton);
+        buttonPanel.add(rankingButton);
         buttonPanel.add(salirButton);
     }
 
@@ -179,7 +179,7 @@ public class menu extends JPanel implements ActionListener {
         imageBotones(iconoInfo, iconoInfo2);
         informacionButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));
         imageBotones(iconoScore, iconoScore2);
-        resumenButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));
+        rankingButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));
         imageBotones(iconoSalir, iconoSalir2);
         salirButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));
     }
@@ -290,10 +290,11 @@ public class menu extends JPanel implements ActionListener {
             getParent().add(informacion);
             getParent().revalidate();
             getParent().repaint();
-        } else if (e.getSource() == resumenButton) {
+        } else if (e.getSource() == rankingButton) {
             setVisible(false);
             
             Control_de_datos.selectRanking();
+            
             Ranking ranking = new Ranking();
             ranking.setVisible(true);
             getParent().add(ranking);

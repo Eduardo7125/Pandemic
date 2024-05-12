@@ -1,77 +1,53 @@
 package main;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import javax.swing.*;
+import javax.swing.table.*;
 
 import data_managment.Control_de_datos;
 
-public class Ranking extends JPanel implements ActionListener{
-
-    private static final long serialVersionUID = 4806108314364896082L;
+public class Ranking extends JPanel {
 
     private JTable leaderboardTable;
     private ArrayList<LeaderboardEntry> leaderboardData;
-    JButton salirButton;
+    private JButton closeButton;
+
     public Ranking() {
+        Control_de_datos.conectarBaseDatos();
         setLayout(new BorderLayout());
 
-
-        
-        // Create a panel to contain the table
-        JPanel tablePanel = new JPanel(new GridBagLayout());
-
-        // Initialize table
         DefaultTableModel tableModel = new DefaultTableModel() {
-            /**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-
-			@Override
+            @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make all cells non-editable
+                return false;
             }
         };
-        tableModel.addColumn("Player Name");
-        tableModel.addColumn("Rounds");
-        tableModel.addColumn("Date");
-        tableModel.addColumn("Result");
+        tableModel.addColumn("PLAYER NAME");
+        tableModel.addColumn("ROUNDS");
+        tableModel.addColumn("DATE");
+        tableModel.addColumn("RESULT");
 
         leaderboardTable = new JTable(tableModel);
 
-        // Disable column reordering and resizing
-        leaderboardTable.getTableHeader().setReorderingAllowed(false);
-        leaderboardTable.getTableHeader().setResizingAllowed(false);
+        leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        leaderboardTable.setFont(new Font("Arial", Font.PLAIN, 12));
+        leaderboardTable.setRowHeight(20);
 
-        // Set default column widths
-        TableColumnModel columnModel = leaderboardTable.getColumnModel();
-        columnModel.getColumn(0).setPreferredWidth(80); // Player Name
-        columnModel.getColumn(1).setPreferredWidth(55); // Rounds
-        columnModel.getColumn(2).setPreferredWidth(75); // Date
-        columnModel.getColumn(3).setPreferredWidth(200); // Result
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        leaderboardTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
+        leaderboardTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        leaderboardTable.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 
-        // Disable cell selection
-        leaderboardTable.setCellSelectionEnabled(false);
+        TableColumn dateColumn = leaderboardTable.getColumnModel().getColumn(2);
+        dateColumn.setCellRenderer(new DateCellRenderer());
 
-        // Convert java.util.Date[] to java.sql.Date[]
         java.util.Date[] utilDates = Control_de_datos.RankingDates;
         java.sql.Date[] sqlDates = new java.sql.Date[utilDates.length];
         for (int i = 0; i < utilDates.length; i++) {
@@ -81,22 +57,32 @@ public class Ranking extends JPanel implements ActionListener{
         updateLeaderboard(Control_de_datos.RankingNames, Control_de_datos.RankingRounds,
                 sqlDates, Control_de_datos.RankingResult);
 
-        // Add the table to the panel
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        tablePanel.add(new JScrollPane(leaderboardTable), gbc);
+        JScrollPane scrollPane = new JScrollPane(leaderboardTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(600, 400));
+        add(scrollPane, BorderLayout.CENTER);
 
-        // Set the preferred size of the table
-        tablePanel.setPreferredSize(new Dimension(600, 400));
+        JLabel titleLabel = new JLabel("LEADERBOARD");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Add the panel to the center of the BorderLayout
-        add(tablePanel, BorderLayout.CENTER);
+        closeButton = new JButton("MENU");
+        closeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                setVisible(false);
+                menu menu = main.menu.getInstance();
+                menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                menu.setVisible(true);
+                getParent().add(menu);
+                getParent().revalidate();
+                getParent().repaint();
+            }
+        });
 
-        // Add a title label
-        salirButton = new JButton("MENU");
-        salirButton.addActionListener(this);
-        add(salirButton, BorderLayout.NORTH);
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(titleLabel, BorderLayout.CENTER);
+        topPanel.add(closeButton, BorderLayout.EAST);
+        add(topPanel, BorderLayout.NORTH);
     }
 
     private String formatDate(Date date) {
@@ -112,7 +98,18 @@ public class Ranking extends JPanel implements ActionListener{
             leaderboardData.add(entry);
         }
 
-        leaderboardData.sort(Comparator.comparingInt(LeaderboardEntry::getRounds).reversed());
+        leaderboardData.sort(new Comparator<LeaderboardEntry>() {
+            @Override
+            public int compare(LeaderboardEntry entry1, LeaderboardEntry entry2) {
+                if (entry1.getResult().equals("Victory") && entry2.getResult().equals("Defeat")) {
+                    return -1;
+                } else if (entry1.getResult().equals("Defeat") && entry2.getResult().equals("Victory")) {
+                    return 1;
+                } else {
+                    return Integer.compare(entry1.getRounds(), entry2.getRounds());
+                }
+            }
+        });
 
         DefaultTableModel tableModel = (DefaultTableModel) leaderboardTable.getModel();
         tableModel.setRowCount(0);
@@ -152,19 +149,21 @@ public class Ranking extends JPanel implements ActionListener{
         }
     }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		if (e.getSource() == salirButton) {
-			setVisible(false); 
-	        menu menu = main.menu.getInstance();
-	        menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	        menu.setVisible(true);
-	        getParent().add(menu);
-	        
-	        getParent().revalidate();
-	        getParent().repaint();
-		}
+    private class DateCellRenderer extends DefaultTableCellRenderer {
+        private static final long serialVersionUID = 1L;
 
-	}
+        public DateCellRenderer() {
+            super();
+            setHorizontalAlignment(JLabel.CENTER);
+        }
+
+        @Override
+        public void setValue(Object value) {
+            if (value instanceof Date) {
+                setText(formatDate((Date) value));
+            } else {
+                super.setValue(value);
+            }
+        }
+    }
 }

@@ -43,7 +43,7 @@ public class Control_de_datos {
 	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
 	private static final String user = "DAM1_2324_PET_EDU";
 	private static final String password = "edu";
-	public static Connection con;
+	public static Connection con = conectarBaseDatos();
 	private static final String ficheroTxt = "src//files//ciudades.txt";
 	private static final String ficheroBin = "src//files//CCP.bin";
 	public static String ficheroXML = "src//files//parametrosMedio.xml";
@@ -369,11 +369,9 @@ public class Control_de_datos {
 	public static void cargarPartida() {
 		Ciudades.clear();
         Vacuna.clear();
-        Virus.clear();
 //		cargarRecord();
 		cargarCiudades();
 		cargarVacunas();
-		cargarVirus();
 		cargarXML();
 	}
 
