@@ -19,31 +19,32 @@ public class game extends JPanel implements ActionListener {
      */
     private static final long serialVersionUID = 7725219079694206212L;
 
-    ImageIcon background;
+    private ImageIcon background;
     
-    JPanel popupPanel;
-
-    JButton SubMenuButton;
-    static JButton salirButton;
-    static JButton salirButton2;
-    static JButton nextRoundButton;
-    static JDialog popupDialog;
+    private JPanel popupPanel;
     
-    JPanel topPanel;
-    static JPanel leftPanel;
-    JPanel rightPanel;
-    JPanel bottomPanel;
-    static JPanel middlePanel;
+    private JButton exitButton;
+    private JButton SubMenuButton;
+    private static JButton salirButton;
+    private static JButton salirButton2;
+    private static JButton nextRoundButton;
+    private static JDialog popupDialog;
+    
+    private JPanel topPanel;
+    private static JPanel leftPanel;
+    private JPanel rightPanel;
+    private JPanel bottomPanel;
+    private static JPanel middlePanel;
 
-    JLabel LabelImagen;
-    JLabel menuLabel1;
-    JLabel brotes;    
-    static JLabel RoundNumber;
-    static JLabel ActionNumber;
-    static JLabel infectedCitiesLabel;
-    static JLabel infectedCitiesGameOverLabel;
+    private JLabel LabelImagen;
+    private JLabel menuLabel1;
+    private JLabel brotes;    
+    private static JLabel RoundNumber;
+    private static JLabel ActionNumber;
+    private static JLabel infectedCitiesLabel;
+    private static JLabel infectedCitiesGameOverLabel;
 
-    JProgressBar vacunas;
+    private JProgressBar vacunas;
 
     static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
 
@@ -200,7 +201,10 @@ public class game extends JPanel implements ActionListener {
     public static void Victory() {
         if (Control_de_partida.infectedcities == 0) {
         	Control_de_partida.resultado = "Victory";
-            JLabel victoryLabel = new JLabel("YOU HAVE WON");
+        	
+        	Control_de_datos.insertarPartida();
+            
+        	JLabel victoryLabel = new JLabel("YOU HAVE WON");
             victoryLabel.setForeground(Color.GREEN);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -238,6 +242,9 @@ public class game extends JPanel implements ActionListener {
     public static void GameOver() {
         if (Control_de_partida.outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || Control_de_partida.infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
         	Control_de_partida.resultado = "Defeat";
+        	
+        	Control_de_datos.insertarPartida();
+        	
         	JLabel victoryLabel = new JLabel("GAME OVER");
             victoryLabel.setForeground(Color.RED);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
@@ -561,22 +568,23 @@ public class game extends JPanel implements ActionListener {
             popupDialog.setLocationRelativeTo(mainFrame);
             popupDialog.setResizable(false);
 
+            
             popupPanel = new JPanel();
             popupPanel.setLayout(new GridLayout(2, 1));
 
-            JButton exitButton = new JButton("SAVE");
-            exitButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    // Code to handle saving action
-                }
-            });
-            popupPanel.add(exitButton);
-
+            
+            exitButton = new JButton("SAVE");
             salirButton2 = new JButton("MENU");
-            salirButton2.addActionListener(this);
-            popupPanel.add(salirButton2);
 
+            
+            exitButton.addActionListener(this);
+            salirButton2.addActionListener(this);
+            
+            
+            popupPanel.add(exitButton);     
+            popupPanel.add(salirButton2);
             popupDialog.add(popupPanel);
+            
         }
 
         popupDialog.setVisible(true);
@@ -612,6 +620,10 @@ public class game extends JPanel implements ActionListener {
         } else if (e.getSource() == salirButton2) {
         	popupDialog.dispose();
         	salirButton.doClick();
+        } else if (e.getSource() == exitButton){
+        	
+			Control_de_datos.insertarPartida();
+		
         }
     }
 }

@@ -43,7 +43,7 @@ public class Control_de_datos {
 	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
 	private static final String user = "DAM1_2324_PET_EDU";
 	private static final String password = "edu";
-	public static Connection con = conectarBaseDatos();
+	public static Connection con;
 	private static final String ficheroTxt = "src//files//ciudades.txt";
 	private static final String ficheroBin = "src//files//CCP.bin";
 	public static String ficheroXML = "src//files//parametrosMedio.xml";
@@ -97,7 +97,7 @@ public class Control_de_datos {
         }
     }
     
-	private static void insertarPartida() {
+    public static void insertarPartida() {
 		try {
 			OracleConnection oracleConn = (OracleConnection) con;
             Struct[] ciudadStructs = new Struct[Ciudades.size()];
@@ -158,7 +158,7 @@ public class Control_de_datos {
 		}
 	}
 	
-	private static void selectDatos() {
+	public static void selectDatos() {
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones FROM PANDEMIC_SAVEFILES WHERE identificador =?");
 	        pstmt.setObject(1, 1);
@@ -231,7 +231,7 @@ public class Control_de_datos {
 		}
 	}
 	
-	private static void insertarRanking(){
+	public static void insertarRanking(){
         try{
             PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado) VALUES (?, ?, ?, SYSDATE, ?)");
             pstmt.setObject(1, null);
@@ -369,23 +369,9 @@ public class Control_de_datos {
 	public static void cargarPartida() {
 		Ciudades.clear();
         Vacuna.clear();
-//		cargarRecord();
 		cargarCiudades();
 		cargarVacunas();
 		cargarXML();
-	}
-
-	public static void main(String []args) {
-		cargarPartida();
-
-//		insertarPartida(con);
-		
-//		selectDatos(con);
-		
-//		insertarRanking(con);
-		
-		selectRanking();
-		
 	}
 	
 	public static void guardarRecord() {
