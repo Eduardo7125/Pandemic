@@ -69,7 +69,7 @@ class info extends JPanel implements ActionListener {
 
         menu.styleButton(salirButton);
 
-        tituloLabel = new JLabel("INFORMACIÓN");
+        tituloLabel = new JLabel("INFORMATION");
         tituloLabel.setFont(new Font("Arial", Font.BOLD, 40));
         tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
