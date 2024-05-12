@@ -58,6 +58,12 @@ public class Control_de_datos {
     public static ArrayList<Vacunas> Vacuna = new ArrayList<>();
     public static ArrayList<Virus> Virus = new ArrayList<>();
     
+    
+	public static String[] RankingNames = new String[10];
+	public static int[] RankingRounds = new int[10];
+	public static Date[] RankingDates = new Date[10];
+	public static String[] RankingResult = new String[10];
+    
 	private static Connection conectarBaseDatos() {
 		Connection con = null;
 	    try {
@@ -206,9 +212,48 @@ public class Control_de_datos {
             pstmt.setInt(8, Control_de_partida.acciones);
 
             pstmt.executeUpdate();
+            oracleConn.close();
 		} catch (SQLException e) {
 		    e.printStackTrace();
 		}
+	}
+	
+	private static void insertarRanking(Connection con) {
+		
+		try (Connection conn = con) {
+			OracleConnection oracleConn = (OracleConnection) conn;
+            
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado) VALUES (?, ?, ?, SYSDATE, ?)");
+            pstmt.setObject(1, null);
+            pstmt.setInt(2, Control_de_partida.turno);
+            pstmt.setString(3, Control_de_partida.playername);
+            pstmt.setString(4, Control_de_partida.resultado);
+
+            pstmt.executeUpdate();
+            oracleConn.close();
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		}
+	}
+	
+	private static void selectRanking(Connection con) {
+		
+	    try (Connection conn = con) {
+	        PreparedStatement pstmt = conn.prepareStatement("SELECT rondas, nombre, fecha, resultado FROM PANDEMIC_RANKING WHERE ROWNUM <= 10 AND resultado LIKE 'Victory' ORDER BY rondas ASC , fecha ASC");
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        int i = 0;
+	        while (rs.next()) {
+	            RankingRounds[i] = rs.getInt("rondas");
+	            RankingNames[i] = rs.getString("nombre");
+	            RankingDates[i] = rs.getDate("fecha");
+	            RankingResult[i] = rs.getString("resultado");
+	            i++;
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
 	
 	public static ArrayList<Ciudad> cargarCiudades() {
@@ -326,23 +371,12 @@ public class Control_de_datos {
 
 //		insertarPartida(con);
 		
-		selectDatos(con);
+//		selectDatos(con);
 		
-	}
-	
-	public static void cargarRecord() {
-	    try {
-	        con = conectarBaseDatos();
-	    } finally {
-	        if (con != null) {
-	            try {
-	                con.close();
-	                System.out.println("Connection closed successfully.");
-	            } catch (SQLException e) {
-	                System.out.println("Error when closing the connection " + e);
-	            }
-	        }
-	    }
+//		insertarRanking(con);
+		
+		selectRanking(con);
+		
 	}
 	
 	public static void guardarRecord() {

@@ -24,6 +24,8 @@ import objects.Ciudad;
 
 public class Control_de_partida {
 
+	public static String playername = "Edu";
+	public static String resultado = "Victory";
 	public static int turno = 1;
 	public static int acciones = 4;
 	public static int outbreak = 0;
