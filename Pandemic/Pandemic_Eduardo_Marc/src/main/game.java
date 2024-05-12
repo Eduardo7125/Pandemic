@@ -621,9 +621,9 @@ public class game extends JPanel implements ActionListener {
         	popupDialog.dispose();
         	salirButton.doClick();
         } else if (e.getSource() == exitButton){
-        	
 			Control_de_datos.insertarPartida();
-		
+        	popupDialog.dispose();
+        	salirButton.doClick();
         }
     }
 }
