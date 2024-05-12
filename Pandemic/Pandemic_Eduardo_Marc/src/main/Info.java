@@ -82,7 +82,7 @@ class info extends JPanel implements ActionListener {
 
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(tituloLabel, BorderLayout.NORTH);
-        centerPanel.add(buttonPanel, BorderLayout.WEST); // Cambio en la disposición del panel de botones
+        centerPanel.add(buttonPanel, BorderLayout.WEST);
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         add(centerPanel, BorderLayout.CENTER);
     }

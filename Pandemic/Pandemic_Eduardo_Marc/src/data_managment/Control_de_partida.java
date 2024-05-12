@@ -1,35 +1,21 @@
 package data_managment;
 import main.game;
 
-import main.game;
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Random;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.Timer;
+
 import objects.Ciudad;
 
 
 public class Control_de_partida {
 
-	public static String playername = "Edu";
-	public static String resultado = "Victory";
+	public static String playername;
 	public static int turno = 1;
 	public static int acciones = 4;
 	public static int outbreak = 0;
 	public static int infectedcities = 0;
+	public static int citiesleft;
+	public static String resultado;
 	
 	public void iniciarPartida() {
 		
@@ -94,9 +80,6 @@ public class Control_de_partida {
 	            game.actualizarEstadoCiudades();
 	            ciudad.propagarInfeccion();
 	        }
-	        if (outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
-	            mostrarPantallaError();
-	        }
 	    }
 	}
 
@@ -124,44 +107,6 @@ public class Control_de_partida {
 //	    }
 //	    return ciudadesAleatorias;
 //	}
-	
-	 private static void mostrarPantallaError() {
-	        JFrame errorFrame = new JFrame();
-	        errorFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	        errorFrame.setUndecorated(true);
-	        errorFrame.setResizable(false);
-	        errorFrame.setAlwaysOnTop(true);
-
-	        
-	        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	        GraphicsDevice device = env.getDefaultScreenDevice();
-	        device.setFullScreenWindow(errorFrame);
-
-	        
-	        JPanel panel = new JPanel();
-	        panel.setLayout(new BorderLayout());
-
-	        JLabel errorMessage = new JLabel("GAME OVER");
-	        errorMessage.setForeground(Color.RED);
-	        errorMessage.setHorizontalAlignment(SwingConstants.CENTER);
-	        errorMessage.setFont(new Font("Arial", Font.PLAIN, 40));
-
-	        panel.add(errorMessage, BorderLayout.CENTER);
-	        errorFrame.add(panel);
-
-	        
-	        Timer timer = new Timer(2000, new ActionListener() {
-	            @Override
-	            public void actionPerformed(ActionEvent e) {
-	                errorFrame.dispose();
-	                System.exit(0);
-	            }
-	        });
-	        timer.setRepeats(false);
-	        timer.start();
-
-	        errorFrame.setVisible(true);
-	    }
     
 	public static void ResetOutbreak() {
 	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;

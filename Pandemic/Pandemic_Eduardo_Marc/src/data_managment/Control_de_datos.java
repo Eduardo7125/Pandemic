@@ -359,6 +359,9 @@ public class Control_de_datos {
 	}
 	
 	public static void cargarPartida() {
+		Ciudades.clear();
+        Vacuna.clear();
+        Virus.clear();
 //		cargarRecord();
 		cargarCiudades();
 		cargarVacunas();

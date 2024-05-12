@@ -18,23 +18,30 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 
 import data_managment.Control_de_datos;
+import data_managment.Control_de_partida;
 import objects.Ciudad;
 
-class menu extends JPanel implements ActionListener {
+public class menu extends JPanel implements ActionListener {
 
     /**
      * 
      */
     @Serial
     private static final long serialVersionUID = -5124796854119688429L;
+    
+    private JDialog playerNameDialog;
+    private JTextField playerNameField;
+    JButton okButton;
     
     ImageIcon icono;
     ImageIcon iconoEscalado;
@@ -81,8 +88,6 @@ class menu extends JPanel implements ActionListener {
 
         dificultad = new JPopupMenu();
 
-        // Iconos
-
         icono = new ImageIcon("src//img//icon.png");
         iconoNuevaPartida = new ImageIcon("src//img//nueva_partida.png");
         iconoNuevaPartida2 = new ImageIcon("src//img//nueva_partida2.png");
@@ -97,7 +102,6 @@ class menu extends JPanel implements ActionListener {
 
         menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
 
-        // Etiqueta del menú
         menuLabel1 = new JLabel(
                 "<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
 
@@ -108,8 +112,6 @@ class menu extends JPanel implements ActionListener {
         buttonPanel.setOpaque(false);
         add(buttonPanel, BorderLayout.CENTER);
 
-        // Botones
-
         botonesCreacion();
         initializePopupMenu();
 
@@ -119,10 +121,9 @@ class menu extends JPanel implements ActionListener {
         version = new JLabel(
                 "<html><div style='text-align:center;color: white;'><p>Eduardo/Marc</p><p>Version 1.0</p></div>");
 
-        // Panel inferior y etiqueta de versión
         bottomPanel = new JPanel();
         JLabel version = new JLabel(
-                "<html><font color='white'><p>Euardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
+                "<html><font color='white'><p>Eduardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
 
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
@@ -130,6 +131,32 @@ class menu extends JPanel implements ActionListener {
         add(bottomPanel, BorderLayout.SOUTH);
 
         setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
+        
+        playerNameDialog = new JDialog();
+        playerNameDialog.setModal(false);
+        playerNameDialog.setTitle("PLAYER NAME");
+        playerNameDialog.setSize(300, 100);
+        playerNameDialog.setLocationRelativeTo(null);
+        playerNameDialog.setLayout(new BorderLayout());
+
+        playerNameField = new JTextField();
+        playerNameField.addActionListener(this);
+        playerNameField.setFont(new Font("Arial", Font.PLAIN, 20));
+        playerNameDialog.add(playerNameField, BorderLayout.CENTER);
+
+        okButton = new JButton("OK");
+        okButton.addActionListener(this);
+        playerNameDialog.add(okButton, BorderLayout.SOUTH);
+        
+        ImageIcon dialogIcon = new ImageIcon("src//img//icon.png");
+        playerNameDialog.setIconImage(dialogIcon.getImage());
+        
+        playerNameField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                okButton.doClick();
+        }
+        });
     }
 
     public void botonesCreacion() {
@@ -214,32 +241,41 @@ class menu extends JPanel implements ActionListener {
             }
         });
     }
-
-    @Override
+    
+    @ Override
     public void actionPerformed(ActionEvent e) {
-    	
         if (e.getSource() == nuevaPartidaButton) {
-        	if (atrasButton == null) {
-        	    atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
-        	    add(atrasButton, BorderLayout.NORTH);
-        	    atrasButton.setBounds(getWidth() - atrasButton.getPreferredSize().width - 10, 10, atrasButton.getPreferredSize().width, atrasButton.getPreferredSize().height);
-        	    atrasButton.addActionListener(new ActionListener() {
-        	        public void actionPerformed(ActionEvent e) {
-        	            dificultad.setVisible(false);
-        	            atrasButton.setVisible(false);
-        	            atrasButton = null;
-        	        }
-        	    });
-        	}
-
-        	int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
-        	int y = nuevaPartidaButton.getHeight() / 2 + nuevaPartidaButton.getHeight() + 90
-        	        - dificultad.getPreferredSize().height / 2;
-
-        	x += nuevaPartidaButton.getLocationOnScreen().x;
-        	y += nuevaPartidaButton.getLocationOnScreen().y;
-
-        	dificultad.show(menu.this, x, y);
+            Control_de_partida.playername = null;
+            playerNameField.setText("");
+            playerNameDialog.setVisible(true);
+            playerNameDialog.setAlwaysOnTop(true);
+        } else if (e.getActionCommand().equals("OK")) {
+            String playerName = playerNameField.getText();
+            if (!playerName.isEmpty()) {
+                Control_de_partida.playername = playerName;
+                playerNameDialog.setVisible(false);
+                if (atrasButton == null) {
+                    atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
+                    dificultad.add(atrasButton);
+                    dificultad.repaint();
+                     
+                    atrasButton.addActionListener(new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            dificultad.remove(atrasButton);
+                            atrasButton = null; 
+                            dificultad.setVisible(false);          
+                        }
+                    });
+                }
+                
+                int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
+                int y = nuevaPartidaButton.getHeight() / 2 + nuevaPartidaButton.getHeight() + 90
+                        - dificultad.getPreferredSize().height / 2;
+                
+                x += nuevaPartidaButton.getLocationOnScreen().x;
+                y += nuevaPartidaButton.getLocationOnScreen().y;
+                dificultad.show(menu.this, x, y);
+            } 
         } else if (e.getSource() == cargarPartidaButton) {
             System.exit(0);
         } else if (e.getSource() == informacionButton) {
@@ -259,17 +295,27 @@ class menu extends JPanel implements ActionListener {
         } else if (e.getSource() == facilItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosFacil.xml";
             Control_de_datos.cargarPartida();
+            resetvalores();
             iniciarNuevaPartida();
         } else if (e.getSource() == medioItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosMedio.xml";
             Control_de_datos.cargarPartida();
+            resetvalores();
             iniciarNuevaPartida();
         } else if (e.getSource() == dificilItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosDificil.xml";
             Control_de_datos.cargarPartida();
+            resetvalores();
             iniciarNuevaPartida();
         }
+    }
 
+    private void resetvalores() {
+    	Control_de_partida.resultado = null;
+    	Control_de_partida.turno = 1;
+    	Control_de_partida.acciones = 4;
+        Control_de_partida.infectedcities = 0;
+        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota);
     }
 
     private void iniciarNuevaPartida() {
@@ -350,6 +396,7 @@ class menu extends JPanel implements ActionListener {
         dificultad.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         dificultad.setPreferredSize(new Dimension(1000, 550));
     }
+
 
     private static menu instance;
 

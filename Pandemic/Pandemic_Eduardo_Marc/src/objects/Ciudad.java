@@ -1,7 +1,5 @@
 package objects;
 
-import java.awt.Color;
-
 import data_managment.*;
 import main.game;
 
@@ -40,7 +38,7 @@ public class Ciudad {
 	public void disminuirInfeccionConVacuna(String identificador) {
 	    Control_de_partida.acciones--;
 	    this.setInfeccion(0);
-//	 VAMOS A USAR ESTE CODIGO    for (Ciudad ciudad : Control_de_datos.Ciudades) {
+//	    for (Ciudad ciudad : Control_de_datos.Ciudades) {
 //	        if (ciudad.getEnfermedad().equalsIgnoreCase(identificador)) {
 //	            Control_de_partida.infectedcities -= ciudad.getInfeccion();
 //	            ciudad.setInfeccion(0);
