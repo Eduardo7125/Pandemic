@@ -72,7 +72,8 @@ public class game extends JPanel implements ActionListener {
 
         rightPanel.setBackground(Color.blue.darker().darker().darker());
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
-        brotes();
+        
+		brotes();
 
         leftPanel.setBackground(Color.gray);
 
@@ -437,18 +438,18 @@ public class game extends JPanel implements ActionListener {
     public static void brotes() {
         leftPanel.removeAll();
 
+        String imagePath = (Control_de_partida.outbreak > 0 && brotesvalor > Control_de_partida.outbreak)
+                ? "src/img/brote_activo.png"
+                : "src/img/brote_inactivo.png";
+
+        ImageIcon icon = new ImageIcon(imagePath);
+        Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(image);
+
         for (int i = 0; i < brotesvalor; i++) {
-            ImageIcon icono;
-            if (Control_de_partida.outbreak > 0 && i < Control_de_partida.outbreak) {
-                icono = new ImageIcon("src//img//brote_activo.png");
-            } else {
-                icono = new ImageIcon("src//img//brote_inactivo.png");
-            }
-            Image imagen = icono.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-            ImageIcon iconoEscalado = new ImageIcon(imagen);
-            JLabel brotes = new JLabel(iconoEscalado);
-            brotes.setSize(75, 75);
-            leftPanel.add(brotes);
+            JLabel brote = new JLabel(scaledIcon);
+            brote.setPreferredSize(new Dimension(75, 75));
+            leftPanel.add(brote);
         }
 
         leftPanel.revalidate();
@@ -539,6 +540,7 @@ public class game extends JPanel implements ActionListener {
 
         Thread vacunaThread = new Thread(() -> vacuna.desarrollarVacuna(valorFloat));
         vacunaThread.start();
+        
         while (counter < 101 && iteraciones < 26) {
             vacunaFinal.setValue(counter);
             try {

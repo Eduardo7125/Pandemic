@@ -6,11 +6,14 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
+import data_managment.Control_de_datos;
+
 import java.awt.*;
 import java.io.Serial;
 
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
+		Control_de_datos.cargarVirus();
 //	    Thread cargaPartidaThread = new Thread(() -> Control_de_datos.cargarPartida());
 //	    cargaPartidaThread.start();
 
