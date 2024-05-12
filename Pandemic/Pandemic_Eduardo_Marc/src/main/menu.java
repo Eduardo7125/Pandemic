@@ -289,7 +289,15 @@ public class menu extends JPanel implements ActionListener {
             getParent().revalidate();
             getParent().repaint();
         } else if (e.getSource() == resumenButton) {
-            System.exit(0);
+            setVisible(false);
+            
+            Control_de_datos.selectRanking(Control_de_datos.con);
+            
+            Ranking ranking = new Ranking();
+            ranking.setVisible(true);
+            getParent().add(ranking);
+            getParent().revalidate();
+            getParent().repaint();
         } else if (e.getSource() == salirButton) {
             System.exit(0);
         } else if (e.getSource() == facilItem) {

@@ -82,7 +82,68 @@ public class Control_de_datos {
 	    return con;
 	}
 	
+	private static void insertarPartida(Connection con) {
+		
+		try (Connection conn = con) {
+			OracleConnection oracleConn = (OracleConnection) conn;
+            Struct[] ciudadStructs = new Struct[Ciudades.size()];
+            for (int i = 0; i < Ciudades.size(); i++) {
+                Ciudad ciudad = Ciudades.get(i);
+                Object[] ciudadAttributes = new Object[] {
+                    ciudad.getNombre(),
+                    new Object[] { ciudad.getCoordenadas()[0], ciudad.getCoordenadas()[1] },
+                    ciudad.getEnfermedad(),
+                    ciudad.getInfeccion(),
+                    Arrays.toString(ciudad.getCiudadesColindantes())
+                };
+                ciudadStructs[i] = oracleConn.createStruct("CIUDAD", ciudadAttributes);
+            }
 
+            Array ciudadArray = oracleConn.createOracleArray("ARRAY_CIUDADES_OBJ", ciudadStructs);
+
+            Struct[] virusStructs = new Struct[Virus.size()];
+            for (int i = 0; i < Virus.size(); i++) {
+                Virus virus = Virus.get(i);
+                Object[] virusAttributes = new Object[] {
+                    virus.getIdentificador(),
+                    virus.getNombre(),
+                    virus.getColor()
+                };
+                virusStructs[i] = oracleConn.createStruct("VIRUS", virusAttributes);
+            }
+
+            Array virusArray = oracleConn.createOracleArray("ARRAY_VIRUS_OBJ", virusStructs);
+
+            Struct[] vacunaStructs = new Struct[ Vacuna.size()];
+            for (int i = 0; i < Vacuna.size(); i++) {
+                Vacunas vacuna = Vacuna.get(i);
+                Object[] vacunaAttributes = new Object[] {
+                    vacuna.getNombre(),
+                    vacuna.getColor(),
+                    vacuna.getPorcentaje()
+                };
+                vacunaStructs[i] = oracleConn.createStruct("VACUNAS", vacunaAttributes);
+            }
+
+            Array vacunasArray = oracleConn.createOracleArray("ARRAY_VACUNAS_OBJ", vacunaStructs);
+
+            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            pstmt.setObject(1, null);
+            pstmt.setArray(2, ciudadArray);
+            pstmt.setArray(3, virusArray);
+            pstmt.setArray(4, vacunasArray);
+            pstmt.setInt(5, Control_de_partida.outbreak);
+            pstmt.setInt(6, Control_de_partida.turno);
+            pstmt.setInt(7, 25);
+            pstmt.setInt(8, Control_de_partida.acciones);
+
+            pstmt.executeUpdate();
+            oracleConn.close();
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		}
+	}
+	
 	private static void selectDatos(Connection con) {
 	    try (Connection conn = con) {
 	        PreparedStatement pstmt = conn.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones FROM PANDEMIC_SAVEFILES WHERE identificador =?");
@@ -156,68 +217,6 @@ public class Control_de_datos {
 	    }
 	}
 	
-	private static void insertarPartida(Connection con) {
-		
-		try (Connection conn = con) {
-			OracleConnection oracleConn = (OracleConnection) conn;
-            Struct[] ciudadStructs = new Struct[Ciudades.size()];
-            for (int i = 0; i < Ciudades.size(); i++) {
-                Ciudad ciudad = Ciudades.get(i);
-                Object[] ciudadAttributes = new Object[] {
-                    ciudad.getNombre(),
-                    new Object[] { ciudad.getCoordenadas()[0], ciudad.getCoordenadas()[1] },
-                    ciudad.getEnfermedad(),
-                    ciudad.getInfeccion(),
-                    Arrays.toString(ciudad.getCiudadesColindantes())
-                };
-                ciudadStructs[i] = oracleConn.createStruct("CIUDAD", ciudadAttributes);
-            }
-
-            Array ciudadArray = oracleConn.createOracleArray("ARRAY_CIUDADES_OBJ", ciudadStructs);
-
-            Struct[] virusStructs = new Struct[Virus.size()];
-            for (int i = 0; i < Virus.size(); i++) {
-                Virus virus = Virus.get(i);
-                Object[] virusAttributes = new Object[] {
-                    virus.getIdentificador(),
-                    virus.getNombre(),
-                    virus.getColor()
-                };
-                virusStructs[i] = oracleConn.createStruct("VIRUS", virusAttributes);
-            }
-
-            Array virusArray = oracleConn.createOracleArray("ARRAY_VIRUS_OBJ", virusStructs);
-
-            Struct[] vacunaStructs = new Struct[ Vacuna.size()];
-            for (int i = 0; i < Vacuna.size(); i++) {
-                Vacunas vacuna = Vacuna.get(i);
-                Object[] vacunaAttributes = new Object[] {
-                    vacuna.getNombre(),
-                    vacuna.getColor(),
-                    vacuna.getPorcentaje()
-                };
-                vacunaStructs[i] = oracleConn.createStruct("VACUNAS", vacunaAttributes);
-            }
-
-            Array vacunasArray = oracleConn.createOracleArray("ARRAY_VACUNAS_OBJ", vacunaStructs);
-
-            PreparedStatement pstmt = conn.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-            pstmt.setObject(1, null);
-            pstmt.setArray(2, ciudadArray);
-            pstmt.setArray(3, virusArray);
-            pstmt.setArray(4, vacunasArray);
-            pstmt.setInt(5, Control_de_partida.outbreak);
-            pstmt.setInt(6, Control_de_partida.turno);
-            pstmt.setInt(7, 25);
-            pstmt.setInt(8, Control_de_partida.acciones);
-
-            pstmt.executeUpdate();
-            oracleConn.close();
-		} catch (SQLException e) {
-		    e.printStackTrace();
-		}
-	}
-	
 	private static void insertarRanking(Connection con) {
 		
 		try (Connection conn = con) {
@@ -236,7 +235,7 @@ public class Control_de_datos {
 		}
 	}
 	
-	private static void selectRanking(Connection con) {
+	public static void selectRanking(Connection con) {
 		
 	    try (Connection conn = con) {
 	        PreparedStatement pstmt = conn.prepareStatement("SELECT rondas, nombre, fecha, resultado FROM PANDEMIC_RANKING WHERE ROWNUM <= 10 AND resultado LIKE 'Victory' ORDER BY rondas ASC , fecha ASC");
