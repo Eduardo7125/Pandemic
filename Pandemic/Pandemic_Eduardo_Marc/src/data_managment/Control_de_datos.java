@@ -58,16 +58,19 @@ public class Control_de_datos {
     public static ArrayList<Vacunas> Vacuna = new ArrayList<>();
     public static ArrayList<Virus> Virus = new ArrayList<>();
     
-    
-	public static String[] RankingNames = new String[10];
-	public static int[] RankingRounds = new int[10];
-	public static Date[] RankingDates = new Date[10];
-	public static String[] RankingResult = new String[10];
+    public static int numeroFilasRanking;
+	public static String[] RankingNames;
+	public static int[] RankingRounds;
+	public static Date[] RankingDates;
+	public static String[] RankingResult;
 	
-	public static String[] SavesgNames;
-	public static int[] SavesRounds;
-	public static int[] SavesOutbreaks;
-	public static int[] SavesActions;
+	public static void inicializarRanking() {
+	    numeroFilasRanking = obtenerNumeroFilasRanking();
+	    RankingNames = new String[numeroFilasRanking];
+	    RankingRounds = new int[numeroFilasRanking];
+	    RankingDates = new Date[numeroFilasRanking];
+	    RankingResult = new String[numeroFilasRanking];
+	}
     
 	public static Connection conectarBaseDatos() {
 		con = null;
@@ -253,9 +256,25 @@ public class Control_de_datos {
 		}
 	}
 	
+	public static int obtenerNumeroFilasRanking() {
+	    int numeroFilas = 0;
+	    try {
+	        Statement stmt = con.createStatement();
+	        ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS total FROM PANDEMIC_RANKING");
+	        if (rs.next()) {
+	            numeroFilas = rs.getInt("total");
+	        }
+	        stmt.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return numeroFilas;
+	}
+	
 	public static void selectRanking(){
-		try {
-	        PreparedStatement pstmt = con.prepareStatement("SELECT rondas, nombre, fecha, resultado FROM PANDEMIC_RANKING WHERE ROWNUM <= 10 AND resultado LIKE 'Victory' ORDER BY rondas ASC , fecha ASC");
+		inicializarRanking();
+	    try {
+	        PreparedStatement pstmt = con.prepareStatement("SELECT rondas, nombre, fecha, resultado FROM PANDEMIC_RANKING");
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        int i = 0;
@@ -266,9 +285,9 @@ public class Control_de_datos {
 	            RankingResult[i] = rs.getString("resultado");
 	            i++;
 	        }
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
+	    } catch (Exception e) {
+	    	// TODO: handle exception
+	    }
 	}
 	
 	public static ArrayList<Ciudad> cargarCiudades() {
