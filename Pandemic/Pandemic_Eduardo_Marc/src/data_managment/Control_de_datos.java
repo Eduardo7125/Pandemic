@@ -59,10 +59,18 @@ public class Control_de_datos {
     public static ArrayList<Virus> Virus = new ArrayList<>();
     
     public static int numeroFilasRanking;
+    public static int numeroFilasSaves;
+    
 	public static String[] RankingNames;
 	public static int[] RankingRounds;
 	public static Date[] RankingDates;
 	public static String[] RankingResult;
+	
+	public static int[] arrOutreak;
+	public static int[] arrTurno;
+	public static String[] arrPlayername;
+	public static int[] arrAcciones;
+	public static int[] arrId;
 	
 	public static void inicializarRanking() {
 	    numeroFilasRanking = obtenerNumeroFilasRanking();
@@ -70,6 +78,15 @@ public class Control_de_datos {
 	    RankingRounds = new int[numeroFilasRanking];
 	    RankingDates = new Date[numeroFilasRanking];
 	    RankingResult = new String[numeroFilasRanking];
+	}
+	
+	public static void inicializarSaves() {
+	    numeroFilasSaves = obtenerNumeroFilasRanking();
+	    arrOutreak = new int[numeroFilasRanking];
+	    arrTurno = new int[numeroFilasRanking];
+	    arrPlayername = new String[numeroFilasRanking];
+	    arrAcciones = new int[numeroFilasRanking];
+	    arrId = new int[numeroFilasRanking];
 	}
 
 	public static Connection conectarBaseDatos() {
@@ -169,7 +186,7 @@ public class Control_de_datos {
     
 	public static void selectDatos() {
 		try {
-	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player FROM PANDEMIC_SAVEFILES WHERE player = ?");
+	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player FROM PANDEMIC_SAVEFILES WHERE player = ? AND identificador = ?");
 	        
 	        pstmt.setObject(1, Control_de_partida.playername);
 	        ResultSet rs = pstmt.executeQuery();
@@ -241,6 +258,28 @@ public class Control_de_datos {
 		}
 	}
 	
+	public static void selectParidas() {
+		try {
+	        PreparedStatement pstmt = con.prepareStatement("SELECT identificador, player, brotes, rondas, acciones FROM PANDEMIC_SAVEFILES WHERE player = ?");
+	        
+	        pstmt.setObject(1, Control_de_partida.playername);
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        int i = 0;
+	        while (rs.next()) {
+	        	arrId[i] = rs.getInt("identificador");
+	        	arrPlayername[i] = rs.getString("player");
+	            arrOutreak[i] = rs.getInt("brotes");
+	            arrTurno[i] = rs.getInt("rondas");
+	            arrAcciones[i] = rs.getInt("acciones");
+	            i++;
+	        }
+	        
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
 	public static void insertarRanking(){
         try{
             PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado) VALUES (?, ?, ?, SYSDATE, ?)");
@@ -254,6 +293,21 @@ public class Control_de_datos {
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
+	}
+	
+	public static int obtenerNumeroFilasPartidas() {
+	    int numberOfRows = 0;
+	    try (PreparedStatement pstmt = con.prepareStatement("SELECT COUNT(*) AS total FROM PANDEMIC_RANKING where player = ?")) {
+	        pstmt.setObject(1, Control_de_partida.playername);
+	        try (ResultSet rs = pstmt.executeQuery()) {
+	            if (rs.next()) {
+	                numberOfRows = rs.getInt("total");
+	            }
+	        }
+	    } catch (SQLException e) {
+	        throw new RuntimeException("Error executing query", e);
+	    }
+	    return numberOfRows;
 	}
 	
 	public static int obtenerNumeroFilasRanking() {
