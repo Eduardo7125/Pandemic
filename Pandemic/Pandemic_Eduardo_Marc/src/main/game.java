@@ -202,11 +202,11 @@ public class game extends JPanel implements ActionListener {
         if (Control_de_partida.infectedcities == 0) {
         	Control_de_partida.resultado = "Victory";
         	
-        	Control_de_datos.insertarPartida();
+        	Control_de_datos.insertarRanking();
             
         	JLabel victoryLabel = new JLabel("YOU HAVE WON");
             victoryLabel.setForeground(Color.GREEN);
-            victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
+            victoryLabel.setFont(new Font("Arial", Font.BOLD, 150));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
             victoryLabel.setVerticalAlignment(SwingConstants.CENTER);
             victoryLabel.setOpaque(true);
@@ -243,11 +243,11 @@ public class game extends JPanel implements ActionListener {
         if (Control_de_partida.outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || Control_de_partida.infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
         	Control_de_partida.resultado = "Defeat";
         	
-        	Control_de_datos.insertarPartida();
+        	Control_de_datos.insertarRanking();
         	
         	JLabel victoryLabel = new JLabel("GAME OVER");
             victoryLabel.setForeground(Color.RED);
-            victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
+            victoryLabel.setFont(new Font("Arial", Font.BOLD, 150));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
             victoryLabel.setVerticalAlignment(SwingConstants.CENTER);
             victoryLabel.setOpaque(true);
