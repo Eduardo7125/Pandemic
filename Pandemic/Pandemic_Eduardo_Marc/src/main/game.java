@@ -228,10 +228,10 @@ public class game extends JPanel implements ActionListener {
             middlePanel.revalidate();
             middlePanel.repaint();
 
-            Timer timer = new Timer(3000, new ActionListener() {
+            Timer timer = new Timer(4000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	System.exit(0);
+                	game.salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -269,13 +269,14 @@ public class game extends JPanel implements ActionListener {
             middlePanel.revalidate();
             middlePanel.repaint();
             
-            Timer timer = new Timer(2000, new ActionListener() {
+            Timer timer = new Timer(4000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	System.exit(0);
+                    game.salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
+
             timer.start();
         }
     }
@@ -602,7 +603,6 @@ public class game extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == salirButton) {
-        	popupDialog.dispose();
             setVisible(false);
             menu menu = main.menu.getInstance();
             menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));

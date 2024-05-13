@@ -46,7 +46,7 @@ public class Control_de_datos {
 	public static Connection con;
 	private static final String ficheroTxt = "src//files//ciudades.txt";
 	private static final String ficheroBin = "src//files//CCP.bin";
-	public static String ficheroXML = "src//files//parametrosMedio.xml";
+	public static String ficheroXML;
 	
     static int contador = 0;
 	public static String CiudadesInfectadasInicio;
@@ -162,7 +162,7 @@ public class Control_de_datos {
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones FROM PANDEMIC_SAVEFILES WHERE identificador =?");
 	        
-	        //en el segundo numero hay que poner el id de la partida que quieras cargar
+	        //en el segundo numero hay que poner el id de la partida que quieras cargar por defecto lo deje en 1
 	        pstmt.setObject(1, 1);
 	        ResultSet rs = pstmt.executeQuery();
 	        
