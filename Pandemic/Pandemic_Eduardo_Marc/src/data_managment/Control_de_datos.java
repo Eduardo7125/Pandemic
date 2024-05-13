@@ -37,7 +37,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Struct;
 import java.math.BigDecimal;
-
+/**
+ * @author Eduardo y Marc
+ */
 public class Control_de_datos {
 
 	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
@@ -447,12 +449,8 @@ public class Control_de_datos {
 	}
 	
 	public static void cargarPartida() {
-<<<<<<< HEAD
-		cargarRecord();
-=======
 		Ciudades.clear();
         Vacuna.clear();
->>>>>>> Eduardo
 		cargarCiudades();
 		cargarVacunas();
 		cargarXML();

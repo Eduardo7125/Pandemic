@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import objects.Ciudad;
-
-
+/**
+ * @author Eduardo y Marc
+ */
 public class Control_de_partida {
 
 	public static String playername;

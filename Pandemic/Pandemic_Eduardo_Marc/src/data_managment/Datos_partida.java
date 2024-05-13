@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import objects.Ciudad;
 import objects.Vacunas;
 import objects.Virus;
-
+/**
+ * @author Eduardo y Marc
+ */
 public class Datos_partida {
 	
 	private int id;
