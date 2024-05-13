@@ -99,15 +99,6 @@ public class Control_de_partida {
 	    return ciudadesAleatorias;
 	}
     
-//	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
-//	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
-//	    for (int i = 0; i < 1; i++) {	
-//	        Ciudad ciudad = ciudades.get(0);
-//	        ciudadesAleatorias.add(ciudad);
-//	    }
-//	    return ciudadesAleatorias;
-//	}
-    
 	public static void ResetOutbreak() {
 	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
 
