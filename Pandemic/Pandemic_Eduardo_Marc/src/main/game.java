@@ -46,7 +46,7 @@ public class game extends JPanel implements ActionListener {
 
     private JProgressBar vacunas;
 
-    static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
+    public static int brotesvalor;
 
     game() {
         setLayout(new BorderLayout());
@@ -228,7 +228,7 @@ public class game extends JPanel implements ActionListener {
             middlePanel.revalidate();
             middlePanel.repaint();
 
-            Timer timer = new Timer(4000, new ActionListener() {
+            Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                 	game.salirButton.doClick();
@@ -272,7 +272,7 @@ public class game extends JPanel implements ActionListener {
             Timer timer = new Timer(4000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    game.salirButton.doClick();
+                	game.salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -446,9 +446,31 @@ public class game extends JPanel implements ActionListener {
     public static void brotes() {
         leftPanel.removeAll();
 
-        String imagePath = (Control_de_partida.outbreak > 0 && brotesvalor > Control_de_partida.outbreak)
-                ? "src/img/brote_activo.png"
-                : "src/img/brote_inactivo.png";
+        for (int i = 0; i < brotesvalor; i++) {
+            String imagePath;
+            if (i < Control_de_partida.outbreak) {
+                imagePath = "src/img/brote_activo.png";
+            } else {
+                imagePath = "src/img/brote_inactivo.png";
+            }
+            
+            ImageIcon icon = new ImageIcon(imagePath);
+            Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(image);
+
+            JLabel brote = new JLabel(scaledIcon);
+            brote.setPreferredSize(new Dimension(75, 75));
+            leftPanel.add(brote);
+        }
+
+        leftPanel.revalidate();
+        leftPanel.repaint();
+    }
+    
+    public static void brotesStart() {
+        leftPanel.removeAll();
+
+        String imagePath = "src/img/brote_inactivo.png";
 
         ImageIcon icon = new ImageIcon(imagePath);
         Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
@@ -463,6 +485,7 @@ public class game extends JPanel implements ActionListener {
         leftPanel.revalidate();
         leftPanel.repaint();
     }
+
 
     public void vacunasCompletas() {
         vacunas("Alfa", new Color(118, 189, 248));

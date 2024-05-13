@@ -308,8 +308,10 @@ public class menu extends JPanel implements ActionListener {
     	Control_de_partida.resultado = null;
     	Control_de_partida.turno = 1;
     	Control_de_partida.acciones = 4;
+    	Control_de_partida.outbreak = 0;
         Control_de_partida.infectedcities = 0;
         Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota);
+        game.brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
     }
 
     private void iniciarNuevaPartida() {
@@ -323,6 +325,7 @@ public class menu extends JPanel implements ActionListener {
         getParent().add(juego);
         getParent().revalidate();
         getParent().repaint();
+        game.brotesStart();
     }
 
     @SuppressWarnings("serial")
