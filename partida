@@ -1,0 +1,266 @@
+San Francisco
+[235, 315]
+0
+0
+[Chicago, Los Angeles, Manila, Tokio]
+Chicago
+[300, 280]
+0
+0
+[San Francisco, Montreal, Atlanta, Mexico DF, Los Angeles]
+Atlanta
+[320, 320]
+0
+0
+[Chicago, Miami, Washington]
+Montreal
+[350, 280]
+0
+0
+[Chicago, Nueva York, Washington]
+Nueva York
+[380, 290]
+0
+0
+[Montreal, Washington, Londres, Madrid]
+Washington
+[360, 330]
+0
+0
+[Montreal, Nueva York, Atlanta, Miami]
+Londres
+[700, 230]
+0
+0
+[Nueva York, Madrid, Paris, Essen]
+Madrid
+[687, 290]
+0
+0
+[Nueva York, Londres, Paris, Sao Paulo, Argel]
+Paris
+[727, 250]
+0
+0
+[Madrid, Londres, Essen, Argel, Milan]
+Essen
+[755, 190]
+0
+0
+[Londres, Paris, San Petersburgo, Milan]
+Milan
+[755, 235]
+0
+0
+[Essen, Paris, Estambul]
+San Petersburgo
+[815, 210]
+0
+0
+[Essen, Estambul, Moscu]
+Los Angeles
+[275, 355]
+3
+0
+[San Francisco, Mexico DF, Chicago, Sidney]
+Miami
+[380, 360]
+3
+0
+[Washington, Atlanta, Mexico DF, Bogota]
+Mexico DF
+[300, 385]
+3
+0
+[Los Angeles, Miami, Chicago, Bogota, Lima]
+Bogota
+[400, 460]
+3
+0
+[Miami, Mexico DF, Lima, Sao Paulo, Buenos Aires]
+Lima
+[395, 520]
+3
+0
+[Mexico DF, Bogota, Santiago de Chile]
+Santiago de Chile
+[430, 620]
+3
+0
+[Lima]
+Buenos Aires
+[453, 670]
+3
+0
+[Sao Paulo, Bogota]
+Sao Paulo
+[520, 570]
+3
+0
+[Bogota, Buenos Aires, Lagos, Madrid]
+Lagos
+[710, 450]
+3
+0
+[Sao Paulo, Kinsasa, Jartum]
+Kinsasa
+[770, 540]
+3
+0
+[Lagos, Jartum, Johannesburgo]
+Jartum
+[815, 450]
+3
+0
+[El Cairo, Lagos, Kinsasa, Johannesburgo]
+Johannesburgo
+[815, 630]
+3
+0
+[Kinsasa, Jartum]
+Argel
+[730, 330]
+2
+0
+[Madrid, Paris, Estambul, El Cairo]
+El Cairo
+[820, 350]
+2
+0
+[Argel, Estambul, Bagdad]
+Riad
+[895, 385]
+2
+0
+[El Cairo, Bagdad, Karachi]
+Estambul
+[830, 294]
+2
+0
+[Argel, El Cairo, Bagdad, Moscu]
+Bagdad
+[880, 320]
+2
+0
+[Estambul, Karachi, Riad, El Cairo]
+Moscu
+[890, 230]
+2
+0
+[Teheran, Estambul, San Petersburgo]
+Teheran
+[920, 310]
+2
+0
+[Moscu, Bagdad, Karachi, Nueva Delhi]
+Karachi
+[980, 355]
+2
+0
+[Teheran, Bagdad, Nueva Delhi, Riad, Bombay]
+Bombay
+[1005, 395]
+2
+0
+[Karachi, Nueva Delhi, Madras]
+Nueva Delhi
+[1025, 330]
+2
+0
+[Teheran, Karachi, Bombay, Madras, Calcuta]
+Calcuta
+[1070, 370]
+2
+0
+[Nueva Delhi, Hong Kong, Madras, Bangkok]
+Madras
+[1035, 410]
+2
+0
+[Bombay, Nueva Delhi, Calcuta, Bangkok, Yakarta]
+Yakarta
+[1150, 525]
+1
+0
+[Madras, Bangkok, Ho Chi Minh, Sidney]
+Bangkok
+[1120, 415]
+1
+0
+[Yakarta, Calcuta, Madras, Ho Chi Minh, Hong Kong]
+Hong Kong
+[1165, 370]
+1
+0
+[Bangkok, Ho Chi Minh, Taipei, Manila, Shanghai]
+Shanghai
+[1195, 355]
+1
+0
+[Pekin, Hong Kong, Seul, Tokio, Taipei]
+Pekin
+[1175, 300]
+1
+0
+[Seul, Shanghai]
+Seul
+[1225, 297]
+1
+0
+[Pekin, Tokio]
+Tokio
+[1280, 290]
+1
+0
+[San Francisco, Seul, Osaka, Shanghai]
+Osaka
+[1255, 320]
+1
+0
+[Tokio, Taipei]
+Taipei
+[1205, 375]
+1
+0
+[Osaka, Shanghai, Hong Kong, Manila]
+Ho Chi Minh
+[1148, 429]
+1
+0
+[Yakarta, Bangkok, Hong Kong, Manila]
+Manila
+[1200, 420]
+1
+0
+[San Francisco, Ho Chi Minh, Taipei, Hong Kong, Sidney]
+Sidney
+[1320, 645]
+1
+0
+[Los Angeles, Manila, Yakarta]
+
+Alfa
+Azul
+0.0
+Beta
+Rojo
+0.0
+Gama
+Verde
+0.0
+Delta
+Amarillo
+0.0
+
+0
+Alfa
+Azul
+1
+Beta
+Rojo
+2
+Gamma
+Verde
+3
+Delta
+Amarillo
