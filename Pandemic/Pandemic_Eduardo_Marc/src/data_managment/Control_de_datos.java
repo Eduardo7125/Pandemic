@@ -141,7 +141,7 @@ public class Control_de_datos {
 
             Array vacunasArray = oracleConn.createOracleArray("ARRAY_VACUNAS_OBJ", vacunaStructs);
 
-            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
             pstmt.setObject(1, null);
             pstmt.setArray(2, ciudadArray);
             pstmt.setArray(3, virusArray);
@@ -150,20 +150,20 @@ public class Control_de_datos {
             pstmt.setInt(6, Control_de_partida.turno);
             pstmt.setInt(7, 25);
             pstmt.setInt(8, Control_de_partida.acciones);
-
+            pstmt.setString(9, Control_de_partida.playername);
+            
             pstmt.executeUpdate();
             oracleConn.close();
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
-	
+    
 	public static void selectDatos() {
 		try {
-	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones FROM PANDEMIC_SAVEFILES WHERE identificador =?");
+	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player FROM PANDEMIC_SAVEFILES WHERE player = ?");
 	        
-	        //en el segundo numero hay que poner el id de la partida que quieras cargar por defecto lo deje en 1
-	        pstmt.setObject(1, 1);
+	        pstmt.setObject(1, Control_de_partida.playername);
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        
