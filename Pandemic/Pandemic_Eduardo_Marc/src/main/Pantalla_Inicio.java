@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -26,6 +27,8 @@ import javax.swing.Timer;
 public class Pantalla_Inicio {
     public static Marco mimimarco;
 =======
+=======
+>>>>>>> Eduardo
 import javax.swing.SwingUtilities;
 import javax.swing.plaf.basic.BasicProgressBarUI;
 
@@ -36,9 +39,13 @@ import java.io.Serial;
 
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
-	    Thread cargaPartidaThread = new Thread(() -> Control_de_datos.cargarPartida());
-	    cargaPartidaThread.start();
+		Control_de_datos.cargarVirus();
+//	    Thread cargaPartidaThread = new Thread(() -> Control_de_datos.cargarPartida());
+//	    cargaPartidaThread.start();
 
+		
+//		Thread iniciar_partida = new Thread(() -> Marco mimimarco = new Marco());
+		
 	    SwingUtilities.invokeLater(() -> {
 	        Marco mimimarco = new Marco();
 	        mimimarco.setVisible(true);
@@ -51,6 +58,7 @@ public class Pantalla_Inicio {
     }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 class Marco extends JFrame {
 
@@ -259,6 +267,35 @@ class Marco extends JFrame{
 	
 }
 
+=======
+class Marco extends JFrame{
+    /**
+	 * 
+	 */
+	@Serial
+    private static final long serialVersionUID = 1L;
+	public Marco(){
+		setTitle("Pandemic");
+        setIconImage(new ImageIcon("src//img//icon.png").getImage());
+        GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        if (graphicsDevice.isFullScreenSupported()) {
+            setUndecorated(true);
+            setResizable(false);
+            graphicsDevice.setFullScreenWindow(this);
+        } else {
+            System.out.println("The full-screen mode is not supported by this device.");
+        }
+
+        menu menu = main.menu.getInstance();
+        
+        menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        add(menu);
+
+        setVisible(true);
+	}
+}
+
+>>>>>>> Eduardo
 class CustomProgressBarUI extends BasicProgressBarUI {
     private Image backgroundImage;
 
@@ -278,6 +315,7 @@ class CustomProgressBarUI extends BasicProgressBarUI {
 
         g2d.dispose();
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     public static void styleButton(JButton button) {
@@ -472,6 +510,9 @@ class Lamina2 extends JPanel implements ActionListener {
         }
     }
 }
+=======
+}
+>>>>>>> Eduardo
 =======
 }
 >>>>>>> Eduardo
