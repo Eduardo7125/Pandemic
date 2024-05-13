@@ -9,21 +9,22 @@ public class Vacunas {
 	public Vacunas(String nombre, String color, float porcentaje) {
 		this.nombre = nombre;
 		this.color = color;
-		this.porcentaje = porcentaje;
+		this.porcentaje = porcentaje;	
 	}
 	
 	boolean completo;
 	public void desarrollarVacuna(float porcentaje) {
-		completo = false;
-		int nuevoValor = (int) (this.getPorcentaje() + (int) porcentaje);
-		if (nuevoValor <= 100) {
-			this.setPorcentaje(nuevoValor);
-			System.out.println("Se aumento el valor de la vacuna " + this.getNombre() + " a " + nuevoValor);
-		} else {
-			completo = true;
-			System.out.println("La vacuna " + this.getNombre() + " ya esta completamente desarrollada.");
-		}
-
+		
+			completo = false;
+			int nuevoValor = (int) (this.getPorcentaje() + (int) porcentaje);
+			if (nuevoValor <= 100) {
+				this.setPorcentaje(nuevoValor);
+				System.out.println("The value of vaccine " + this.getNombre() + " has been increased to " + nuevoValor);
+			} else {
+				completo = true;
+				System.out.println("Vaccine " + this.getNombre() + " is already fully developed.");
+			}	
+		
 	}
 	
 	public String getNombre() {
