@@ -23,7 +23,7 @@ public class game extends JPanel implements ActionListener {
     
     private JPanel popupPanel;
     
-    private JButton exitButton;
+    private JButton saveButton;
     private JButton SubMenuButton;
     private static JButton salirButton;
     private static JButton salirButton2;
@@ -574,15 +574,15 @@ public class game extends JPanel implements ActionListener {
             popupPanel.setLayout(new GridLayout(2, 1));
 
             
-            exitButton = new JButton("SAVE");
+            saveButton = new JButton("SAVE");
             salirButton2 = new JButton("MENU");
 
             
-            exitButton.addActionListener(this);
+            saveButton.addActionListener(this);
             salirButton2.addActionListener(this);
             
             
-            popupPanel.add(exitButton);     
+            popupPanel.add(saveButton);     
             popupPanel.add(salirButton2);
             popupDialog.add(popupPanel);
             
@@ -620,7 +620,7 @@ public class game extends JPanel implements ActionListener {
         } else if (e.getSource() == salirButton2) {
         	popupDialog.dispose();
         	salirButton.doClick();
-        } else if (e.getSource() == exitButton){
+        } else if (e.getSource() == saveButton){
 			Control_de_datos.insertarPartida();
         	popupDialog.dispose();
         	salirButton.doClick();
