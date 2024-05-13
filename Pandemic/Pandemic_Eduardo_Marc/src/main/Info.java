@@ -13,7 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-
+/**
+ * @author Eduardo y Marc
+ */
 class info extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 2242406387998512165L;
@@ -69,32 +71,20 @@ class info extends JPanel implements ActionListener {
 
         menu.styleButton(salirButton);
 
-<<<<<<< HEAD
-        tituloLabel = new JLabel("INFORMACIÓN");
-        tituloLabel.setFont(new Font("Arial", Font.BOLD, 16));
-=======
         tituloLabel = new JLabel("INFORMATION");
         tituloLabel.setFont(new Font("Arial", Font.BOLD, 40));
->>>>>>> Eduardo
         tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         informacionLabel = new JLabel();
         informacionLabel.setVerticalAlignment(JLabel.TOP);
-<<<<<<< HEAD
-=======
         informacionLabel.setFont(new Font("Arial", Font.PLAIN, 28));
->>>>>>> Eduardo
 
         scrollPane = new JScrollPane(informacionLabel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.add(tituloLabel, BorderLayout.NORTH);
-<<<<<<< HEAD
-        centerPanel.add(buttonPanel, BorderLayout.WEST); // Cambio en la disposición del panel de botones
-=======
         centerPanel.add(buttonPanel, BorderLayout.WEST);
->>>>>>> Eduardo
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         add(centerPanel, BorderLayout.CENTER);
     }
@@ -110,17 +100,11 @@ class info extends JPanel implements ActionListener {
                 informacion = "<html><p>At the beginning of each game, vaccines are initialized.<br>"
                         + "At the beginning of each game, cities are initialized.<br>"
                         + "Each city can only be infected with 1 type of infection based on its ID.<br>"
-<<<<<<< HEAD
-                        + "If there is an outbreak in the adjacent city and both cities have different types of infection, the corresponding infection type will be added.<br>"
-                        + "If a city has 3 infections and 1 is added, it is an outbreak. If there is an outbreak, 1 infection is added to the neighboring cities.<br>"
-                        + "If there are 3 connected cities, an outbreak occurs in the first city, it jumps to the second, there is also an outbreak, in the third, 2 infections are added. 1 is not added to the connected cities that have had an outbreak in this chain of outbreaks.<br>"
-=======
                         + "If there is an outbreak in the adjacent city and both cities have different types of infection, the corresponding infection type will <br>"
                         + "be added.<br>"
                         + "If a city has 3 infections and 1 is added, it is an outbreak. If there is an outbreak, 1 infection is added to the neighboring cities.<br>"
                         + "If there are 3 connected cities, an outbreak occurs in the first city, it jumps to the second, there is also an outbreak, in the third,<br>"
                         + "2 infections are added. 1 is not added to the connected cities that have had an outbreak in this chain of outbreaks.<br>"
->>>>>>> Eduardo
                         + "The number of infected cities at the beginning of the game is a configuration parameter.<br>"
                         + "The number of infected cities each round is a configuration parameter.<br>"
                         + "The number of diseases is a configuration parameter.</p></html>";
@@ -173,11 +157,7 @@ class info extends JPanel implements ActionListener {
                 tituloLabel.setText("END");
                 informacion = "<html><p>At the end of each round, it is checked whether the player has won, lost, or it is unknown.<br>"
                         + "You win by curing all infections.<br>"
-<<<<<<< HEAD
-                        + "If X outbreaks occur, the game is lost.</p></html>";
-=======
                         + "If all the outbreaks occur, the game is lost.</p></html>";
->>>>>>> Eduardo
                 break;
             case "MENU":
     			setVisible(false); 
@@ -200,8 +180,4 @@ class info extends JPanel implements ActionListener {
         }
         return instance;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> Eduardo

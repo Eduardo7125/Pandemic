@@ -15,59 +15,6 @@ import java.awt.event.MouseEvent;
 import java.io.Serial;
 
 import javax.swing.BorderFactory;
-<<<<<<< HEAD
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-
-class menu extends JPanel implements ActionListener {
-
-	/**
-	 * 
-	 */
-	@Serial
-	private static final long serialVersionUID = -5124796854119688429L;
-	ImageIcon icono;
-    ImageIcon iconoEscalado;
-    ImageIcon iconoNuevaPartida;
-    ImageIcon iconoNuevaPartida2;
-    ImageIcon iconoCargarPartida;
-    ImageIcon iconoCargarPartida2;
-    ImageIcon iconoInfo;
-    ImageIcon iconoInfo2;
-    ImageIcon iconoScore;
-    ImageIcon iconoScore2;
-    ImageIcon iconoSalir;
-    ImageIcon iconoSalir2;
-    Image imagen;
-    Image imagenEscalada;
-    static Image nuevaImagen;
-    static Image nuevaImagen2;
-    static Image imagen_botones;
-
-    JPanel buttonPanel;
-    JPanel gridLabel1;
-    JPanel bottomPanel;
-
-    JLabel version;
-    JLabel menuLabel1;
-
-    JButton button;
-    JButton nuevaPartidaButton;
-    JButton cargarPartidaButton;
-    JButton informacionButton;
-    JButton resumenButton;
-    static JButton salirButton;
-
-    Marco marco;
-
-    menu() {
-        setLayout(new BorderLayout());
-
-        // Iconos
-=======
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -83,7 +30,9 @@ import javax.swing.Timer;
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
 import objects.Ciudad;
-
+/**
+ * @author Eduardo y Marc
+ */
 public class menu extends JPanel implements ActionListener {
 
     /**
@@ -136,7 +85,6 @@ public class menu extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         dificultad = new JPopupMenu();
->>>>>>> Eduardo
 
         icono = new ImageIcon("src//img//icon.png");
         iconoNuevaPartida = new ImageIcon("src//img//nueva_partida.png");
@@ -149,17 +97,9 @@ public class menu extends JPanel implements ActionListener {
         iconoScore2 = new ImageIcon("src//img//ranking2.png");
         iconoSalir = new ImageIcon("src//img//salir.png");
         iconoSalir2 = new ImageIcon("src//img//salir2.png");
-<<<<<<< HEAD
-
-        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
-
-        // Etiqueta del menú
-        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
-=======
         
         menuLabel1 = new JLabel(
                 "<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
->>>>>>> Eduardo
 
         menuLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         add(menuLabel1, BorderLayout.NORTH);
@@ -167,28 +107,6 @@ public class menu extends JPanel implements ActionListener {
         buttonPanel = new JPanel(new GridLayout(5, 1, 10, 10));
         buttonPanel.setOpaque(false);
         add(buttonPanel, BorderLayout.CENTER);
-<<<<<<< HEAD
-        
-        // Botones
-        botones();
-
-
-        buttonPanel.add(nuevaPartidaButton);
-        buttonPanel.add(cargarPartidaButton);
-        buttonPanel.add(informacionButton);
-        buttonPanel.add(resumenButton);
-        buttonPanel.add(salirButton);
-        
-        add(buttonPanel, BorderLayout.CENTER);
-        
-        bottomPanel = new JPanel();
-        version = new JLabel("<html><div style='text-align:center;color: white;'><p>Eduardo/Marc</p><p>Version 1.0</p></div>");
-
-
-        // Panel inferior y etiqueta de versión
-        bottomPanel = new JPanel();
-        JLabel version = new JLabel("<html><font color='white'><p>Euardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
-=======
 
         botonesCreacion();
         initializePopupMenu();
@@ -198,7 +116,6 @@ public class menu extends JPanel implements ActionListener {
         bottomPanel = new JPanel();
         version = new JLabel(
                 "<html><font color='white'><p>Eduardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
->>>>>>> Eduardo
 
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
@@ -206,30 +123,6 @@ public class menu extends JPanel implements ActionListener {
         add(bottomPanel, BorderLayout.SOUTH);
 
         setBorder(BorderFactory.createEmptyBorder(30, 10, 10, 10));
-<<<<<<< HEAD
-	}
-
-    public void botones() {
-        imageBotones(iconoNuevaPartida, iconoNuevaPartida2);
-        nuevaPartidaButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));        
-        imageBotones(iconoCargarPartida, iconoCargarPartida2);        
-        cargarPartidaButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));        
-        imageBotones(iconoInfo, iconoInfo2);        
-        informacionButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));        
-        imageBotones(iconoScore, iconoScore2);        
-        resumenButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));
-        imageBotones(iconoSalir, iconoSalir2);        
-        salirButton = createButton(new ImageIcon(nuevaImagen), new ImageIcon(nuevaImagen2));
-    }
-    
-    public static void imageBotones(ImageIcon icono, ImageIcon icono2) {
-        imagen_botones = icono.getImage();
-        nuevaImagen = imagen_botones.getScaledInstance(450, 300, Image.SCALE_SMOOTH);
-        imagen_botones = icono2.getImage();
-        nuevaImagen2 = imagen_botones.getScaledInstance(450, 300, Image.SCALE_SMOOTH);
-    }
-    
-=======
         
         playerNameDialog = new JDialog();
         playerNameDialog.setModal(false);
@@ -287,7 +180,6 @@ public class menu extends JPanel implements ActionListener {
         nuevaImagen2 = imagen_botones.getScaledInstance(450, 330, Image.SCALE_SMOOTH);
     }
 
->>>>>>> Eduardo
     public JButton createButton(ImageIcon icono, ImageIcon iconoHover) {
         JButton button = new JButton();
         button.setIcon(icono);
@@ -318,10 +210,7 @@ public class menu extends JPanel implements ActionListener {
         g2d.drawImage(imagenFondo, 0, 0, getWidth(), getHeight(), this);
         g2d.dispose();
     }
-<<<<<<< HEAD
-=======
 
->>>>>>> Eduardo
     public static void styleButton(JButton button) {
         button.setBackground(new Color(240, 240, 240));
         button.setForeground(Color.BLACK);
@@ -343,41 +232,6 @@ public class menu extends JPanel implements ActionListener {
             }
         });
     }
-<<<<<<< HEAD
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		if (e.getSource() == nuevaPartidaButton) {
-		    setVisible(false);
-		    game juego = game.getInstance();
-		    juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-		    juego.setVisible(true);
-		    
-		    getParent().add(juego);
-	        getParent().revalidate();
-	        getParent().repaint();
-		} else if (e.getSource() == cargarPartidaButton) {
-			System.exit(0);
-		} else if (e.getSource() == informacionButton) {
-			setVisible(false); 
-
-	        info informacion = info.getInstance();
-	        informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-	   
-	        informacion.setVisible(true);
-	        getParent().add(informacion);        
-	        getParent().revalidate();
-	        getParent().repaint();
-		} else if (e.getSource() == resumenButton) {
-			System.exit(0);
-		}else if (e.getSource() == salirButton) {
-			System.exit(0);
-		}
-		
-	}
-	private static menu instance;
-=======
     
     @ Override
     public void actionPerformed(ActionEvent e) {
@@ -584,29 +438,12 @@ public class menu extends JPanel implements ActionListener {
 
     private static menu instance;
 
->>>>>>> Eduardo
     public static menu getInstance() {
         if (instance == null) {
             instance = new menu();
         }
         return instance;
     }
-<<<<<<< HEAD
-    
-	public static void cargarRecords() {
-		
-	}
-	
-	public static void cargarPantallaGuardado() {
-		
-	}
-	
-	public static void cargarPartida() {
-
-		
-	}
-}
-=======
 
     public static void cargarRecords() {
 
@@ -633,4 +470,3 @@ class JMenuItemMenuItemPersonalizado extends JMenuItem {
         setHorizontalTextPosition(SwingConstants.RIGHT);
     }
 }
->>>>>>> Eduardo

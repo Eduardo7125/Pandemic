@@ -11,7 +11,9 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import data_managment.Control_de_datos;
-
+/**
+ * @author Eduardo y Marc
+ */
 public class Ranking extends JPanel {
 
     /**
