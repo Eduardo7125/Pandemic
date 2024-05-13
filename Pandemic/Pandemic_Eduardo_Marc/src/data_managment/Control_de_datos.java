@@ -63,6 +63,11 @@ public class Control_de_datos {
 	public static int[] RankingRounds = new int[10];
 	public static Date[] RankingDates = new Date[10];
 	public static String[] RankingResult = new String[10];
+	
+	public static String[] SavesgNames;
+	public static int[] SavesRounds;
+	public static int[] SavesOutbreaks;
+	public static int[] SavesActions;
     
 	public static Connection conectarBaseDatos() {
 		con = null;
@@ -378,60 +383,5 @@ public class Control_de_datos {
 	
 	public static void guardarRecord() {
 
-	}
-}
-
-class Ranking{
-	int rondas;
-	String nombre;
-	Date fecha;
-	int resultado;
-	int puntuacion;
-	public Ranking(int rondas, String nombre, Date fecha, int resultado, int puntuacion) {
-		this.rondas = rondas;
-		this.nombre = nombre;
-		this.fecha = fecha;
-		this.resultado = resultado;
-		this.puntuacion = puntuacion;
-	}
-	
-	public int getRondas() {
-		return rondas;
-	}
-	
-	public void setRondas(int rondas) {
-		this.rondas = rondas;
-	}
-	
-	public String getNombre() {
-		return nombre;
-	}
-	
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	
-	public Date getFecha() {
-		return fecha;
-	}
-	
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
-	
-	public int getResultado() {
-		return resultado;
-	}
-	
-	public void setResultado(int resultado) {
-		this.resultado = resultado;
-	}
-	
-	public int getPuntuacion() {
-		return puntuacion;
-	}
-
-	public void setPuntuacion(int puntuacion) {
-		this.puntuacion = puntuacion;
 	}
 }
