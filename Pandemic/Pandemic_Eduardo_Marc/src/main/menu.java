@@ -69,6 +69,7 @@ public class menu extends JPanel implements ActionListener {
     private JLabel version;
     private JLabel menuLabel1;
 
+    private JButton searchButton;
     private JButton nuevaPartidaButton;
     private JButton cargarPartidaButton;
     private JButton informacionButton;
@@ -135,6 +136,10 @@ public class menu extends JPanel implements ActionListener {
 
         okButton = new JButton("OK");
         okButton.addActionListener(this);
+        
+        searchButton = new JButton("SEARCH");
+        searchButton.addActionListener(this);
+        
         playerNameDialog.add(okButton, BorderLayout.SOUTH);
         
         ImageIcon dialogIcon = new ImageIcon("src//img//icon.png");
@@ -233,7 +238,7 @@ public class menu extends JPanel implements ActionListener {
             playerNameField.setText("");
             playerNameDialog.setVisible(true);
             playerNameDialog.setAlwaysOnTop(true);
-        } else if (e.getActionCommand().equals("OK")) {
+        } else if (e.getSource() == okButton) {
             String playerName = playerNameField.getText();
             if (!playerName.isEmpty()) {
                 Control_de_partida.playername = playerName;
@@ -255,10 +260,34 @@ public class menu extends JPanel implements ActionListener {
                 dificultad.show(menu.this, x, y);
             } 
         } else if (e.getSource() == cargarPartidaButton) {
-           
-        	Control_de_datos.selectDatos();
         	
-        } else if (e.getSource() == informacionButton) {
+        	remove(okButton);
+        	playerNameDialog.add(searchButton, BorderLayout.SOUTH);
+        	
+        	Control_de_partida.playername = null;
+            playerNameField.setText("");
+            playerNameDialog.setVisible(true);
+            playerNameDialog.setAlwaysOnTop(true);
+            
+            String playerName = playerNameField.getText();
+            if (!playerName.isEmpty()) {
+                Control_de_partida.playername = playerName;
+                playerNameDialog.setVisible(false);
+            } 
+            
+        } else if (e.getSource() == searchButton) {
+			setVisible(false);
+			Control_de_datos.disconnect();
+			Control_de_datos.conectarBaseDatos();
+			 
+			Control_de_datos.selectRanking();
+             
+            loadgame loadgame = new loadgame();
+            loadgame.setVisible(true);
+            getParent().add(loadgame);
+            getParent().revalidate();
+            getParent().repaint();
+    	}else if (e.getSource() == informacionButton) {
             setVisible(false);
 
             info informacion = info.getInstance();
