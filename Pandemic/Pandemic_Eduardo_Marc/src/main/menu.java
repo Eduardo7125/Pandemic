@@ -41,49 +41,44 @@ public class menu extends JPanel implements ActionListener {
     
     private JDialog playerNameDialog;
     private JTextField playerNameField;
-    JButton okButton;
+    private JButton okButton;
     
-    ImageIcon icono;
-    ImageIcon iconoEscalado;
-    ImageIcon iconoNuevaPartida;
-    ImageIcon iconoNuevaPartida2;
-    ImageIcon iconoCargarPartida;
-    ImageIcon iconoCargarPartida2;
-    ImageIcon iconoInfo;
-    ImageIcon iconoInfo2;
-    ImageIcon iconoScore;
-    ImageIcon iconoScore2;
-    ImageIcon iconoSalir;
-    ImageIcon iconoSalir2;
-    Image imagen;
-    Image imagenEscalada;
-    static Image nuevaImagen;
-    static Image nuevaImagen2;
-    static Image imagen_botones;
+    private ImageIcon icono;
+    private ImageIcon iconoNuevaPartida;
+    private ImageIcon iconoNuevaPartida2;
+    private ImageIcon iconoCargarPartida;
+    private ImageIcon iconoCargarPartida2;
+    private ImageIcon iconoInfo;
+    private ImageIcon iconoInfo2;
+    private ImageIcon iconoScore;
+    private ImageIcon iconoScore2;
+    private ImageIcon iconoSalir;
+    private ImageIcon iconoSalir2;
+    private static Image nuevaImagen;
+    private static Image nuevaImagen2;
+    private static Image imagen_botones;
 
-    JPopupMenu dificultad;
-    JMenuItemMenuItemPersonalizado facilItem;
-    JMenuItemMenuItemPersonalizado medioItem;
-    JMenuItemMenuItemPersonalizado dificilItem;
+    private JPopupMenu dificultad;
+    private JMenuItemMenuItemPersonalizado facilItem;
+    private JMenuItemMenuItemPersonalizado medioItem;
+    private JMenuItemMenuItemPersonalizado dificilItem;
 
-    JPanel buttonPanel;
-    JPanel gridLabel1;
-    JPanel bottomPanel;
+    private JPanel buttonPanel;
+    private JPanel bottomPanel;
 
-    JLabel version;
-    JLabel menuLabel1;
+    private JLabel version;
+    private JLabel menuLabel1;
 
-    JButton button;
-    JButton nuevaPartidaButton;
-    JButton cargarPartidaButton;
-    JButton informacionButton;
-    JButton rankingButton;
-    static JButton salirButton;
-    JButton atrasButton;
-
-    Marco marco;
+    private JButton nuevaPartidaButton;
+    private JButton cargarPartidaButton;
+    private JButton informacionButton;
+    private JButton rankingButton;
+    private static JButton salirButton;
+    private JButton atrasButton;
 
     menu() {
+        Control_de_datos.conectarBaseDatos();
+        
         setLayout(new BorderLayout());
 
         dificultad = new JPopupMenu();
@@ -99,9 +94,7 @@ public class menu extends JPanel implements ActionListener {
         iconoScore2 = new ImageIcon("src//img//ranking2.png");
         iconoSalir = new ImageIcon("src//img//salir.png");
         iconoSalir2 = new ImageIcon("src//img//salir2.png");
-
-        menuLabel1 = new JLabel("<html><div style='text-align:center;'><h1>PANDEMIC</h1><h2>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'>");
-
+        
         menuLabel1 = new JLabel(
                 "<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
 
@@ -119,10 +112,6 @@ public class menu extends JPanel implements ActionListener {
 
         bottomPanel = new JPanel();
         version = new JLabel(
-                "<html><div style='text-align:center;color: white;'><p>Eduardo/Marc</p><p>Version 1.0</p></div>");
-
-        bottomPanel = new JPanel();
-        JLabel version = new JLabel(
                 "<html><font color='white'><p>Eduardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
 
         bottomPanel.add(version);
@@ -151,12 +140,7 @@ public class menu extends JPanel implements ActionListener {
         ImageIcon dialogIcon = new ImageIcon("src//img//icon.png");
         playerNameDialog.setIconImage(dialogIcon.getImage());
         
-        playerNameField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                okButton.doClick();
-        }
-        });
+        playerNameField.addActionListener(this);
     }
 
     public void botonesCreacion() {
@@ -259,13 +243,7 @@ public class menu extends JPanel implements ActionListener {
                     dificultad.add(atrasButton);
                     dificultad.repaint();
                      
-                    atrasButton.addActionListener(new ActionListener() {
-                        public void actionPerformed(ActionEvent e) {
-                            dificultad.remove(atrasButton);
-                            atrasButton = null; 
-                            dificultad.setVisible(false);          
-                        }
-                    });
+                    atrasButton.addActionListener(this);
                 }
                 
                 int x = nuevaPartidaButton.getWidth() / 2 - dificultad.getPreferredSize().width / 2;
@@ -277,7 +255,9 @@ public class menu extends JPanel implements ActionListener {
                 dificultad.show(menu.this, x, y);
             } 
         } else if (e.getSource() == cargarPartidaButton) {
-            System.exit(0);
+           
+        	Control_de_datos.selectDatos();
+        	
         } else if (e.getSource() == informacionButton) {
             setVisible(false);
 
@@ -290,7 +270,8 @@ public class menu extends JPanel implements ActionListener {
             getParent().repaint();
         } else if (e.getSource() == rankingButton) {
             setVisible(false);
-            Control_de_datos.selectRanking(Control_de_datos.con);
+            
+            Control_de_datos.selectRanking();
             
             Ranking ranking = new Ranking();
             ranking.setVisible(true);
@@ -314,6 +295,12 @@ public class menu extends JPanel implements ActionListener {
             Control_de_datos.cargarPartida();
             resetvalores();
             iniciarNuevaPartida();
+        } else if(e.getSource() == playerNameField) {       	
+        	okButton.doClick();
+    	} else if (e.getSource() == atrasButton) {
+            dificultad.remove(atrasButton);
+            atrasButton = null; 
+            dificultad.setVisible(false);      
         }
     }
 
@@ -321,8 +308,10 @@ public class menu extends JPanel implements ActionListener {
     	Control_de_partida.resultado = null;
     	Control_de_partida.turno = 1;
     	Control_de_partida.acciones = 4;
+    	Control_de_partida.outbreak = 0;
         Control_de_partida.infectedcities = 0;
         Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota);
+        game.brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
     }
 
     private void iniciarNuevaPartida() {
@@ -336,6 +325,7 @@ public class menu extends JPanel implements ActionListener {
         getParent().add(juego);
         getParent().revalidate();
         getParent().repaint();
+        game.brotesStart();
     }
 
     @SuppressWarnings("serial")

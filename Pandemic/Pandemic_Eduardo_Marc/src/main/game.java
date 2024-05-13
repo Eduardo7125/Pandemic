@@ -19,33 +19,34 @@ public class game extends JPanel implements ActionListener {
      */
     private static final long serialVersionUID = 7725219079694206212L;
 
-    ImageIcon background;
+    private ImageIcon background;
     
-    JPanel popupPanel;
-
-    JButton SubMenuButton;
-    static JButton salirButton;
-    static JButton salirButton2;
-    static JButton nextRoundButton;
-    static JDialog popupDialog;
+    private JPanel popupPanel;
     
-    JPanel topPanel;
-    static JPanel leftPanel;
-    JPanel rightPanel;
-    JPanel bottomPanel;
-    static JPanel middlePanel;
+    private JButton saveButton;
+    private JButton SubMenuButton;
+    private static JButton salirButton;
+    private static JButton salirButton2;
+    private static JButton nextRoundButton;
+    private static JDialog popupDialog;
+    
+    private JPanel topPanel;
+    private static JPanel leftPanel;
+    private JPanel rightPanel;
+    private JPanel bottomPanel;
+    private static JPanel middlePanel;
 
-    JLabel LabelImagen;
-    JLabel menuLabel1;
-    JLabel brotes;    
-    static JLabel RoundNumber;
-    static JLabel ActionNumber;
-    static JLabel infectedCitiesLabel;
-    static JLabel infectedCitiesGameOverLabel;
+    private JLabel LabelImagen;
+    private JLabel menuLabel1;
+    private JLabel brotes;    
+    private static JLabel RoundNumber;
+    private static JLabel ActionNumber;
+    private static JLabel infectedCitiesLabel;
+    private static JLabel infectedCitiesGameOverLabel;
 
-    JProgressBar vacunas;
+    private JProgressBar vacunas;
 
-    static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
+    public static int brotesvalor;
 
     game() {
         setLayout(new BorderLayout());
@@ -200,7 +201,10 @@ public class game extends JPanel implements ActionListener {
     public static void Victory() {
         if (Control_de_partida.infectedcities == 0) {
         	Control_de_partida.resultado = "Victory";
-            JLabel victoryLabel = new JLabel("YOU HAVE WON");
+        	
+        	Control_de_datos.insertarPartida();
+            
+        	JLabel victoryLabel = new JLabel("YOU HAVE WON");
             victoryLabel.setForeground(Color.GREEN);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -224,10 +228,10 @@ public class game extends JPanel implements ActionListener {
             middlePanel.revalidate();
             middlePanel.repaint();
 
-            Timer timer = new Timer(3000, new ActionListener() {
+            Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	System.exit(0);
+                	game.salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -238,6 +242,9 @@ public class game extends JPanel implements ActionListener {
     public static void GameOver() {
         if (Control_de_partida.outbreak == Integer.parseInt(Control_de_datos.NumBrotesDerrota) || Control_de_partida.infectedcities == Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota)) {
         	Control_de_partida.resultado = "Defeat";
+        	
+        	Control_de_datos.insertarPartida();
+        	
         	JLabel victoryLabel = new JLabel("GAME OVER");
             victoryLabel.setForeground(Color.RED);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 250));
@@ -265,7 +272,7 @@ public class game extends JPanel implements ActionListener {
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	System.exit(0);
+                	game.salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -438,9 +445,31 @@ public class game extends JPanel implements ActionListener {
     public static void brotes() {
         leftPanel.removeAll();
 
-        String imagePath = (Control_de_partida.outbreak > 0 && brotesvalor > Control_de_partida.outbreak)
-                ? "src/img/brote_activo.png"
-                : "src/img/brote_inactivo.png";
+        for (int i = 0; i < brotesvalor; i++) {
+            String imagePath;
+            if (i < Control_de_partida.outbreak) {
+                imagePath = "src/img/brote_activo.png";
+            } else {
+                imagePath = "src/img/brote_inactivo.png";
+            }
+            
+            ImageIcon icon = new ImageIcon(imagePath);
+            Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+            ImageIcon scaledIcon = new ImageIcon(image);
+
+            JLabel brote = new JLabel(scaledIcon);
+            brote.setPreferredSize(new Dimension(75, 75));
+            leftPanel.add(brote);
+        }
+
+        leftPanel.revalidate();
+        leftPanel.repaint();
+    }
+    
+    public static void brotesStart() {
+        leftPanel.removeAll();
+
+        String imagePath = "src/img/brote_inactivo.png";
 
         ImageIcon icon = new ImageIcon(imagePath);
         Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
@@ -455,6 +484,7 @@ public class game extends JPanel implements ActionListener {
         leftPanel.revalidate();
         leftPanel.repaint();
     }
+
 
     public void vacunasCompletas() {
         vacunas("Alfa", new Color(118, 189, 248));
@@ -561,22 +591,23 @@ public class game extends JPanel implements ActionListener {
             popupDialog.setLocationRelativeTo(mainFrame);
             popupDialog.setResizable(false);
 
+            
             popupPanel = new JPanel();
             popupPanel.setLayout(new GridLayout(2, 1));
 
-            JButton exitButton = new JButton("SAVE");
-            exitButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    // Code to handle saving action
-                }
-            });
-            popupPanel.add(exitButton);
-
+            
+            saveButton = new JButton("SAVE");
             salirButton2 = new JButton("MENU");
-            salirButton2.addActionListener(this);
-            popupPanel.add(salirButton2);
 
+            
+            saveButton.addActionListener(this);
+            salirButton2.addActionListener(this);
+            
+            
+            popupPanel.add(saveButton);     
+            popupPanel.add(salirButton2);
             popupDialog.add(popupPanel);
+            
         }
 
         popupDialog.setVisible(true);
@@ -594,7 +625,7 @@ public class game extends JPanel implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == salirButton) {
-        	popupDialog.dispose();
+//        	popupDialog.dispose();
             setVisible(false);
             menu menu = main.menu.getInstance();
             menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -610,6 +641,10 @@ public class game extends JPanel implements ActionListener {
         } else if (e.getSource() == SubMenuButton) {
         	MenuPopup();
         } else if (e.getSource() == salirButton2) {
+        	popupDialog.dispose();
+        	salirButton.doClick();
+        } else if (e.getSource() == saveButton){
+			Control_de_datos.insertarPartida();
         	popupDialog.dispose();
         	salirButton.doClick();
         }

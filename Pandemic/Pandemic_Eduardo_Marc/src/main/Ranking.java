@@ -19,7 +19,6 @@ public class Ranking extends JPanel {
     private JButton closeButton;
 
     public Ranking() {
-        Control_de_datos.conectarBaseDatos();
         setLayout(new BorderLayout());
 
         DefaultTableModel tableModel = new DefaultTableModel() {
