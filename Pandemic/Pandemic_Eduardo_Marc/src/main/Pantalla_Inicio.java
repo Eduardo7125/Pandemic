@@ -21,6 +21,7 @@ public class Pantalla_Inicio {
 //		Thread iniciar_partida = new Thread(() -> Marco mimimarco = new Marco());
 		
 	    SwingUtilities.invokeLater(() -> {
+	    	Control_de_datos.conectarBaseDatos();
 	        Marco mimimarco = new Marco();
 	        mimimarco.setVisible(true);
 	    });

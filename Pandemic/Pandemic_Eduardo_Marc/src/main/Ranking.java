@@ -14,7 +14,11 @@ import data_managment.Control_de_datos;
 
 public class Ranking extends JPanel {
 
-    private JTable leaderboardTable;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1803883461317339869L;
+	private JTable leaderboardTable;
     private ArrayList<LeaderboardEntry> leaderboardData;
     private JButton closeButton;
 

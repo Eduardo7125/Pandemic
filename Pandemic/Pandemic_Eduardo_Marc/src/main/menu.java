@@ -77,8 +77,8 @@ public class menu extends JPanel implements ActionListener {
     private JButton atrasButton;
 
     menu() {
-        Control_de_datos.conectarBaseDatos();
-        
+    	Control_de_datos.conectarBaseDatos();
+    	
         setLayout(new BorderLayout());
 
         dificultad = new JPopupMenu();
@@ -270,6 +270,8 @@ public class menu extends JPanel implements ActionListener {
             getParent().repaint();
         } else if (e.getSource() == rankingButton) {
             setVisible(false);
+            Control_de_datos.disconnect();
+            Control_de_datos.conectarBaseDatos();
             
             Control_de_datos.selectRanking();
             

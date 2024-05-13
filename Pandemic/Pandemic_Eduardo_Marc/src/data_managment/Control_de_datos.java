@@ -71,7 +71,7 @@ public class Control_de_datos {
 	    RankingDates = new Date[numeroFilasRanking];
 	    RankingResult = new String[numeroFilasRanking];
 	}
-    
+
 	public static Connection conectarBaseDatos() {
 		con = null;
 	    try {

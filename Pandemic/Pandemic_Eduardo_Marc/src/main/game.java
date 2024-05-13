@@ -627,6 +627,7 @@ public class game extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == salirButton) {
             setVisible(false);
+            
             menu menu = main.menu.getInstance();
             menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
             menu.setVisible(true);
