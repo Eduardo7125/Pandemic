@@ -59,7 +59,7 @@ public class Ciudad {
      * 
      * @param identificador Identificador de la enfermedad.
      */
-    public void disminuirInfeccionConVacuna(String identificador) {
+    public void disminuirInfeccionConVacuna() {
         Control_de_partida.acciones--;
         this.setInfeccion(0);
     }
@@ -73,9 +73,7 @@ public class Ciudad {
             Ciudad ciudad = obtenerCiudad(colindantes);
             if (!ciudad.getOutbreakHappened()) {
                 ciudad.aumentarInfeccion();
-                System.out.println("Nombre: " + ciudad.getNombre());
-                System.out.println("Virus: " + ciudad.getNombreEnfermedad());
-                System.out.println("Infección: " + ciudad.getInfeccion());
+                System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad() + " | Infection: " + ciudad.getInfeccion());
                 game.actualizarEstadoCiudades();
                 ciudad.setOutbreakHappened(true);
                 if (ciudad.getInfeccion() > 3) {
@@ -99,7 +97,7 @@ public class Ciudad {
                 ciudadColindante.aumentarInfeccion();
                 System.out.println("Nombre: " + ciudadColindante.getNombre());
                 System.out.println("Virus: " + ciudadColindante.getNombreEnfermedad());
-                System.out.println("Infección: " + ciudadColindante.getInfeccion());
+                System.out.println("Infection: " + ciudadColindante.getInfeccion());
                 game.actualizarEstadoCiudades();
                 ciudadColindante.setOutbreakHappened(true);
                 if (ciudadColindante.getInfeccion() > 3) {

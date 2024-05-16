@@ -35,6 +35,13 @@ public class Control_de_partida {
 	}
 	
 	public static void InfeccionInicial() {
+		for (objects.Vacunas vacunas : Control_de_datos.Vacuna) {
+            for (objects.Virus virus : Control_de_datos.Virus) {
+                if (vacunas.getNombre().equalsIgnoreCase(virus.getNombre())) {
+                	System.out.println(vacunas.getNombre() + " " + virus.getNombre());
+                }
+            }
+		}
 	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
 	    
 	    ArrayList<Ciudad> ciudadesAleatorias = SelecionarCiudadesInfeccionInicial(ciudades);
@@ -68,9 +75,7 @@ public class Control_de_partida {
 
 	    for (Ciudad ciudad : ciudadesAleatorias) {
 	        ciudad.aumentarInfeccion();
-	        System.out.println("Name: " + ciudad.getNombre());
-	        System.out.println("Virus: " + ciudad.getNombreEnfermedad());
-	        System.out.println("Infection: " + ciudad.getInfeccion());
+	        System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad() + " | Infection: " + ciudad.getInfeccion());
 	        game.actualizarEstadoCiudades();
 	        if (ciudad.getInfeccion() > 3) {
 	        	ciudad.setOutbreakHappened(true);

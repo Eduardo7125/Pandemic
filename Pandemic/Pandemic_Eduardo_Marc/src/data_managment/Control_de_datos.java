@@ -68,12 +68,14 @@ public class Control_de_datos {
 	public static int[] RankingRounds;
 	public static Date[] RankingDates;
 	public static String[] RankingResult;
+	public static String[] RankingDificulty;
 	
 	public static int[] arrOutreak;
 	public static int[] arrTurno;
 	public static String[] arrPlayername;
 	public static int[] arrAcciones;
 	public static int[] arrId;
+	public static String[]arrDificulty;
 	
 	public static void inicializarRanking() {
 	    numeroFilasRanking = obtenerNumeroFilasRanking();
@@ -81,6 +83,7 @@ public class Control_de_datos {
 	    RankingRounds = new int[numeroFilasRanking];
 	    RankingDates = new Date[numeroFilasRanking];
 	    RankingResult = new String[numeroFilasRanking];
+	    RankingDificulty =  new String[numeroFilasRanking];
 	}
 	
 	public static void inicializarSaves() {
@@ -90,6 +93,7 @@ public class Control_de_datos {
 	    arrPlayername = new String[numeroFilasRanking];
 	    arrAcciones = new int[numeroFilasRanking];
 	    arrId = new int[numeroFilasRanking];
+	    arrDificulty = new String[numeroFilasRanking];
 	}
 
 	public static Connection conectarBaseDatos() {
@@ -98,7 +102,6 @@ public class Control_de_datos {
 	        Class.forName("oracle.jdbc.driver.OracleDriver");
 	        con = DriverManager.getConnection(url, user, password);
 	        if (con != null) {
-	            System.out.println("Connection established successfully.");
 	        } else {
 	            System.out.println("The connection could not be established.");
 	        }
@@ -169,7 +172,7 @@ public class Control_de_datos {
 
             Array vacunasArray = oracleConn.createOracleArray("ARRAY_VACUNAS_OBJ", vacunaStructs);
 
-            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_SAVEFILES (identificador, ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player, dificultad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             pstmt.setObject(1, null);
             pstmt.setArray(2, ciudadArray);
             pstmt.setArray(3, virusArray);
@@ -180,16 +183,103 @@ public class Control_de_datos {
             pstmt.setInt(8, Control_de_partida.acciones);
             pstmt.setString(9, Control_de_partida.playername);
             
+            if (ficheroXML == "src//files//parametrosFacil.xml") {
+            	pstmt.setString(10, "Facil");
+			} else if (ficheroXML == "src//files//parametrosMedio.xml") {
+				pstmt.setString(10, "Medio");
+			} else {
+				pstmt.setString(10, "Dificil");
+			}
             pstmt.executeUpdate();
             oracleConn.close();
+            System.out.println("GAME SAVED");
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
     
+    public static void actualizarPartida() {
+	    try {
+	    	OracleConnection oracleConn = (OracleConnection) con;
+	        PreparedStatement pstmt = con.prepareStatement(
+	            "UPDATE PANDEMIC_SAVEFILES " +
+	            "SET ciudades = ?, virus = ?, vacunas = ?, brotes = ?, rondas = ?, p_desarrollo = ?, acciones = ?, player = ?, dificultad = ? " +
+	            "WHERE identificador = ( " +
+	            "   SELECT MAX(identificador) FROM PANDEMIC_SAVEFILES " +
+	            "   WHERE player = ? " +
+	            ")"
+	        );
+
+	        Struct[] ciudadStructs = new Struct[Ciudades.size()];
+	        for (int i = 0; i < Ciudades.size(); i++) {
+	            Ciudad ciudad = Ciudades.get(i);
+	            Object[] ciudadAttributes = new Object[] {
+	                ciudad.getNombre(),
+	                new Object[] { ciudad.getCoordenadas()[0], ciudad.getCoordenadas()[1] },
+	                ciudad.getEnfermedad(),
+	                ciudad.getInfeccion(),
+	                Arrays.toString(ciudad.getCiudadesColindantes())
+	            };
+	            ciudadStructs[i] = oracleConn.createStruct("CIUDAD", ciudadAttributes);
+	        }
+
+	        Array ciudadArray = oracleConn.createOracleArray("ARRAY_CIUDADES_OBJ", ciudadStructs);
+
+	        Struct[] virusStructs = new Struct[Virus.size()];
+	        for (int i = 0; i < Virus.size(); i++) {
+	            Virus virus = Virus.get(i);
+	            Object[] virusAttributes = new Object[] {
+	                virus.getIdentificador(),
+	                virus.getNombre(),
+	                virus.getColor()
+	            };
+	            virusStructs[i] = oracleConn.createStruct("VIRUS", virusAttributes);
+	        }
+
+	        Array virusArray = oracleConn.createOracleArray("ARRAY_VIRUS_OBJ", virusStructs);
+
+	        Struct[] vacunaStructs = new Struct[Vacuna.size()];
+	        for (int i = 0; i < Vacuna.size(); i++) {
+	            Vacunas vacuna = Vacuna.get(i);
+	            Object[] vacunaAttributes = new Object[] {
+	                vacuna.getNombre(),
+	                vacuna.getColor(),
+	                vacuna.getPorcentaje()
+	            };
+	            vacunaStructs[i] = oracleConn.createStruct("VACUNAS", vacunaAttributes);
+	        }
+
+	        Array vacunasArray = oracleConn.createOracleArray("ARRAY_VACUNAS_OBJ", vacunaStructs);
+
+	        pstmt.setArray(1, ciudadArray);
+	        pstmt.setArray(2, virusArray);
+	        pstmt.setArray(3, vacunasArray);
+	        pstmt.setInt(4, Control_de_partida.outbreak);
+	        pstmt.setInt(5, Control_de_partida.turno);
+	        pstmt.setInt(6, 25);
+	        pstmt.setInt(7, Control_de_partida.acciones);
+	        pstmt.setString(8, Control_de_partida.playername);
+	        
+	        if (ficheroXML.equals("src//files//parametrosFacil.xml")) {
+	            pstmt.setString(9, "Facil");
+	        } else if (ficheroXML.equals("src//files//parametrosMedio.xml")) {
+	            pstmt.setString(9, "Medio");
+	        } else {
+	            pstmt.setString(9, "Dificil");
+	        }
+	        
+	        pstmt.setString(10, Control_de_partida.playername);
+	        pstmt.executeUpdate();
+	        oracleConn.close();
+	        System.out.println("GAME SAVE UPDATED");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	}
+    
 	public static void selectDatos() {
 		try {
-	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player FROM PANDEMIC_SAVEFILES WHERE player = ? AND identificador = ?");
+	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player, dificultad FROM PANDEMIC_SAVEFILES WHERE player = ? AND identificador = ?");
 	        
 	        pstmt.setObject(1, Control_de_partida.playername);
 	        ResultSet rs = pstmt.executeQuery();
@@ -254,7 +344,15 @@ public class Control_de_datos {
 	            Control_de_partida.outbreak = rs.getInt(4);
 	            Control_de_partida.turno = rs.getInt(5);
 	            Control_de_partida.acciones = rs.getInt(7);
-
+	            
+	            rs.getString(8);
+	            if (rs.getString(8) == "Facil") {
+	            	ficheroXML = "src//files//parametrosFacil.xml";
+				} else if (rs.getString(8) == "Facil") {
+					ficheroXML = "src//files//parametrosMedio.xml";
+				} else {
+					ficheroXML = "src//files//parametrosDificil.xml";
+				}
 	        }
 		}catch (Exception e) {
 			// TODO: handle exception
@@ -263,7 +361,7 @@ public class Control_de_datos {
 	
 	public static void selectParidas() {
 		try {
-	        PreparedStatement pstmt = con.prepareStatement("SELECT identificador, player, brotes, rondas, acciones FROM PANDEMIC_SAVEFILES WHERE player = ?");
+	        PreparedStatement pstmt = con.prepareStatement("SELECT identificador, player, brotes, rondas, acciones, dificultad FROM PANDEMIC_SAVEFILES WHERE player = ?");
 	        
 	        pstmt.setObject(1, Control_de_partida.playername);
 	        ResultSet rs = pstmt.executeQuery();
@@ -275,6 +373,7 @@ public class Control_de_datos {
 	            arrOutreak[i] = rs.getInt("brotes");
 	            arrTurno[i] = rs.getInt("rondas");
 	            arrAcciones[i] = rs.getInt("acciones");
+	            arrDificulty[i] = rs.getString("dificultad");
 	            i++;
 	        }
 	        
@@ -285,12 +384,20 @@ public class Control_de_datos {
 	
 	public static void insertarRanking(){
         try{
-            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado) VALUES (?, ?, ?, SYSDATE, ?)");
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado, dificultad) VALUES (?, ?, ?, SYSDATE, ?, ?)");
             pstmt.setObject(1, null);
             pstmt.setInt(2, Control_de_partida.turno);
             pstmt.setString(3, Control_de_partida.playername);
             pstmt.setString(4, Control_de_partida.resultado);
 
+            if (ficheroXML == "src//files//parametrosFacil.xml") {
+            	pstmt.setString(5, "Facil");
+			} else if (ficheroXML == "src//files//parametrosMedio.xml") {
+				pstmt.setString(5, "Medio");
+			} else {
+				pstmt.setString(5, "Dificil");
+			}
+            
             pstmt.executeUpdate();
             con.close();
 		}catch (Exception e) {
@@ -331,7 +438,7 @@ public class Control_de_datos {
 	public static void selectRanking(){
 		inicializarRanking();
 	    try {
-	        PreparedStatement pstmt = con.prepareStatement("SELECT rondas, nombre, fecha, resultado FROM PANDEMIC_RANKING");
+	        PreparedStatement pstmt = con.prepareStatement("SELECT rondas, nombre, fecha, resultado, dificultad FROM PANDEMIC_RANKING");
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        int i = 0;
@@ -340,6 +447,7 @@ public class Control_de_datos {
 	            RankingNames[i] = rs.getString("nombre");
 	            RankingDates[i] = rs.getDate("fecha");
 	            RankingResult[i] = rs.getString("resultado");
+	            RankingDificulty[i] = rs.getString("dificultad");
 	            i++;
 	        }
 	    } catch (Exception e) {

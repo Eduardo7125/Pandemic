@@ -2,6 +2,6 @@
 <parametros>
     <numCiudadesInfectadasInicio>4</numCiudadesInfectadasInicio>
     <numCuidadesInfectadasRonda>2</numCuidadesInfectadasRonda>
-    <numEnfermedadesActivasDerrota>5</numEnfermedadesActivasDerrota>
+    <numEnfermedadesActivasDerrota>30</numEnfermedadesActivasDerrota>
     <numBrotesDerrota>6</numBrotesDerrota>
 </parametros>
