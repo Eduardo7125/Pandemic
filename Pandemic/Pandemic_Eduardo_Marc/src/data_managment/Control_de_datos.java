@@ -70,6 +70,8 @@ public class Control_de_datos {
 	public static String[] RankingResult;
 	public static String[] RankingDificulty;
 	
+	public static ArrayList<Datos_partida> saveFiles = new ArrayList<>();
+	
 	public static void inicializarRanking() {
 	    numeroFilasRanking = obtenerNumeroFilasRanking();
 	    RankingNames = new String[numeroFilasRanking];
@@ -262,7 +264,7 @@ public class Control_de_datos {
 	}
     
     
-    public static void borrarPartida() {
+    public static void borrarPartida(int identificador) {
 	    try {
 	    	OracleConnection oracleConn = (OracleConnection) con;
 	    	PreparedStatement pstmt = con.prepareStatement(
@@ -270,8 +272,8 @@ public class Control_de_datos {
 	    		    "WHERE identificador = ? AND player = ?"
 	    		);
 
-//    		pstmt.setInt(1, );
-//    		pstmt.setString(2, player);
+    		pstmt.setInt(1, saveFiles.get(identificador).getIdentificador());
+    		pstmt.setString(2, Control_de_partida.playername);
 
     		int rowsAffected = pstmt.executeUpdate();
 
@@ -373,8 +375,7 @@ public class Control_de_datos {
 		}
 	}
 	
-
-	public static ArrayList<Datos_partida> saveFiles = new ArrayList<>();
+	
 	public static void selectParidas() {
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT identificador, player, brotes, rondas, acciones, dificultad FROM PANDEMIC_SAVEFILES WHERE player LIKE ?");

@@ -3,8 +3,8 @@ package main;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
 import javax.swing.*;
@@ -13,14 +13,12 @@ import javax.swing.table.*;
 import data_managment.Control_de_datos;
 import data_managment.Datos_partida;
 
-/**
- * Author: Eduardo y Marc
- */
 public class loadgame extends JPanel {
 
     private static final long serialVersionUID = 1803883461317339869L;
     private JTable leaderboardTableEasy, leaderboardTableMedium, leaderboardTableHard;
     private ArrayList<LeaderboardEntry> leaderboardDataEasy, leaderboardDataMedium, leaderboardDataHard;
+    private ArrayList<Datos_partida> saveFiles;
     private JButton closeButton;
 
     public loadgame() {
@@ -29,18 +27,20 @@ public class loadgame extends JPanel {
         leaderboardDataEasy = new ArrayList<>();
         leaderboardDataMedium = new ArrayList<>();
         leaderboardDataHard = new ArrayList<>();
+        saveFiles = Control_de_datos.saveFiles;
 
-        
         leaderboardTableEasy = createLeaderboardTable();
         leaderboardTableMedium = createLeaderboardTable();
         leaderboardTableHard = createLeaderboardTable();
 
-        
+        addMouseListenerToTable(leaderboardTableEasy, leaderboardDataEasy);
+        addMouseListenerToTable(leaderboardTableMedium, leaderboardDataMedium);
+        addMouseListenerToTable(leaderboardTableHard, leaderboardDataHard);
+
         JPanel easyPanel = createDifficultyPanel("Easy", leaderboardTableEasy);
         JPanel mediumPanel = createDifficultyPanel("Medium", leaderboardTableMedium);
         JPanel hardPanel = createDifficultyPanel("Hard", leaderboardTableHard);
 
-        
         JPanel tablesPanel = new JPanel(new GridLayout(1, 3));
         tablesPanel.add(easyPanel);
         tablesPanel.add(mediumPanel);
@@ -48,12 +48,10 @@ public class loadgame extends JPanel {
 
         add(tablesPanel, BorderLayout.CENTER);
 
-        
         JLabel titleLabel = new JLabel("<html><div style='padding-left: 20%'>LEADERBOARD</div></html>");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        
         closeButton = new JButton("MENU");
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -68,28 +66,22 @@ public class loadgame extends JPanel {
             }
         });
 
-        
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(titleLabel, BorderLayout.CENTER);
         topPanel.add(closeButton, BorderLayout.EAST);
         add(topPanel, BorderLayout.NORTH);
 
-        
-        for (Datos_partida  files :  Control_de_datos.saveFiles) {
+        for (Datos_partida files : saveFiles) {
             if (files.getDificultad().equals("Facil")) {
-                updateLeaderboard(files.getPlayer(), files.getAcciones(),
-                		files.getRondas(), files.getBrotes(), leaderboardDataEasy, leaderboardTableEasy);
+                updateLeaderboard(files, leaderboardDataEasy, leaderboardTableEasy);
             } else if (files.getDificultad().equals("Medio")) {
-                updateLeaderboard(files.getPlayer(), files.getAcciones(),
-                		files.getRondas(), files.getBrotes(), leaderboardDataMedium, leaderboardTableMedium);
+                updateLeaderboard(files, leaderboardDataMedium, leaderboardTableMedium);
             } else {
-                updateLeaderboard(files.getPlayer(), files.getAcciones(),
-                		files.getRondas(), files.getBrotes(), leaderboardDataHard, leaderboardTableHard);
+                updateLeaderboard(files, leaderboardDataHard, leaderboardTableHard);
             }
         }
     }
-    
-    
+
     private JTable createLeaderboardTable() {
         DefaultTableModel tableModel = new DefaultTableModel() {
             @Override
@@ -140,44 +132,64 @@ public class loadgame extends JPanel {
         return panel;
     }
 
-    public void updateLeaderboard(String name, int rounds, int arrTurno, int arrOutreak,
-            ArrayList<LeaderboardEntry> leaderboardData, JTable leaderboardTable) {
-        LeaderboardEntry entry = new LeaderboardEntry(name, rounds, arrTurno, arrOutreak);
+    public void updateLeaderboard(Datos_partida files, ArrayList<LeaderboardEntry> leaderboardData, JTable leaderboardTable) {
+        LeaderboardEntry entry = new LeaderboardEntry(files.getPlayer(), files.getRondas(), files.getAcciones(), files.getBrotes(), files.getIdentificador());
         leaderboardData.add(entry);
 
         leaderboardData.sort(new Comparator<LeaderboardEntry>() {
             @Override
             public int compare(LeaderboardEntry entry1, LeaderboardEntry entry2) {
-                if (entry1.getRounds() < entry2.getRounds()) {
-                    return -1;
-                } else if (entry1.getRounds() > entry2.getRounds()) {
-                    return 1;
-                } else {
-                    return 0;
+                return Integer.compare(entry1.getRounds(), entry2.getRounds());
+            }
+        });
+
+        DefaultTableModel tableModel = (DefaultTableModel) leaderboardTable.getModel();
+        tableModel.setRowCount(0);
+        for (LeaderboardEntry entry2 : leaderboardData) {
+            tableModel.addRow(new Object[]{entry2.getPlayerName(), entry2.getRounds(), entry2.getArrTurno(), entry2.getArrOutreak()});
+        }
+    }
+
+    private void addMouseListenerToTable(JTable table, ArrayList<LeaderboardEntry> leaderboardData) {
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.rowAtPoint(e.getPoint());
+                if (row >= 0 && row < leaderboardData.size()) {
+                    performCellAction(row, leaderboardData);
                 }
             }
         });
-		
-        DefaultTableModel tableModel = (DefaultTableModel) leaderboardTable.getModel();
-        tableModel.setRowCount(0);
-        for (int i = 0; i < leaderboardData.size(); i++) {
-            LeaderboardEntry entry2 = leaderboardData.get(i);
-            tableModel.addRow(new Object[]{i + 1, entry2.getPlayerName(), entry2.getRounds(), entry2.getArrTurno(),
-                    entry2.getArrOutreak()});
+    }
+
+    private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData) {
+        if (row >= 0 && row < leaderboardData.size()) {
+            LeaderboardEntry entry = leaderboardData.get(row);
+            int identificador = entry.getIdentificador();
+            
+            //JMENUPOPUPPPPPPPP
+//            Control_de_datos.borrarPartida(row);
+            
+            
+            JOptionPane.showMessageDialog(null, "Partida eliminada: " + identificador);
+        } else {
+            JOptionPane.showMessageDialog(null, "Índice fuera de rango: " + row);
         }
-	}
+    }
 
     private static class LeaderboardEntry {
         private String playerName;
         private int rounds;
         private int arrTurno;
         private int arrOutreak;
+        private int identificador;
 
-        public LeaderboardEntry(String playerName, int rounds, int arrTurno, int arrOutreak) {
+        public LeaderboardEntry(String playerName, int rounds, int arrTurno, int arrOutreak, int identificador) {
             this.playerName = playerName;
             this.rounds = rounds;
             this.arrTurno = arrTurno;
             this.arrOutreak = arrOutreak;
+            this.identificador = identificador;
         }
 
         public String getPlayerName() {
@@ -191,11 +203,14 @@ public class loadgame extends JPanel {
         public int getArrTurno() {
             return arrTurno;
         }
-        
+
         public int getArrOutreak() {
             return arrOutreak;
         }
 
+        public int getIdentificador() {
+            return identificador;
+        }
     }
 
     private class ResultCellRenderer extends DefaultTableCellRenderer {
