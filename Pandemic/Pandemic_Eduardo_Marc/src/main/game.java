@@ -52,7 +52,8 @@ public class game extends JPanel implements ActionListener {
 
         topPanel = new JPanel(new BorderLayout());
         bottomPanel = new JPanel();
-        leftPanel = new JPanel(new GridLayout(brotesvalor, 0, 10, 10));
+        leftPanel = new JPanel(new GridLayout(brotesvalor, 1, 10, 10));
+
         rightPanel = new JPanel(new GridBagLayout());
         middlePanel = new JPanel();
         

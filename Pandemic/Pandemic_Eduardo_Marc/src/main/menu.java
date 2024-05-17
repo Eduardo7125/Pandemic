@@ -303,8 +303,10 @@ public class menu extends JPanel implements ActionListener {
         }
     }
 
-    private void resetvalores() {
+    public void resetvalores() {
     	game.partidaInsertada = false;
+        Ciudad.resetValues();
+        game.brotesStart();
         Control_de_partida.resultado = null;
         Control_de_partida.turno = 1;
         Control_de_partida.acciones = 4;
@@ -314,10 +316,9 @@ public class menu extends JPanel implements ActionListener {
         game.brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
     }
 
-    private void iniciarNuevaPartida() {
+    public void iniciarNuevaPartida() {
         setVisible(false);
         dificultad.setVisible(false);
-        Ciudad.resetValues();
         game juego = new game();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
@@ -325,7 +326,6 @@ public class menu extends JPanel implements ActionListener {
         getParent().add(juego);
         getParent().revalidate();
         getParent().repaint();
-        game.brotesStart();
     }
 
     @SuppressWarnings("serial")

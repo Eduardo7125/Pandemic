@@ -170,7 +170,10 @@ public class loadgame extends JPanel {
             //JMENUPOPUPPPPPPPP
 //            Control_de_datos.borrarPartida(row);
             
-            
+            Control_de_datos.selectDatos(row);
+//            menus.resetvalores();
+            game juego = new game();
+            juego.setVisible(true);
             JOptionPane.showMessageDialog(null, "Partida eliminada: " + identificador);
         } else {
             JOptionPane.showMessageDialog(null, "Índice fuera de rango: " + row);

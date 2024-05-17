@@ -293,11 +293,12 @@ public class Control_de_datos {
 	}
     
 
-	public static void selectDatos() {
+	public static void selectDatos(int identificador) {
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player, dificultad FROM PANDEMIC_SAVEFILES WHERE player = ? AND identificador = ?");
 	        
 	        pstmt.setObject(1, Control_de_partida.playername);
+	        pstmt.setObject(2, saveFiles.get(identificador).getIdentificador());
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        
@@ -364,7 +365,7 @@ public class Control_de_datos {
 	            rs.getString(8);
 	            if (rs.getString(8) == "Facil") {
 	            	ficheroXML = "src//files//parametrosFacil.xml";
-				} else if (rs.getString(8) == "Facil") {
+				} else if (rs.getString(8) == "Medio") {
 					ficheroXML = "src//files//parametrosMedio.xml";
 				} else {
 					ficheroXML = "src//files//parametrosDificil.xml";
