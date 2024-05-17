@@ -11,65 +11,49 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import data_managment.Control_de_datos;
+import data_managment.Datos_partida;
+
 /**
- * @author Eduardo y Marc
+ * Author: Eduardo y Marc
  */
 public class loadgame extends JPanel {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1962141026846897594L;
-	private JTable leaderboardTable;
-    private ArrayList<LeaderboardEntry> leaderboardData;
+    private static final long serialVersionUID = 1803883461317339869L;
+    private JTable leaderboardTableEasy, leaderboardTableMedium, leaderboardTableHard;
+    private ArrayList<LeaderboardEntry> leaderboardDataEasy, leaderboardDataMedium, leaderboardDataHard;
     private JButton closeButton;
 
     public loadgame() {
         setLayout(new BorderLayout());
 
-        DefaultTableModel tableModel = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        tableModel.addColumn("PLAYER NAME");
-        tableModel.addColumn("ROUNDS");
-        tableModel.addColumn("OUTBRAKS");
-        tableModel.addColumn("ACTIONS");
+        leaderboardDataEasy = new ArrayList<>();
+        leaderboardDataMedium = new ArrayList<>();
+        leaderboardDataHard = new ArrayList<>();
 
-        leaderboardTable = new JTable(tableModel);
+        
+        leaderboardTableEasy = createLeaderboardTable();
+        leaderboardTableMedium = createLeaderboardTable();
+        leaderboardTableHard = createLeaderboardTable();
 
-        leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        leaderboardTable.setFont(new Font("Arial", Font.PLAIN, 12));
-        leaderboardTable.setRowHeight(20);
+        
+        JPanel easyPanel = createDifficultyPanel("Easy", leaderboardTableEasy);
+        JPanel mediumPanel = createDifficultyPanel("Medium", leaderboardTableMedium);
+        JPanel hardPanel = createDifficultyPanel("Hard", leaderboardTableHard);
 
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        leaderboardTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-        leaderboardTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-        leaderboardTable.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
+        
+        JPanel tablesPanel = new JPanel(new GridLayout(1, 3));
+        tablesPanel.add(easyPanel);
+        tablesPanel.add(mediumPanel);
+        tablesPanel.add(hardPanel);
 
-        TableColumn dateColumn = leaderboardTable.getColumnModel().getColumn(2);
-        dateColumn.setCellRenderer(new DateCellRenderer());
+        add(tablesPanel, BorderLayout.CENTER);
 
-        java.util.Date[] utilDates = Control_de_datos.RankingDates;
-        java.sql.Date[] sqlDates = new java.sql.Date[utilDates.length];
-        for (int i = 0; i < utilDates.length; i++) {
-            sqlDates[i] = new java.sql.Date(utilDates[i].getTime());
-        }
-
-        updateLeaderboard(Control_de_datos.RankingNames, Control_de_datos.RankingRounds,
-                sqlDates, Control_de_datos.RankingResult);
-
-        JScrollPane scrollPane = new JScrollPane(leaderboardTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setPreferredSize(new Dimension(600, 400));
-        add(scrollPane, BorderLayout.CENTER);
-
-        JLabel titleLabel = new JLabel("LEADERBOARD");
+        
+        JLabel titleLabel = new JLabel("<html><div style='padding-left: 20%'>LEADERBOARD</div></html>");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
+        
         closeButton = new JButton("MENU");
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -84,57 +68,116 @@ public class loadgame extends JPanel {
             }
         });
 
+        
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(titleLabel, BorderLayout.CENTER);
         topPanel.add(closeButton, BorderLayout.EAST);
         add(topPanel, BorderLayout.NORTH);
-    }
 
-    private String formatDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdf.format(date);
-    }
-
-    public void updateLeaderboard(String[] names, int[] rounds, Date[] dates, String[] results) {
-        leaderboardData = new ArrayList<>();
-
-        for (int i = 0; i < names.length; i++) {
-            LeaderboardEntry entry = new LeaderboardEntry(names[i], rounds[i], dates[i], results[i]);
-            leaderboardData.add(entry);
+        
+        for (Datos_partida  files :  Control_de_datos.saveFiles) {
+            if (files.getDificultad().equals("Facil")) {
+                updateLeaderboard(files.getPlayer(), files.getAcciones(),
+                		files.getRondas(), files.getBrotes(), leaderboardDataEasy, leaderboardTableEasy);
+            } else if (files.getDificultad().equals("Medio")) {
+                updateLeaderboard(files.getPlayer(), files.getAcciones(),
+                		files.getRondas(), files.getBrotes(), leaderboardDataMedium, leaderboardTableMedium);
+            } else {
+                updateLeaderboard(files.getPlayer(), files.getAcciones(),
+                		files.getRondas(), files.getBrotes(), leaderboardDataHard, leaderboardTableHard);
+            }
         }
+    }
+    
+    
+    private JTable createLeaderboardTable() {
+        DefaultTableModel tableModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tableModel.addColumn("PLAYER NAME");
+        tableModel.addColumn("ROUNDS");
+        tableModel.addColumn("TURNS");
+        tableModel.addColumn("OUTBREAKS");
+
+        JTable table = new JTable(tableModel) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setColor(new Color(0, 0, 0, 0));
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                g2d.dispose();
+            }
+        };
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        table.setFont(new Font("Arial", Font.PLAIN, 12));
+        table.setRowHeight(20);
+
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int i = 0; i < 4; i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        return table;
+    }
+
+    private JPanel createDifficultyPanel(String difficulty, JTable table) {
+        JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new Dimension(600, 200));
+
+        JLabel label = new JLabel(difficulty.toUpperCase());
+        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    public void updateLeaderboard(String name, int rounds, int arrTurno, int arrOutreak,
+            ArrayList<LeaderboardEntry> leaderboardData, JTable leaderboardTable) {
+        LeaderboardEntry entry = new LeaderboardEntry(name, rounds, arrTurno, arrOutreak);
+        leaderboardData.add(entry);
 
         leaderboardData.sort(new Comparator<LeaderboardEntry>() {
             @Override
             public int compare(LeaderboardEntry entry1, LeaderboardEntry entry2) {
-                if (entry1.getResult().equals("Victory") && entry2.getResult().equals("Defeat")) {
+                if (entry1.getRounds() < entry2.getRounds()) {
                     return -1;
-                } else if (entry1.getResult().equals("Defeat") && entry2.getResult().equals("Victory")) {
+                } else if (entry1.getRounds() > entry2.getRounds()) {
                     return 1;
                 } else {
-                    return Integer.compare(entry1.getRounds(), entry2.getRounds());
+                    return 0;
                 }
             }
         });
-
+		
         DefaultTableModel tableModel = (DefaultTableModel) leaderboardTable.getModel();
         tableModel.setRowCount(0);
-        for (LeaderboardEntry entry : leaderboardData) {
-            tableModel.addRow(new Object[] { entry.getPlayerName(), entry.getRounds(), formatDate(entry.getDate()),
-                    entry.getResult() });
+        for (int i = 0; i < leaderboardData.size(); i++) {
+            LeaderboardEntry entry2 = leaderboardData.get(i);
+            tableModel.addRow(new Object[]{i + 1, entry2.getPlayerName(), entry2.getRounds(), entry2.getArrTurno(),
+                    entry2.getArrOutreak()});
         }
-    }
+	}
 
     private static class LeaderboardEntry {
         private String playerName;
         private int rounds;
-        private Date date;
-        private String result;
+        private int arrTurno;
+        private int arrOutreak;
 
-        public LeaderboardEntry(String playerName, int rounds, Date date, String result) {
+        public LeaderboardEntry(String playerName, int rounds, int arrTurno, int arrOutreak) {
             this.playerName = playerName;
             this.rounds = rounds;
-            this.date = date;
-            this.result = result;
+            this.arrTurno = arrTurno;
+            this.arrOutreak = arrOutreak;
         }
 
         public String getPlayerName() {
@@ -145,27 +188,37 @@ public class loadgame extends JPanel {
             return rounds;
         }
 
-        public Date getDate() {
-            return date;
+        public int getArrTurno() {
+            return arrTurno;
+        }
+        
+        public int getArrOutreak() {
+            return arrOutreak;
         }
 
-        public String getResult() {
-            return result;
-        }
     }
 
-    private class DateCellRenderer extends DefaultTableCellRenderer {
+    private class ResultCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = 1L;
 
-        public DateCellRenderer() {
+        public ResultCellRenderer() {
             super();
             setHorizontalAlignment(JLabel.CENTER);
         }
 
         @Override
         public void setValue(Object value) {
-            if (value instanceof Date) {
-                setText(formatDate((Date) value));
+            if (value instanceof String) {
+                String result = (String) value;
+                if (result.equals("Victory")) {
+                    setText("Victory");
+                    setForeground(Color.GREEN);
+                } else if (result.equals("Defeat")) {
+                    setText("Defeat");
+                    setForeground(Color.RED);
+                } else {
+                    setText("");
+                }
             } else {
                 super.setValue(value);
             }

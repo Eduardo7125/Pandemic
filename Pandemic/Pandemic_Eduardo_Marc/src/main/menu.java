@@ -215,7 +215,17 @@ public class menu extends JPanel implements ActionListener {
         	Control_de_partida.playername = null;
             showPlayerNamePopup();
         } else if (e.getSource() == cargarPartidaButton) {
-            // Código para cargar una partida
+            setVisible(false);
+            Control_de_datos.disconnect();
+            Control_de_datos.conectarBaseDatos();
+
+            Control_de_datos.selectParidas();
+
+            loadgame loadgame = new loadgame();
+            loadgame.setVisible(true);
+            getParent().add(loadgame);
+            getParent().revalidate();
+            getParent().repaint();
         } else if (e.getSource() == searchButton) {
             setVisible(false);
             Control_de_datos.disconnect();
@@ -415,7 +425,6 @@ public class menu extends JPanel implements ActionListener {
             }
             @Override
             public void keyReleased(KeyEvent e) {
-                // Habilitar o deshabilitar el botón "OK" según si hay texto escrito o no
                 if(playerNameTextField.getText().isEmpty()) {
                     okButton.setEnabled(false);
                 } else {

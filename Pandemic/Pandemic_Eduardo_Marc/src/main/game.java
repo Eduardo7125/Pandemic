@@ -341,7 +341,7 @@ public class game extends JPanel implements ActionListener {
                     if (vacuna.getPorcentaje() > 99) {
                         Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna());
                         curar.start();
-                        System.out.println("Nombre: " + ciudades.getNombre() + " | Infección: Curada");
+                        System.out.println("Nombre: " + ciudades.getNombre() + " | Infección: Healed");
                         vacunaUtilizada = true;
                     }
                 }

@@ -16,11 +16,6 @@ import java.io.Serial;
 public class Pantalla_Inicio {
 	public static void main(String[] args) {
 		Control_de_datos.cargarVirus();
-//	    Thread cargaPartidaThread = new Thread(() -> Control_de_datos.cargarPartida());
-//	    cargaPartidaThread.start();
-
-		
-//		Thread iniciar_partida = new Thread(() -> Marco mimimarco = new Marco());
 		
 	    SwingUtilities.invokeLater(() -> {
 	        Marco mimimarco = new Marco();

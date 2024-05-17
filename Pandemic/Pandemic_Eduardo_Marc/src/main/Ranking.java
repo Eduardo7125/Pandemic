@@ -134,7 +134,16 @@ public class Ranking extends JPanel {
         tableModel.addColumn("DATE");
         tableModel.addColumn("RESULT");
 
-        JTable table = new JTable(tableModel);
+        JTable table = new JTable(tableModel){
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g.create();
+				g2d.setColor(new Color(0, 0, 0, 0));
+				g2d.fillRect(0, 0, getWidth(), getHeight());
+				g2d.dispose();
+			}
+		};
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         table.setFont(new Font("Arial", Font.PLAIN, 12));
         table.setRowHeight(20);

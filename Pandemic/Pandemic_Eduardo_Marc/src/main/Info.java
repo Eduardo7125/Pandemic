@@ -2,7 +2,10 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,43 +36,16 @@ class info extends JPanel implements ActionListener {
 
         buttonPanel = new JPanel(new GridLayout(0, 1));
 
-        JButton texto2 = new JButton("START");
-        texto2.addActionListener(this);
-        buttonPanel.add(texto2);
-
-        JButton texto3 = new JButton("CITY");
-        texto3.addActionListener(this);
-        buttonPanel.add(texto3);
-
-        JButton texto4 = new JButton("GAMES");
-        texto4.addActionListener(this);
-        buttonPanel.add(texto4);
-
-        JButton texto5 = new JButton("PLAYER");
-        texto5.addActionListener(this);
-        buttonPanel.add(texto5);
-
-        JButton texto6 = new JButton("RESEARCH");
-        texto6.addActionListener(this);
-        buttonPanel.add(texto6);
-
-        JButton texto7 = new JButton("VACCINE");
-        texto7.addActionListener(this);
-        buttonPanel.add(texto7);
-
-        JButton texto8 = new JButton("HEAL");
-        texto8.addActionListener(this);
-        buttonPanel.add(texto8);
-
-        JButton texto9 = new JButton("END");
-        texto9.addActionListener(this);
-        buttonPanel.add(texto9);
-
-        salirButton = new JButton("MENU");
-        salirButton.addActionListener(this);
-        buttonPanel.add(salirButton);
-
-        menu.styleButton(salirButton);
+        
+        addButton("START");
+        addButton("CITY");
+        addButton("GAMES");
+        addButton("PLAYER");
+        addButton("RESEARCH");
+        addButton("VACCINE");
+        addButton("HEAL");
+        addButton("END");
+        addButton("MENU");
 
         tituloLabel = new JLabel("INFORMATION");
         tituloLabel.setFont(new Font("Arial", Font.BOLD, 40));
@@ -88,7 +64,22 @@ class info extends JPanel implements ActionListener {
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         add(centerPanel, BorderLayout.CENTER);
     }
+    
+    private void addButton(String text) {
+        JButton button = createTransparentButton(text);
+        button.addActionListener(this);
+        button.setPreferredSize(new Dimension(150, 80)); 
+        buttonPanel.add(button);
+    }
 
+    private JButton createTransparentButton(String text) {
+        JButton button = new JButton(text);
+        button.setForeground(Color.WHITE);
+        button.setOpaque(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(150, 80));
+        return button;
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton boton = (JButton) e.getSource();

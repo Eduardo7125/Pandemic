@@ -9,60 +9,46 @@ import objects.Virus;
  */
 public class Datos_partida {
 	
-	private int id;
-	private ArrayList<Ciudad> ciudades = new ArrayList<>();
-	private ArrayList<Virus> virus = new ArrayList<>();
-	private ArrayList<Vacunas> vacunas = new ArrayList<>();
-	public int brotes = 0;
-	public int rondas = 0;
-	private int pDesarrollo = 0;
-	public int acciones = 4;
+	private int identificador;
+    private String player;
+    private int brotes;
+    private int rondas;
+    private int acciones;
+    private String dificultad;
 	
-	public void cargarDatos() {
-		this.ciudades = Control_de_datos.cargarCiudades();
-		this.virus = Control_de_datos.cargarVirus();
-		this.vacunas = Control_de_datos.cargarVacunas();
-	}
 	
-	public Datos_partida(int id, ArrayList<Ciudad> ciudades, ArrayList<Virus> virus, ArrayList<Vacunas> vacunas, int brotes, int rondas, int pDesarrollo, int acciones) {
-		this.id = id;
-		this.ciudades = ciudades;
-		this.virus = virus;
-		this.vacunas = vacunas;
-		this.brotes = brotes;
-		this.rondas = rondas;
-		this.pDesarrollo = pDesarrollo;
-		this.acciones = acciones;
+    public Datos_partida() {
+		// TODO Auto-generated constructor stub
 	}
 
 
-	public ArrayList<Ciudad> getCiudades() {
-		return ciudades;
+	public int getIdentificador() {
+		return identificador;
 	}
 
 
-	public void setCiudades(ArrayList<Ciudad> ciudades) {
-		this.ciudades = ciudades;
+	public void setIdentificador(int identificador) {
+		this.identificador = identificador;
 	}
 
 
-	public ArrayList<Virus> getVirus() {
-		return virus;
+	public String getPlayer() {
+		return player;
 	}
 
 
-	public void setVirus(ArrayList<Virus> virus) {
-		this.virus = virus;
+	public void setPlayer(String player) {
+		this.player = player;
 	}
 
 
-	public ArrayList<Vacunas> getVacunas() {
-		return vacunas;
+	public String getDificultad() {
+		return dificultad;
 	}
 
 
-	public void setVacunas(ArrayList<Vacunas> vacunas) {
-		this.vacunas = vacunas;
+	public void setDificultad(String dificultad) {
+		this.dificultad = dificultad;
 	}
 
 
@@ -86,16 +72,6 @@ public class Datos_partida {
 	}
 
 
-	public int getpDesarrollo() {
-		return pDesarrollo;
-	}
-
-
-	public void setpDesarrollo(int pDesarrolloAlfa) {
-		this.pDesarrollo = pDesarrolloAlfa;
-	}
-
-
 	public int getAcciones() {
 		return acciones;
 	}
@@ -105,12 +81,5 @@ public class Datos_partida {
 		this.acciones = acciones;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 }
