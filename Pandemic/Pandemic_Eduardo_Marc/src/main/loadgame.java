@@ -162,21 +162,23 @@ public class loadgame extends JPanel {
         });
     }
 
-    private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData) {
+        private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData) {
         if (row >= 0 && row < leaderboardData.size()) {
             LeaderboardEntry entry = leaderboardData.get(row);
             int identificador = entry.getIdentificador();
             
-            //JMENUPOPUPPPPPPPP
-//            Control_de_datos.borrarPartida(row);
-            
-            Control_de_datos.selectDatos(row);
+            if(cargarP == false) {
+            Control_de_datos.borrarPartida(row);
+            JOptionPane.showMessageDialog(null, "Savefile deleted: " + identificador);
+            } else {
+            	Control_de_datos.selectDatos(row);
 //            menus.resetvalores();
             game juego = new game();
             juego.setVisible(true);
-            JOptionPane.showMessageDialog(null, "Partida eliminada: " + identificador);
+            }
+            
         } else {
-            JOptionPane.showMessageDialog(null, "Índice fuera de rango: " + row);
+            JOptionPane.showMessageDialog(null, "Out of range: " + row);
         }
     }
 
