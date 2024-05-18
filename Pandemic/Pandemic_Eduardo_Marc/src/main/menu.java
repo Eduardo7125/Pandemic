@@ -76,6 +76,7 @@ public class menu extends JPanel implements ActionListener {
     private JPopupMenu playerNamePopup;
     private JTextField playerNameTextField;
     private JButton okButton;
+    private JButton okButton2;
 
     menu() {
         Control_de_datos.conectarBaseDatos();
@@ -215,17 +216,8 @@ public class menu extends JPanel implements ActionListener {
         	Control_de_partida.playername = null;
             showPlayerNamePopup();
         } else if (e.getSource() == cargarPartidaButton) {
-            setVisible(false);
-            Control_de_datos.disconnect();
-            Control_de_datos.conectarBaseDatos();
-
-            Control_de_datos.selectParidas();
-
-            loadgame loadgame = new loadgame();
-            loadgame.setVisible(true);
-            getParent().add(loadgame);
-            getParent().revalidate();
-            getParent().repaint();
+        	Control_de_partida.playername = null;
+        	continueOP();
         } else if (e.getSource() == searchButton) {
             setVisible(false);
             Control_de_datos.disconnect();
@@ -300,13 +292,26 @@ public class menu extends JPanel implements ActionListener {
             x += nuevaPartidaButton.getLocationOnScreen().x;
             y += nuevaPartidaButton.getLocationOnScreen().y;
             dificultad.show(menu.this, x, y);
+        } else if (e.getSource() == okButton2) {
+            String playerName = playerNameTextField.getText();
+            Control_de_partida.playername = playerName;
+            hidePlayerNamePopup();
+            setVisible(false);
+            Control_de_datos.disconnect();
+            Control_de_datos.conectarBaseDatos();
+
+            Control_de_datos.selectParidas();
+
+            loadgame loadgame = new loadgame();
+            loadgame.setVisible(true);
+            getParent().add(loadgame);
+            getParent().revalidate();
+            getParent().repaint();
         }
     }
 
-    public void resetvalores() {
+    private void resetvalores() {
     	game.partidaInsertada = false;
-        Ciudad.resetValues();
-        game.brotesStart();
         Control_de_partida.resultado = null;
         Control_de_partida.turno = 1;
         Control_de_partida.acciones = 4;
@@ -316,9 +321,10 @@ public class menu extends JPanel implements ActionListener {
         game.brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
     }
 
-    public void iniciarNuevaPartida() {
+    private void iniciarNuevaPartida() {
         setVisible(false);
         dificultad.setVisible(false);
+        Ciudad.resetValues();
         game juego = new game();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
@@ -326,6 +332,47 @@ public class menu extends JPanel implements ActionListener {
         getParent().add(juego);
         getParent().revalidate();
         getParent().repaint();
+        game.brotesStart();
+    }
+
+    public void continueOP() {
+        JPanel buttonPanel = new JPanel();
+
+        JButton deleteButton = new JButton("DELETE");
+        JButton continueButton = new JButton("CONTINUE");
+
+        deleteButton.setPreferredSize(new Dimension(140, 60));
+        continueButton.setPreferredSize(new Dimension(140, 60));
+
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadgame.cargarP = false;
+                loadgame.resetLeaderboardData();
+                showPlayerNamePopup2();
+            }
+        });
+
+        continueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadgame.cargarP = true;
+                loadgame.resetLeaderboardData();
+                showPlayerNamePopup2();
+            }
+        });
+
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(continueButton);
+
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.add(buttonPanel);
+        popupMenu.show(cargarPartidaButton, 0, cargarPartidaButton.getHeight());
+        
+        int x = (getWidth() - popupMenu.getPreferredSize().width) / 2;
+        int y = (getHeight() - popupMenu.getPreferredSize().height) / 2;
+        
+        popupMenu.show(this, x, y);
     }
 
     @SuppressWarnings("serial")
@@ -440,7 +487,7 @@ public class menu extends JPanel implements ActionListener {
         okButton = new JButton("OK");
         okButton.setFont(new Font("Arial", Font.PLAIN, 20));
         okButton.addActionListener(this);
-        okButton.setEnabled(false); // El botón se inicia deshabilitado
+        okButton.setEnabled(false);
         playerNamePopup.add(okButton, BorderLayout.SOUTH);
 
 
@@ -450,10 +497,58 @@ public class menu extends JPanel implements ActionListener {
         playerNamePopup.show(this, x, y);
     }
 
-
     private void hidePlayerNamePopup() {
         playerNamePopup.setVisible(false);
     }
+    
+    private void showPlayerNamePopup2() {
+        playerNamePopup = new JPopupMenu();
+        playerNamePopup.setLayout(new BorderLayout());
+        playerNamePopup.setBackground(Color.BLUE);
+
+        JLabel playerNameLabel = new JLabel("PLAYER NAME");
+        playerNameLabel.setForeground(Color.WHITE);
+        playerNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        playerNameLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        playerNamePopup.add(playerNameLabel, BorderLayout.NORTH);
+
+        playerNameTextField = new JTextField(12);
+        playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
+        playerNameTextField.addActionListener(this);
+        playerNameTextField.addKeyListener(new KeyListener(){
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                	okButton2.doClick();
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if(playerNameTextField.getText().isEmpty()) {
+                	okButton2.setEnabled(false);
+                } else {
+                	okButton2.setEnabled(true);
+                }
+            }
+            @Override
+            public void keyTyped(KeyEvent e) {}
+        });
+        playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
+        playerNameTextField.requestFocusInWindow();
+
+        okButton2 = new JButton("OK");
+        okButton2.setFont(new Font("Arial", Font.PLAIN, 20));
+        okButton2.addActionListener(this);
+        okButton2.setEnabled(false);
+        playerNamePopup.add(okButton2, BorderLayout.SOUTH);
+
+
+        int x = (getWidth() - playerNamePopup.getPreferredSize().width) / 2;
+        int y = (getHeight() - playerNamePopup.getPreferredSize().height) / 2;
+        
+        playerNamePopup.show(this, x, y);
+    }
+    
     private static menu instance;
 
     public static menu getInstance() {
@@ -461,18 +556,6 @@ public class menu extends JPanel implements ActionListener {
             instance = new menu();
         }
         return instance;
-    }
-
-    public static void cargarRecords() {
-
-    }
-
-    public static void cargarPantallaGuardado() {
-
-    }
-
-    public static void cargarPartida() {
-
     }
 }
 
