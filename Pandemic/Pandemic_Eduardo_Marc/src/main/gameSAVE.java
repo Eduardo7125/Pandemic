@@ -38,6 +38,8 @@ public class gameSAVE extends JPanel implements ActionListener {
     private static JLabel infectedCitiesGameOverLabel;
 
     public static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
+    
+    private static int[] valoresVacunas = new int[4];
 
     public gameSAVE() {
         setLayout(new BorderLayout());
@@ -496,6 +498,11 @@ public class gameSAVE extends JPanel implements ActionListener {
     }
 
     public void vacunasCompletas() {
+    	int i = 0;
+    	for (Vacunas vacunas : Control_de_datos.Vacuna) {
+    		valoresVacunas[i] = (int) vacunas.getPorcentaje();
+    		i++;
+		}
         vacunas("Alfa", new Color(118, 189, 248));
         vacunas("Beta", new Color(248, 118, 118));
         vacunas("Gama", new Color(118, 248, 150));
@@ -525,6 +532,17 @@ public class gameSAVE extends JPanel implements ActionListener {
 
         vacunaFinal.setMinimum(0);
         vacunaFinal.setMaximum(100);
+        
+        if (nombre.equalsIgnoreCase("Alfa")) {
+        	vacunaFinal.setValue(valoresVacunas[0]);
+		}else if (nombre.equalsIgnoreCase("Beta")) {
+			vacunaFinal.setValue(valoresVacunas[1]);
+		}else if (nombre.equalsIgnoreCase("Gama")) {
+			vacunaFinal.setValue(valoresVacunas[2]);
+		}else {
+			vacunaFinal.setValue(valoresVacunas[3]);
+		}
+        
         vacunaFinal.setStringPainted(true);
         vacunaFinal.setOpaque(false);
         vacunaFinal.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
