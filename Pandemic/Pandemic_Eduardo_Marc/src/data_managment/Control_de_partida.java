@@ -18,30 +18,11 @@ public class Control_de_partida {
 	public static int citiesleft;
 	public static String resultado;
 	
-	public void iniciarPartida() {
-		
-	}
-	
-	public void iniciarPartidaGuardada(String id) {
-		
-	}
-	
 	public static void gestionarTurno() {
 		turno++;
 	}
 	
-	public void gestionarVacuna() {
-		
-	}
-	
 	public static void InfeccionInicial() {
-		for (objects.Vacunas vacunas : Control_de_datos.Vacuna) {
-            for (objects.Virus virus : Control_de_datos.Virus) {
-                if (vacunas.getNombre().equalsIgnoreCase(virus.getNombre())) {
-                	System.out.println(vacunas.getNombre() + " " + virus.getNombre());
-                }
-            }
-		}
 	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
 	    
 	    ArrayList<Ciudad> ciudadesAleatorias = SelecionarCiudadesInfeccionInicial(ciudades);
@@ -111,17 +92,5 @@ public class Control_de_partida {
 	    for (Ciudad ciudad : ciudades) {
 	    	ciudad.setOutbreakHappened(false);
 	        }
-	}
-	
-	public void gestionarFinPartida() {
-		
-	}
-	
-	public void gestionarFrases() {
-		
-	}
-	
-	public void gestionarCura() {
-		
 	}
 }
