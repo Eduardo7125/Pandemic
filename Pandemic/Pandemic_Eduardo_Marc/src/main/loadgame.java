@@ -17,6 +17,7 @@ public class loadgame extends JPanel {
 
 	public static boolean cargarP;
     private static final long serialVersionUID = 1803883461317339869L;
+    public static boolean cargarP;
     private JTable leaderboardTableEasy, leaderboardTableMedium, leaderboardTableHard;
     private ArrayList<LeaderboardEntry> leaderboardDataEasy, leaderboardDataMedium, leaderboardDataHard;
     private ArrayList<Datos_partida> saveFiles;
@@ -186,6 +187,10 @@ public class loadgame extends JPanel {
         } else {
             JOptionPane.showMessageDialog(null, "Out of range: " + row);
         }
+    }
+
+        static void resetLeaderboardData() {
+    	Control_de_datos.saveFiles.clear();
     }
 
     private static class LeaderboardEntry {
