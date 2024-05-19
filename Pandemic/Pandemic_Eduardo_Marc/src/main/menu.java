@@ -37,7 +37,7 @@ public class menu extends JPanel implements ActionListener {
     @Serial
     private static final long serialVersionUID = -5124796854119688429L;
     
-    private ImageIcon icono;
+    public ImageIcon icono;
     private ImageIcon iconoNuevaPartida;
     private ImageIcon iconoNuevaPartida2;
     private ImageIcon iconoCargarPartida;
@@ -70,8 +70,6 @@ public class menu extends JPanel implements ActionListener {
     private JButton rankingButton;
     private static JButton salirButton;
     private JButton atrasButton;
-    
-    private JPanel playerNamePanel;
     
     private JPopupMenu playerNamePopup;
     private JTextField playerNameTextField;
