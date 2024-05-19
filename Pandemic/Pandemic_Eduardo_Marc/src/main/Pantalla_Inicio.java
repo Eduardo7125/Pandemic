@@ -26,9 +26,7 @@ public class Pantalla_Inicio {
 }
 
 class Marco extends JFrame{
-    /**
-	 * 
-	 */
+	
 	@Serial
     private static final long serialVersionUID = 1L;
 	public Marco(){

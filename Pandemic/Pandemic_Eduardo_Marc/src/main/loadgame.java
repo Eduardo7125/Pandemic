@@ -15,6 +15,7 @@ import data_managment.Datos_partida;
 
 public class loadgame extends JPanel {
 
+	public static boolean cargarP;
     private static final long serialVersionUID = 1803883461317339869L;
     private JTable leaderboardTableEasy, leaderboardTableMedium, leaderboardTableHard;
     private ArrayList<LeaderboardEntry> leaderboardDataEasy, leaderboardDataMedium, leaderboardDataHard;
@@ -117,6 +118,11 @@ public class loadgame extends JPanel {
         return table;
     }
 
+    
+    static void resetLeaderboardData() {
+    	Control_de_datos.saveFiles.clear();
+    }
+    
     private JPanel createDifficultyPanel(String difficulty, JTable table) {
         JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(600, 200));
