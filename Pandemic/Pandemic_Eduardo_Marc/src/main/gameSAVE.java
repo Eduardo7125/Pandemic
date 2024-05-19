@@ -109,6 +109,8 @@ public class gameSAVE extends JPanel implements ActionListener {
         gbc.insets = new Insets(-630, 45, 5, 5);
         rightPanel.add(infectedCitiesLabel, gbc);
         
+        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Control_de_partida.infectedcities;
+        
         infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
         infectedCitiesGameOverLabel.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
@@ -233,7 +235,7 @@ public class gameSAVE extends JPanel implements ActionListener {
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	gameSAVE.salirButton.doClick();
+                	salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -275,7 +277,7 @@ public class gameSAVE extends JPanel implements ActionListener {
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	gameSAVE.salirButton.doClick();
+                	salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -395,13 +397,15 @@ public class gameSAVE extends JPanel implements ActionListener {
     public void printInfection() {
         nextRoundButton.setEnabled(false);
 
-        Runnable printInfection = () -> {
-            Control_de_partida.gestionarInfeccion();
+        Thread printInfection = new Thread(() -> {
+            Control_de_partida.gestionarInfeccion2();
 
             SwingUtilities.invokeLater(() -> {
                 nextRoundButton.setEnabled(true);
             });
-        };
+        });
+
+        printInfection.start();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(printInfection);
@@ -647,13 +651,13 @@ public class gameSAVE extends JPanel implements ActionListener {
                     partidaInsertada = true;
                 }
                 
-                gameSAVE.salirButton.doClick();
+                salirButton.doClick();
             }
         });
         
         exitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                gameSAVE.salirButton.doClick();
+                salirButton.doClick();
             }
         });
         

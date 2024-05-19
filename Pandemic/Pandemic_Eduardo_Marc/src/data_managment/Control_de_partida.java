@@ -1,5 +1,6 @@
 package data_managment;
 import main.game;
+import main.gameSAVE;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -50,9 +51,8 @@ public class Control_de_partida {
     
 	
 	public static void gestionarInfeccion() {
-	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
 
-	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion(ciudades);
+	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion(Control_de_datos.Ciudades);
 
 	    for (Ciudad ciudad : ciudadesAleatorias) {
 	        ciudad.aumentarInfeccion();
@@ -70,6 +70,26 @@ public class Control_de_partida {
 	    }
 	}
 
+	public static void gestionarInfeccion2() {
+
+	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion(Control_de_datos.Ciudades);
+
+	    for (Ciudad ciudad : ciudadesAleatorias) {
+	        ciudad.aumentarInfeccion();
+	        System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad() + " | Infection: " + ciudad.getInfeccion());
+	        gameSAVE.actualizarEstadoCiudades();
+	        if (ciudad.getInfeccion() > 3) {
+	        	ciudad.setOutbreakHappened(true);
+	            outbreak++;
+	            gameSAVE.brotes();
+	            System.out.println("AN OUTBREAK IS HAPPENING");
+	            ciudad.setInfeccion(3);
+	            gameSAVE.actualizarEstadoCiudades();
+	            ciudad.propagarInfeccion();
+	        }
+	    }
+	}
+	
 	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
 	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
 	    Random rand = new Random();
