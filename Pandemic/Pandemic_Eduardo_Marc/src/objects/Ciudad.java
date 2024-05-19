@@ -68,7 +68,7 @@ public class Ciudad {
      * Propagar la infeccion a las ciudades colindantes debido a un brote.
      */
     public void propagarInfeccion() {
-        System.out.println("CIUDADES INFECTADAS POR EL BROTE:");
+        System.out.println("INFECTED CITIES BY THE OUTBREAK:");
         for (String colindantes : this.ciudadesColindantes) {
             Ciudad ciudad = obtenerCiudad(colindantes);
             if (!ciudad.getOutbreakHappened()) {
@@ -95,7 +95,7 @@ public class Ciudad {
             Ciudad ciudadColindante = obtenerCiudad(colindantes);
             if (!ciudadColindante.getOutbreakHappened()) {
                 ciudadColindante.aumentarInfeccion();
-                System.out.println("Nombre: " + ciudadColindante.getNombre());
+                System.out.println("Name: " + ciudadColindante.getNombre());
                 System.out.println("Virus: " + ciudadColindante.getNombreEnfermedad());
                 System.out.println("Infection: " + ciudadColindante.getInfeccion());
                 game.actualizarEstadoCiudades();
