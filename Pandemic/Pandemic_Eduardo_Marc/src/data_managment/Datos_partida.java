@@ -1,9 +1,4 @@
 package data_managment;
-import java.util.ArrayList;
-
-import objects.Ciudad;
-import objects.Vacunas;
-import objects.Virus;
 /**
  * @author Eduardo y Marc
  */
@@ -15,11 +10,6 @@ public class Datos_partida {
     private int rondas;
     private int acciones;
     private String dificultad;
-	
-	
-    public Datos_partida() {
-		// TODO Auto-generated constructor stub
-	}
 
 
 	public int getIdentificador() {
@@ -80,6 +70,4 @@ public class Datos_partida {
 	public void setAcciones(int acciones) {
 		this.acciones = acciones;
 	}
-
-
 }
