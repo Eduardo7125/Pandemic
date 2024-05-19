@@ -19,16 +19,11 @@ import objects.Vacunas;
 public class game extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 7725219079694206212L;
-
-    private ImageIcon background;
-    
-    private JPanel popupPanel;
     
     public static boolean partidaInsertada = false;
     private JButton SubMenuButton;
     private static JButton salirButton;
     private static JButton nextRoundButton;
-    private static JDialog popupDialog;
     
     private JPanel topPanel;
     private static JPanel leftPanel;
@@ -36,14 +31,10 @@ public class game extends JPanel implements ActionListener {
     private JPanel bottomPanel;
     private static JPanel middlePanel;
 
-    private JLabel LabelImagen;
-    private JLabel brotes;    
     private static JLabel RoundNumber;
     private static JLabel ActionNumber;
     private static JLabel infectedCitiesLabel;
     private static JLabel infectedCitiesGameOverLabel;
-
-    private JProgressBar vacunas;
 
     public static int brotesvalor;
 
@@ -342,7 +333,7 @@ public class game extends JPanel implements ActionListener {
                     if (vacuna.getPorcentaje() > 99) {
                         Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna());
                         curar.start();
-                        System.out.println("Nombre: " + ciudades.getNombre() + " | Infección: Healed");
+                        System.out.println("Name: " + ciudades.getNombre() + " | Infection: Healed");
                         vacunaUtilizada = true;
                     }
                 }
