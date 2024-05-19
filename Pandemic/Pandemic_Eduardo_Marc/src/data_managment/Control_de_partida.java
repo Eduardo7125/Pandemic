@@ -85,7 +85,7 @@ public class Control_de_partida {
 	            System.out.println("AN OUTBREAK IS HAPPENING");
 	            ciudad.setInfeccion(3);
 	            gameSAVE.actualizarEstadoCiudades();
-	            ciudad.propagarInfeccion();
+	            ciudad.propagarInfeccion2();
 	        }
 	    }
 	}

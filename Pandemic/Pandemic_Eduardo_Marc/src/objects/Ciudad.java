@@ -2,6 +2,7 @@ package objects;
 
 import data_managment.*;
 import main.game;
+import main.gameSAVE;
 
 /**
  * En esta clase se gestionan las distintas variables que afectan a las ciudades.
@@ -85,6 +86,23 @@ public class Ciudad {
         System.out.println();
     }
 
+    public void propagarInfeccion2() {
+        System.out.println("INFECTED CITIES BY THE OUTBREAK:");
+        for (String colindantes : this.ciudadesColindantes) {
+            Ciudad ciudad = obtenerCiudad(colindantes);
+            if (!ciudad.getOutbreakHappened()) {
+                ciudad.aumentarInfeccion();
+                System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad() + " | Infection: " + ciudad.getInfeccion());
+                gameSAVE.actualizarEstadoCiudades();
+                ciudad.setOutbreakHappened(true);
+                if (ciudad.getInfeccion() > 3) {
+                    ciudad.setInfeccion(3);
+                    propagarInfeccion2(ciudad);
+                }
+            }
+        }
+        System.out.println();
+    }
     /**
      * Propagar la infeccion a las ciudades colindantes de forma recursiva por si de un brote han habido otros.
      * 
