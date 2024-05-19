@@ -16,6 +16,7 @@ import data_managment.Datos_partida;
 public class loadgame extends JPanel {
 
     private static final long serialVersionUID = 1803883461317339869L;
+    public static boolean cargarP;
     private JTable leaderboardTableEasy, leaderboardTableMedium, leaderboardTableHard;
     private ArrayList<LeaderboardEntry> leaderboardDataEasy, leaderboardDataMedium, leaderboardDataHard;
     private ArrayList<Datos_partida> saveFiles;
