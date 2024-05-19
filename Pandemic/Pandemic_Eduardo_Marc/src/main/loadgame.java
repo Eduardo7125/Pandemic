@@ -15,8 +15,8 @@ import data_managment.Datos_partida;
 
 public class loadgame extends JPanel {
 
+	public static boolean cargarP;
     private static final long serialVersionUID = 1803883461317339869L;
-    public static boolean cargarP;
     private JTable leaderboardTableEasy, leaderboardTableMedium, leaderboardTableHard;
     private ArrayList<LeaderboardEntry> leaderboardDataEasy, leaderboardDataMedium, leaderboardDataHard;
     private ArrayList<Datos_partida> saveFiles;
@@ -117,7 +117,7 @@ public class loadgame extends JPanel {
 
         return table;
     }
-    
+
     private JPanel createDifficultyPanel(String difficulty, JTable table) {
         JScrollPane scrollPane = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setPreferredSize(new Dimension(600, 200));
@@ -157,35 +157,67 @@ public class loadgame extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 int row = table.rowAtPoint(e.getPoint());
                 if (row >= 0 && row < leaderboardData.size()) {
-                    performCellAction(row, leaderboardData);
+                    performCellAction(row, leaderboardData, table);
                 }
             }
         });
     }
 
-        private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData) {
+    private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData, JComponent invoker) {
         if (row >= 0 && row < leaderboardData.size()) {
             LeaderboardEntry entry = leaderboardData.get(row);
-            int identificador = entry.getIdentificador();
             
             if(cargarP == false) {
-            Control_de_datos.borrarPartida(row);
-            JOptionPane.showMessageDialog(null, "Savefile deleted: " + identificador);
+            	JPanel buttonPanel = new JPanel();
+
+            	JButton confirmItem = new JButton("CONFIRM");
+            	JButton rejectItem = new JButton("REJECT");
+
+                confirmItem.setPreferredSize(new Dimension(140, 60));
+                rejectItem.setPreferredSize(new Dimension(140, 60));
+
+                buttonPanel.add(confirmItem);
+                buttonPanel.add(rejectItem);
+
+                JPopupMenu popupMenu = new JPopupMenu();
+                popupMenu.add(buttonPanel);
+                
+                confirmItem.addActionListener(e -> {
+                    Control_de_datos.borrarPartida(row);
+                    buttonPanel.setVisible(false);
+                    popupMenu.setVisible(false);
+                    
+                    Control_de_datos.saveFiles.clear();
+                    Control_de_datos.selectParidas();
+                });
+
+                rejectItem.addActionListener(e -> {
+                	buttonPanel.setVisible(false);
+                	popupMenu.setVisible(false);
+                });
+                
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                int screenWidth = screenSize.width;
+                int screenHeight = screenSize.height;
+                
+                int x = (screenWidth - popupMenu.getPreferredSize().width) / 2;
+                int y = (screenHeight - popupMenu.getPreferredSize().height) / 2;
+
+                popupMenu.show(this, x, y);
             } else {
             	Control_de_datos.selectDatos(row);
-//            menus.resetvalores();
-            game juego = new game();
-            juego.setVisible(true);
+//            	menus.resetvalores();
+            	game juego = new game();
+            	juego.setVisible(true);
             }
-            
         } else {
             JOptionPane.showMessageDialog(null, "Out of range: " + row);
         }
     }
-
+        
         static void resetLeaderboardData() {
-    	Control_de_datos.saveFiles.clear();
-    }
+        	Control_de_datos.saveFiles.clear();
+        }
 
     private static class LeaderboardEntry {
         private String playerName;
