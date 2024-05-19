@@ -1,20 +1,16 @@
 package data_managment;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -42,8 +38,8 @@ import java.math.BigDecimal;
  */
 public class Control_de_datos {
 
-	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
-//	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
+//	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
+	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
 	private static final String user = "DAM1_2324_PET_EDU";
 	private static final String password = "edu";
 	public static Connection con;
@@ -179,7 +175,7 @@ public class Control_de_datos {
             oracleConn.close();
             System.out.println("GAME SAVED");
 		}catch (Exception e) {
-			// TODO: handle exception
+			
 		}
 	}
     
@@ -372,7 +368,6 @@ public class Control_de_datos {
 				}
 	        }
 		}catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 	
@@ -400,7 +395,6 @@ public class Control_de_datos {
 	        }
 	        
 		}catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 	
@@ -423,7 +417,6 @@ public class Control_de_datos {
             pstmt.executeUpdate();
             con.close();
 		}catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 	
@@ -473,7 +466,6 @@ public class Control_de_datos {
 	            i++;
 	        }
 	    } catch (Exception e) {
-	    	// TODO: handle exception
 	    }
 	}
 	
@@ -585,9 +577,5 @@ public class Control_de_datos {
 		cargarCiudades();
 		cargarVacunas();
 		cargarXML();
-	}
-	
-	public static void guardarRecord() {
-
 	}
 }
