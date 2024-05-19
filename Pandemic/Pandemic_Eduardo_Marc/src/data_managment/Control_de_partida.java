@@ -10,7 +10,7 @@ import objects.Ciudad;
  */
 public class Control_de_partida {
 
-	public static String playername = "a";
+	public static String playername;
 	public static int turno = 1;
 	public static int acciones = 4;
 	public static int outbreak = 0;
