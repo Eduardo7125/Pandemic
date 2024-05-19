@@ -210,14 +210,23 @@ public class loadgame extends JPanel {
 
                 popupMenu.show(this, x, y);
             } else {
+            	setVisible(false);
             	Control_de_datos.selectDatos(row);
-//            	menus.resetvalores();
-            	game juego = new game();
-            	juego.setVisible(true);
+            	iniciarSavePartida();
             }
         } else {
             JOptionPane.showMessageDialog(null, "Out of range: " + row);
         }
+    }
+    
+    public void iniciarSavePartida() {
+        gameSAVE juego = new gameSAVE();
+        juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        juego.setVisible(true);
+        gameSAVE.actualizarEstadoCiudades();
+        getParent().add(juego);
+        getParent().revalidate();
+        getParent().repaint();
     }
         
         static void resetLeaderboardData() {
