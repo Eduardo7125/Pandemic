@@ -85,7 +85,9 @@ public class loadgame extends JPanel {
 
     private JTable createLeaderboardTable() {
         DefaultTableModel tableModel = new DefaultTableModel() {
-            @Override
+            private static final long serialVersionUID = -4814450097661192875L;
+
+			@Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -96,7 +98,9 @@ public class loadgame extends JPanel {
         tableModel.addColumn("OUTBREAKS");
 
         JTable table = new JTable(tableModel) {
-            @Override
+            private static final long serialVersionUID = -4964336313599035200L;
+
+			@Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g.create();
@@ -165,7 +169,8 @@ public class loadgame extends JPanel {
 
     private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData, JComponent invoker) {
         if (row >= 0 && row < leaderboardData.size()) {
-            LeaderboardEntry entry = leaderboardData.get(row);
+            @SuppressWarnings("unused")
+			LeaderboardEntry entry = leaderboardData.get(row);
             
             if(cargarP == false) {
             	JPanel buttonPanel = new JPanel();
@@ -250,12 +255,14 @@ public class loadgame extends JPanel {
             return arrOutreak;
         }
 
-        public int getIdentificador() {
+        @SuppressWarnings("unused")
+		public int getIdentificador() {
             return identificador;
         }
     }
 
-    private class ResultCellRenderer extends DefaultTableCellRenderer {
+    @SuppressWarnings("unused")
+	private class ResultCellRenderer extends DefaultTableCellRenderer {
         private static final long serialVersionUID = 1L;
 
         public ResultCellRenderer() {
