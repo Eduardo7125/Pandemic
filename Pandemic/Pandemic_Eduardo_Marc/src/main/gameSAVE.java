@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import javax.swing.*;
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
+import objects.Ciudad;
 import objects.Vacunas;
 /**
  * @author Eduardo y Marc
@@ -100,6 +101,8 @@ public class gameSAVE extends JPanel implements ActionListener {
         gbc.insets = new Insets(-660, 45, 5, 5);
         rightPanel.add(ActionNumber, gbc);
         
+        ciudadesInfect();
+        
         infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesLabel.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
@@ -144,7 +147,13 @@ public class gameSAVE extends JPanel implements ActionListener {
         actualizarEstadoCiudades();
         
     }
-
+    
+    public static void ciudadesInfect() {
+    	for (Ciudad ciudad : Control_de_datos.Ciudades) {
+    		Control_de_partida.infectedcities += ciudad.getInfeccion();
+		}
+    }
+    
     public static void actualizarEstadoCiudades() {
         Color verdeSuave = new Color(144, 238, 144);
 
