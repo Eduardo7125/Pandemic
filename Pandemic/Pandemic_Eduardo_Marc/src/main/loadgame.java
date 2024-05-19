@@ -183,6 +183,10 @@ public class loadgame extends JPanel {
         }
     }
 
+        static void resetLeaderboardData() {
+    	Control_de_datos.saveFiles.clear();
+    }
+
     private static class LeaderboardEntry {
         private String playerName;
         private int rounds;
