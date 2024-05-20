@@ -97,7 +97,8 @@ public class menu extends JPanel implements ActionListener {
 
         menuLabel1 = new JLabel(
                 "<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
-
+        menuLabel1.setFont(info.fuentecargar2(35));
+        
         menuLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         add(menuLabel1, BorderLayout.NORTH);
 
@@ -113,7 +114,8 @@ public class menu extends JPanel implements ActionListener {
         bottomPanel = new JPanel();
         version = new JLabel(
                 "<html><font color='white'><p>Eduardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
-
+        version.setFont(info.fuentecargar2(20));
+        
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
