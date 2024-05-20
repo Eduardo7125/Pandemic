@@ -49,7 +49,7 @@ public class loadgame extends JPanel {
 
         add(tablesPanel, BorderLayout.CENTER);
 
-        JLabel titleLabel = new JLabel("<html><div style='padding-left: 20%'>LEADERBOARD</div></html>");
+        JLabel titleLabel = new JLabel("<html><div>SAVEFILES</div></html>");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -92,7 +92,7 @@ public class loadgame extends JPanel {
                 return false;
             }
         };
-        tableModel.addColumn("PLAYER NAME");
+        tableModel.addColumn("PLAYER");
         tableModel.addColumn("ROUNDS");
         tableModel.addColumn("TURNS");
         tableModel.addColumn("OUTBREAKS");
@@ -194,6 +194,7 @@ public class loadgame extends JPanel {
                     
                     Control_de_datos.saveFiles.clear();
                     Control_de_datos.selectParidas();
+                    closeButton.doClick();
                 });
 
                 rejectItem.addActionListener(e -> {
