@@ -25,22 +25,18 @@ public class Ranking extends JPanel {
     public Ranking() {
         setLayout(new BorderLayout());
 
-        // Initialize the leaderboard data lists
         leaderboardDataEasy = new ArrayList<>();
         leaderboardDataMedium = new ArrayList<>();
         leaderboardDataHard = new ArrayList<>();
 
-        // Create the tables for each difficulty
         leaderboardTableEasy = createLeaderboardTable();
         leaderboardTableMedium = createLeaderboardTable();
         leaderboardTableHard = createLeaderboardTable();
 
-        // Create the panels for each difficulty
         JPanel easyPanel = createDifficultyPanel("Easy", leaderboardTableEasy);
         JPanel mediumPanel = createDifficultyPanel("Medium", leaderboardTableMedium);
         JPanel hardPanel = createDifficultyPanel("Hard", leaderboardTableHard);
 
-        // Create a vertical panel to organize the tables
         JPanel tablesPanel = new JPanel(new GridLayout(1, 3));
         tablesPanel.add(easyPanel);
         tablesPanel.add(mediumPanel);
@@ -77,7 +73,6 @@ public class Ranking extends JPanel {
             sqlDates[i] = new java.sql.Date(utilDates[i].getTime());
         }
 
-        // Update the leaderboard tables for each difficulty
         for (int i = 0; i < Control_de_datos.RankingDificulty.length; i++) {
             if (Control_de_datos.RankingDificulty[i].equals("Facil")) {
                 updateLeaderboard(Control_de_datos.RankingNames[i], Control_de_datos.RankingRounds[i],
@@ -123,7 +118,9 @@ public class Ranking extends JPanel {
     
     private JTable createLeaderboardTable() {
         DefaultTableModel tableModel = new DefaultTableModel() {
-            @Override
+            private static final long serialVersionUID = -2122284634474847297L;
+
+			@Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
@@ -134,7 +131,18 @@ public class Ranking extends JPanel {
         tableModel.addColumn("DATE");
         tableModel.addColumn("RESULT");
 
-        JTable table = new JTable(tableModel);
+        JTable table = new JTable(tableModel){
+			private static final long serialVersionUID = -719725885547750342L;
+
+			@Override
+			protected void paintComponent(Graphics g) {
+				super.paintComponent(g);
+				Graphics2D g2d = (Graphics2D) g.create();
+				g2d.setColor(new Color(0, 0, 0, 0));
+				g2d.fillRect(0, 0, getWidth(), getHeight());
+				g2d.dispose();
+			}
+		};
         table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
         table.setFont(new Font("Arial", Font.PLAIN, 12));
         table.setRowHeight(20);
@@ -263,12 +271,12 @@ public class Ranking extends JPanel {
                 String result = (String) value;
                 if (result.equals("Victory")) {
                     setText("Victory");
-                    setForeground(Color.GREEN); // Green color for victories
+                    setForeground(Color.GREEN);
                 } else if (result.equals("Defeat")) {
                     setText("Defeat");
-                    setForeground(Color.RED); // Red color for defeats
+                    setForeground(Color.RED);
                 } else {
-                    setText(""); // If it's neither "Victory" nor "Defeat", show nothing
+                    setText("");
                 }
             } else {
                 super.setValue(value);

@@ -10,26 +10,21 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
+import objects.Ciudad;
 import objects.Vacunas;
 /**
  * @author Eduardo y Marc
  */
-public class game extends JPanel implements ActionListener {
+public class gameSAVE extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 7725219079694206212L;
-
-    private ImageIcon background;
     
-    private JPanel popupPanel;
-    
+    public static boolean partidaInsertada = false;
     private JButton SubMenuButton;
     private static JButton salirButton;
     private static JButton nextRoundButton;
-    private static JDialog popupDialog;
     
     private JPanel topPanel;
     private static JPanel leftPanel;
@@ -37,23 +32,22 @@ public class game extends JPanel implements ActionListener {
     private JPanel bottomPanel;
     private static JPanel middlePanel;
 
-    private JLabel LabelImagen;
-    private JLabel brotes;    
     private static JLabel RoundNumber;
     private static JLabel ActionNumber;
     private static JLabel infectedCitiesLabel;
     private static JLabel infectedCitiesGameOverLabel;
 
-    private JProgressBar vacunas;
+    public static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
+    
+    private static int[] valoresVacunas = new int[4];
 
-    public static int brotesvalor;
-
-    game() {
+    public gameSAVE() {
         setLayout(new BorderLayout());
 
         topPanel = new JPanel(new BorderLayout());
         bottomPanel = new JPanel();
-        leftPanel = new JPanel(new GridLayout(brotesvalor, 0, 10, 10));
+        leftPanel = new JPanel(new GridLayout(brotesvalor, 1, 10, 10));
+
         rightPanel = new JPanel(new GridBagLayout());
         middlePanel = new JPanel();
         
@@ -74,6 +68,8 @@ public class game extends JPanel implements ActionListener {
         rightPanel.setBackground(Color.blue.darker().darker().darker());
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         
+        
+        brotesStart();
 		brotes();
 
         leftPanel.setBackground(Color.gray);
@@ -107,11 +103,15 @@ public class game extends JPanel implements ActionListener {
         gbc.insets = new Insets(-660, 45, 5, 5);
         rightPanel.add(ActionNumber, gbc);
         
+        ciudadesInfect();
+        
         infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesLabel.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
         gbc.insets = new Insets(-630, 45, 5, 5);
         rightPanel.add(infectedCitiesLabel, gbc);
+        
+        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Control_de_partida.infectedcities;
         
         infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
         infectedCitiesGameOverLabel.setForeground(Color.WHITE);
@@ -151,7 +151,13 @@ public class game extends JPanel implements ActionListener {
         actualizarEstadoCiudades();
         
     }
-
+    
+    public static void ciudadesInfect() {
+    	for (Ciudad ciudad : Control_de_datos.Ciudades) {
+    		Control_de_partida.infectedcities += ciudad.getInfeccion();
+		}
+    }
+    
     public static void actualizarEstadoCiudades() {
         Color verdeSuave = new Color(144, 238, 144);
 
@@ -197,14 +203,14 @@ public class game extends JPanel implements ActionListener {
         Victory();
         GameOver();
     }
-
+    
     public static void Victory() {
-        if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1) {
+    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1) {
         	Control_de_partida.resultado = "Victory";
         	
         	Control_de_datos.insertarRanking();
-            
-        	JLabel victoryLabel = new JLabel("YOU HAVE WON");
+        	
+        	JLabel victoryLabel = new JLabel("VICTORY");
             victoryLabel.setForeground(Color.GREEN);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 150));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -227,14 +233,15 @@ public class game extends JPanel implements ActionListener {
 
             middlePanel.revalidate();
             middlePanel.repaint();
-
+            
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	game.salirButton.doClick();
+                	salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
+
             timer.start();
         }
     }
@@ -245,7 +252,7 @@ public class game extends JPanel implements ActionListener {
         	
         	Control_de_datos.insertarRanking();
         	
-        	JLabel victoryLabel = new JLabel("GAME OVER");
+        	JLabel victoryLabel = new JLabel("DEFEAT");
             victoryLabel.setForeground(Color.RED);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 150));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -269,10 +276,10 @@ public class game extends JPanel implements ActionListener {
             middlePanel.revalidate();
             middlePanel.repaint();
             
-            Timer timer = new Timer(4000, new ActionListener() {
+            Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	game.salirButton.doClick();
+                	salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -319,9 +326,7 @@ public class game extends JPanel implements ActionListener {
             ciudad.setBounds(x, y, size.width, size.height);
             
             Color borderColor = obtenerColorBorde(ciudades.getEnfermedad());
-            // Crear un borde compuesto con un grosor de 3 y el color del borde
-            Border compoundBorder = BorderFactory.createLineBorder(borderColor, 3);
-            ciudad.setBorder(compoundBorder);
+            ciudad.setBorderColor(borderColor);
             
             ciudad.addActionListener(e -> {
                 if (Control_de_partida.turno == 1) {                    
@@ -337,12 +342,13 @@ public class game extends JPanel implements ActionListener {
                 boolean vacunaUtilizada = false;
                 int NumEn = Integer.parseInt(ciudades.getEnfermedad());
                 if (NumEn >= 0 && NumEn < Control_de_datos.Vacuna.size()) {
+                    
                     Vacunas vacuna = Control_de_datos.Vacuna.get(NumEn);
 
                     if (vacuna.getPorcentaje() > 99) {
                         Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna());
                         curar.start();
-                        System.out.println("Nombre: " + ciudades.getNombre() + " | Infección: Curada");
+                        System.out.println("Name: " + ciudades.getNombre() + " | Infection: Healed");
                         vacunaUtilizada = true;
                     }
                 }
@@ -353,9 +359,12 @@ public class game extends JPanel implements ActionListener {
                 }
                 
                 actualizarEstadoCiudades();
+                
             });
             
             middlePanel.add(ciudad);
+            String nombreCiudad = ciudades.getNombre();
+            new Thread(() -> ciudad.setToolTipText(nombreCiudad)).start();
         }
     }
 
@@ -390,13 +399,15 @@ public class game extends JPanel implements ActionListener {
     public void printInfection() {
         nextRoundButton.setEnabled(false);
 
-        Runnable printInfection = () -> {
-            Control_de_partida.gestionarInfeccion();
+        Thread printInfection = new Thread(() -> {
+            Control_de_partida.gestionarInfeccion2();
 
             SwingUtilities.invokeLater(() -> {
                 nextRoundButton.setEnabled(true);
             });
-        };
+        });
+
+        printInfection.start();
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(printInfection);
@@ -426,7 +437,7 @@ public class game extends JPanel implements ActionListener {
                     texto.setCaretPosition(texto.getDocument().getLength());
                 });
                 try {
-                    Thread.sleep(15);
+                    Thread.sleep(5);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -440,10 +451,28 @@ public class game extends JPanel implements ActionListener {
     
     static void startinfection() {
         nextRoundButton.setEnabled(false);
-        Control_de_partida.InfeccionInicial();
         nextRoundButton.setEnabled(true);
     } 
 
+    public static void brotesStart() {
+        leftPanel.removeAll();
+
+        String imagePath = "src/img/brote_inactivo.png";
+
+        ImageIcon icon = new ImageIcon(imagePath);
+        Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(image);
+
+        for (int i = 0; i < brotesvalor; i++) {
+            JLabel brote = new JLabel(scaledIcon);
+            brote.setPreferredSize(new Dimension(75, 75));
+            leftPanel.add(brote);
+        }
+
+        leftPanel.revalidate();
+        leftPanel.repaint();
+    }
+    
     public static void brotes() {
         leftPanel.removeAll();
 
@@ -467,28 +496,13 @@ public class game extends JPanel implements ActionListener {
         leftPanel.revalidate();
         leftPanel.repaint();
     }
-    
-    public static void brotesStart() {
-        leftPanel.removeAll();
-
-        String imagePath = "src/img/brote_inactivo.png";
-
-        ImageIcon icon = new ImageIcon(imagePath);
-        Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(image);
-
-        for (int i = 0; i < brotesvalor; i++) {
-            JLabel brote = new JLabel(scaledIcon);
-            brote.setPreferredSize(new Dimension(75, 75));
-            leftPanel.add(brote);
-        }
-
-        leftPanel.revalidate();
-        leftPanel.repaint();
-    }
-
 
     public void vacunasCompletas() {
+    	int i = 0;
+    	for (Vacunas vacunas : Control_de_datos.Vacuna) {
+    		valoresVacunas[i] = (int) vacunas.getPorcentaje();
+    		i++;
+		}
         vacunas("Alfa", new Color(118, 189, 248));
         vacunas("Beta", new Color(248, 118, 118));
         vacunas("Gama", new Color(118, 248, 150));
@@ -518,6 +532,17 @@ public class game extends JPanel implements ActionListener {
 
         vacunaFinal.setMinimum(0);
         vacunaFinal.setMaximum(100);
+        
+        if (nombre.equalsIgnoreCase("Alfa")) {
+        	vacunaFinal.setValue(valoresVacunas[0]);
+		}else if (nombre.equalsIgnoreCase("Beta")) {
+			vacunaFinal.setValue(valoresVacunas[1]);
+		}else if (nombre.equalsIgnoreCase("Gama")) {
+			vacunaFinal.setValue(valoresVacunas[2]);
+		}else {
+			vacunaFinal.setValue(valoresVacunas[3]);
+		}
+        
         vacunaFinal.setStringPainted(true);
         vacunaFinal.setOpaque(false);
         vacunaFinal.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
@@ -584,7 +609,7 @@ public class game extends JPanel implements ActionListener {
             iteraciones++;
         }
     }
-    
+
     private void MenuPopup() {
         JPopupMenu popupMenu = new JPopupMenu();
         
@@ -606,7 +631,7 @@ public class game extends JPanel implements ActionListener {
 
         infoMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	info informacion = info.getInstance();
+                info informacion = info.getInstance();
                 informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
                 informacion.setVisible(true);
@@ -618,23 +643,39 @@ public class game extends JPanel implements ActionListener {
         
         saveMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Control_de_datos.insertarPartida();
+                Control_de_datos.disconnect();
+                Control_de_datos.conectarBaseDatos();
+                
+                if (partidaInsertada == true) {
+                    Control_de_datos.actualizarPartida();
+                } else {
+                    Control_de_datos.insertarPartida();
+                    partidaInsertada = true;
+                }
+                
                 popupMenu.setVisible(false);
-                System.out.println("");
-                System.out.println("GAME SAVED");
             }
         });
         
         savequitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Control_de_datos.insertarPartida();
-                game.salirButton.doClick();
+                Control_de_datos.disconnect();
+                Control_de_datos.conectarBaseDatos();
+                
+                if (partidaInsertada == true) {
+                    Control_de_datos.actualizarPartida();
+                } else {
+                    Control_de_datos.insertarPartida();
+                    partidaInsertada = true;
+                }
+                
+                salirButton.doClick();
             }
         });
         
         exitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                game.salirButton.doClick();
+                salirButton.doClick();
             }
         });
         
@@ -642,6 +683,23 @@ public class game extends JPanel implements ActionListener {
         popupMenu.add(saveMenuItem);
         popupMenu.add(savequitMenuItem);
         popupMenu.add(exitMenuItem);
+        
+        infoMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                info informacion = info.getInstance();
+                informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+                setVisible(false);
+
+                Container parent = getParent();
+                parent.add(informacion);
+                parent.setComponentZOrder(informacion, 0);
+                informacion.setVisible(true);
+                parent.revalidate();
+                parent.repaint();
+            }
+        });
+
         
         popupMenu.show(SubMenuButton, -55, 0);
     }

@@ -2,6 +2,7 @@ package main;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -33,43 +34,16 @@ class info extends JPanel implements ActionListener {
 
         buttonPanel = new JPanel(new GridLayout(0, 1));
 
-        JButton texto2 = new JButton("START");
-        texto2.addActionListener(this);
-        buttonPanel.add(texto2);
-
-        JButton texto3 = new JButton("CITY");
-        texto3.addActionListener(this);
-        buttonPanel.add(texto3);
-
-        JButton texto4 = new JButton("GAMES");
-        texto4.addActionListener(this);
-        buttonPanel.add(texto4);
-
-        JButton texto5 = new JButton("PLAYER");
-        texto5.addActionListener(this);
-        buttonPanel.add(texto5);
-
-        JButton texto6 = new JButton("RESEARCH");
-        texto6.addActionListener(this);
-        buttonPanel.add(texto6);
-
-        JButton texto7 = new JButton("VACCINE");
-        texto7.addActionListener(this);
-        buttonPanel.add(texto7);
-
-        JButton texto8 = new JButton("HEAL");
-        texto8.addActionListener(this);
-        buttonPanel.add(texto8);
-
-        JButton texto9 = new JButton("END");
-        texto9.addActionListener(this);
-        buttonPanel.add(texto9);
-
-        salirButton = new JButton("MENU");
-        salirButton.addActionListener(this);
-        buttonPanel.add(salirButton);
-
-        menu.styleButton(salirButton);
+        
+        addButton("START");
+        addButton("CITY");
+        addButton("GAMES");
+        addButton("PLAYER");
+        addButton("RESEARCH");
+        addButton("VACCINE");
+        addButton("HEAL");
+        addButton("END");
+        addButton("MENU");
 
         tituloLabel = new JLabel("INFORMATION");
         tituloLabel.setFont(new Font("Arial", Font.BOLD, 40));
@@ -78,17 +52,40 @@ class info extends JPanel implements ActionListener {
         informacionLabel = new JLabel();
         informacionLabel.setVerticalAlignment(JLabel.TOP);
         informacionLabel.setFont(new Font("Arial", Font.PLAIN, 28));
-
+        informacionLabel.setOpaque(true);
+        
         scrollPane = new JScrollPane(informacionLabel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.getViewport().setBackground(Color.BLACK);
+        scrollPane.setOpaque(false); 
+        
         JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setBackground(Color.BLACK);
         centerPanel.add(tituloLabel, BorderLayout.NORTH);
         centerPanel.add(buttonPanel, BorderLayout.WEST);
         centerPanel.add(scrollPane, BorderLayout.CENTER);
         add(centerPanel, BorderLayout.CENTER);
     }
+    
+    private void addButton(String text) {
+        JButton button = createTransparentButton(text);
+        button.addActionListener(this);
+        button.setPreferredSize(new Dimension(150, 80)); 
+        buttonPanel.add(button);
+    }
 
+    private JButton createTransparentButton(String text) {
+        JButton button = new JButton(text);
+        button.setForeground(Color.WHITE);
+        button.setOpaque(false);
+        
+        button.setContentAreaFilled(false);
+        button.setForeground(Color.BLACK);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(150, 80));
+        return button;
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         JButton boton = (JButton) e.getSource();
@@ -97,7 +94,7 @@ class info extends JPanel implements ActionListener {
         switch (boton.getText()) {
             case "START":
                 tituloLabel.setText("START");
-                informacion = "<html><p>At the beginning of each game, vaccines are initialized.<br>"
+                informacion = "<html><div><p>At the beginning of each game, vaccines are initialized.<br>"
                         + "At the beginning of each game, cities are initialized.<br>"
                         + "Each city can only be infected with 1 type of infection based on its ID.<br>"
                         + "If there is an outbreak in the adjacent city and both cities have different types of infection, the corresponding infection type will <br>"
@@ -107,25 +104,25 @@ class info extends JPanel implements ActionListener {
                         + "2 infections are added. 1 is not added to the connected cities that have had an outbreak in this chain of outbreaks.<br>"
                         + "The number of infected cities at the beginning of the game is a configuration parameter.<br>"
                         + "The number of infected cities each round is a configuration parameter.<br>"
-                        + "The number of diseases is a configuration parameter.</p></html>";
+                        + "The number of diseases is a configuration parameter.</p></div></html>";
                 break;
             case "CITY":
                 tituloLabel.setText("CITY");
-                informacion = "<html><p>Each city has a name, X coordinate, Y coordinate, and type of disease.<br>"
+                informacion = "<html<div><p>Each city has a name, X coordinate, Y coordinate, and type of disease.<br>"
                         + "Each city has different infection levels.<br>"
                         + "Each city stores its adjacent cities.<br>"
                         + "Each city increases the infection level by +1 when it becomes infected again.<br>"
-                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent cities and (+1 is added to the outbreak counter).</p></html>";
+                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent cities and (+1 is added to the outbreak counter).</p></div></html>";
                 break;
             case "GAMES":
                 tituloLabel.setText("GAMES");
-                informacion = "<html><p>Round number.<br>"
+                informacion = "<html><div><p>Round number.<br>"
                         + "It will have a list with all the cities and actions that can be performed on them.<br>"
-                        + "It will have a list with all the vaccines and actions that can be performed on them (generate vaccine, increase%, ...).</p></html>";
+                        + "It will have a list with all the vaccines and actions that can be performed on them (generate vaccine, increase%, ...).</p></div></html>";
                 break;
             case "PLAYER":
                 tituloLabel.setText("PLAYER");
-                informacion = "<html><p>The player will have 4 actions per round.<br>"
+                informacion = "<html><div><p>The player will have 4 actions per round.<br>"
                         + "Each turn, the player can create the vaccine (conduct research) or cure cities. Both cannot be done in the same turn.<br>"
                         + "Curing costs 1 action and only affects one city.<br>"
                         + "When conducting research, all 4 actions are spent.<br>"
@@ -134,30 +131,30 @@ class info extends JPanel implements ActionListener {
                         + "Each city has different infection levels.<br>"
                         + "Each city stores its adjacent cities.<br>"
                         + "Each city increases the infection level by +1 when it becomes infected again.<br>"
-                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent cities and (+1 is added to the outbreak counter).</p></html>";
+                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent cities and (+1 is added to the outbreak counter).</p></div></html>";
                 break;
             case "RESEARCH":
                 tituloLabel.setText("RESEARCH");
-                informacion = "<html><p>Every time research is conducted, the player spends 4 actions and the percentage of the selected vaccine will increase.</p></html>";
+                informacion = "<html><div><p>Every time research is conducted, the player spends 4 actions and the percentage of the selected vaccine will increase.</p></div></html>";
                 break;
             case "VACCINE":
                 tituloLabel.setText("VACCINE");
-                informacion = "<html><p>The vaccine consists of 4 parts (1 part per research).<br>"
+                informacion = "<html><div><p>The vaccine consists of 4 parts (1 part per research).<br>"
                         + "1 vaccine per disease type.<br>"
                         + "They have a name, a color, and a development percentage.<br>"
                         + "If the vaccine is developed 100%, it is indicated that the development is already complete.<br>"
-                        + "With 1 complete vaccine, an entire city can be cured at once.</p></html>";
+                        + "With 1 complete vaccine, an entire city can be cured at once.</p></div></html>";
                 break;
             case "HEAL":
                 tituloLabel.setText("HEAL");
-                informacion = "<html><p>If when curing 1 infected city, a vaccine developed 100% is not available, only the infection level is reduced by 1.<br>"
-                        + "If when curing 1 infected city, a vaccine developed 100% is available, the infection is completely eliminated (infection level 0).</p></html>";
+                informacion = "<html><div><p>If when curing 1 infected city, a vaccine developed 100% is not available, only the infection level is reduced by 1.<br>"
+                        + "If when curing 1 infected city, a vaccine developed 100% is available, the infection is completely eliminated (infection level 0).</p></div></html>";
                 break;
             case "END":
                 tituloLabel.setText("END");
-                informacion = "<html><p>At the end of each round, it is checked whether the player has won, lost, or it is unknown.<br>"
+                informacion = "<html><div><p>At the end of each round, it is checked whether the player has won, lost, or it is unknown.<br>"
                         + "You win by curing all infections.<br>"
-                        + "If all the outbreaks occur, the game is lost.</p></html>";
+                        + "If all the outbreaks occur, the game is lost.</p></div></html>";
                 break;
             case "MENU":
     			setVisible(false); 

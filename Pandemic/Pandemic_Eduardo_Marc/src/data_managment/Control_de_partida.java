@@ -1,5 +1,6 @@
 package data_managment;
 import main.game;
+import main.gameSAVE;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,30 +19,11 @@ public class Control_de_partida {
 	public static int citiesleft;
 	public static String resultado;
 	
-	public void iniciarPartida() {
-		
-	}
-	
-	public void iniciarPartidaGuardada(String id) {
-		
-	}
-	
 	public static void gestionarTurno() {
 		turno++;
 	}
 	
-	public void gestionarVacuna() {
-		
-	}
-	
 	public static void InfeccionInicial() {
-		for (objects.Vacunas vacunas : Control_de_datos.Vacuna) {
-            for (objects.Virus virus : Control_de_datos.Virus) {
-                if (vacunas.getNombre().equalsIgnoreCase(virus.getNombre())) {
-                	System.out.println(vacunas.getNombre() + " " + virus.getNombre());
-                }
-            }
-		}
 	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
 	    
 	    ArrayList<Ciudad> ciudadesAleatorias = SelecionarCiudadesInfeccionInicial(ciudades);
@@ -69,9 +51,8 @@ public class Control_de_partida {
     
 	
 	public static void gestionarInfeccion() {
-	    ArrayList<Ciudad> ciudades = Control_de_datos.Ciudades;
 
-	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion(ciudades);
+	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion(Control_de_datos.Ciudades);
 
 	    for (Ciudad ciudad : ciudadesAleatorias) {
 	        ciudad.aumentarInfeccion();
@@ -89,6 +70,26 @@ public class Control_de_partida {
 	    }
 	}
 
+	public static void gestionarInfeccion2() {
+
+	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion(Control_de_datos.Ciudades);
+
+	    for (Ciudad ciudad : ciudadesAleatorias) {
+	        ciudad.aumentarInfeccion();
+	        System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad() + " | Infection: " + ciudad.getInfeccion());
+	        gameSAVE.actualizarEstadoCiudades();
+	        if (ciudad.getInfeccion() > 3) {
+	        	ciudad.setOutbreakHappened(true);
+	            outbreak++;
+	            gameSAVE.brotes();
+	            System.out.println("AN OUTBREAK IS HAPPENING");
+	            ciudad.setInfeccion(3);
+	            gameSAVE.actualizarEstadoCiudades();
+	            ciudad.propagarInfeccion2();
+	        }
+	    }
+	}
+	
 	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
 	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
 	    Random rand = new Random();
@@ -111,17 +112,5 @@ public class Control_de_partida {
 	    for (Ciudad ciudad : ciudades) {
 	    	ciudad.setOutbreakHappened(false);
 	        }
-	}
-	
-	public void gestionarFinPartida() {
-		
-	}
-	
-	public void gestionarFrases() {
-		
-	}
-	
-	public void gestionarCura() {
-		
 	}
 }

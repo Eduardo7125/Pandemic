@@ -1,68 +1,44 @@
 package data_managment;
-import java.util.ArrayList;
-
-import objects.Ciudad;
-import objects.Vacunas;
-import objects.Virus;
 /**
  * @author Eduardo y Marc
  */
 public class Datos_partida {
 	
-	private int id;
-	private ArrayList<Ciudad> ciudades = new ArrayList<>();
-	private ArrayList<Virus> virus = new ArrayList<>();
-	private ArrayList<Vacunas> vacunas = new ArrayList<>();
-	public int brotes = 0;
-	public int rondas = 0;
-	private int pDesarrollo = 0;
-	public int acciones = 4;
-	
-	public void cargarDatos() {
-		this.ciudades = Control_de_datos.cargarCiudades();
-		this.virus = Control_de_datos.cargarVirus();
-		this.vacunas = Control_de_datos.cargarVacunas();
-	}
-	
-	public Datos_partida(int id, ArrayList<Ciudad> ciudades, ArrayList<Virus> virus, ArrayList<Vacunas> vacunas, int brotes, int rondas, int pDesarrollo, int acciones) {
-		this.id = id;
-		this.ciudades = ciudades;
-		this.virus = virus;
-		this.vacunas = vacunas;
-		this.brotes = brotes;
-		this.rondas = rondas;
-		this.pDesarrollo = pDesarrollo;
-		this.acciones = acciones;
+	private int identificador;
+    private String player;
+    private int brotes;
+    private int rondas;
+    private int acciones;
+    private String dificultad;
+
+
+	public int getIdentificador() {
+		return identificador;
 	}
 
 
-	public ArrayList<Ciudad> getCiudades() {
-		return ciudades;
+	public void setIdentificador(int identificador) {
+		this.identificador = identificador;
 	}
 
 
-	public void setCiudades(ArrayList<Ciudad> ciudades) {
-		this.ciudades = ciudades;
+	public String getPlayer() {
+		return player;
 	}
 
 
-	public ArrayList<Virus> getVirus() {
-		return virus;
+	public void setPlayer(String player) {
+		this.player = player;
 	}
 
 
-	public void setVirus(ArrayList<Virus> virus) {
-		this.virus = virus;
+	public String getDificultad() {
+		return dificultad;
 	}
 
 
-	public ArrayList<Vacunas> getVacunas() {
-		return vacunas;
-	}
-
-
-	public void setVacunas(ArrayList<Vacunas> vacunas) {
-		this.vacunas = vacunas;
+	public void setDificultad(String dificultad) {
+		this.dificultad = dificultad;
 	}
 
 
@@ -86,16 +62,6 @@ public class Datos_partida {
 	}
 
 
-	public int getpDesarrollo() {
-		return pDesarrollo;
-	}
-
-
-	public void setpDesarrollo(int pDesarrolloAlfa) {
-		this.pDesarrollo = pDesarrolloAlfa;
-	}
-
-
 	public int getAcciones() {
 		return acciones;
 	}
@@ -104,13 +70,4 @@ public class Datos_partida {
 	public void setAcciones(int acciones) {
 		this.acciones = acciones;
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 }

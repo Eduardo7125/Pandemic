@@ -24,6 +24,7 @@ public class game extends JPanel implements ActionListener {
     
     private JPanel popupPanel;
     
+    public static boolean partidaInsertada = false;
     private JButton SubMenuButton;
     private static JButton salirButton;
     private static JButton nextRoundButton;
@@ -195,14 +196,14 @@ public class game extends JPanel implements ActionListener {
         Victory();
         GameOver();
     }
-
+    
     public static void Victory() {
-        if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1) {
+    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1) {
         	Control_de_partida.resultado = "Victory";
         	
         	Control_de_datos.insertarRanking();
-            
-        	JLabel victoryLabel = new JLabel("YOU HAVE WON");
+        	
+        	JLabel victoryLabel = new JLabel("VICTORY");
             victoryLabel.setForeground(Color.GREEN);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 150));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -225,7 +226,7 @@ public class game extends JPanel implements ActionListener {
 
             middlePanel.revalidate();
             middlePanel.repaint();
-
+            
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -233,6 +234,7 @@ public class game extends JPanel implements ActionListener {
                 }
             });
             timer.setRepeats(false);
+
             timer.start();
         }
     }
@@ -243,7 +245,7 @@ public class game extends JPanel implements ActionListener {
         	
         	Control_de_datos.insertarRanking();
         	
-        	JLabel victoryLabel = new JLabel("GAME OVER");
+        	JLabel victoryLabel = new JLabel("DEFEAT");
             victoryLabel.setForeground(Color.RED);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 150));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -267,7 +269,7 @@ public class game extends JPanel implements ActionListener {
             middlePanel.revalidate();
             middlePanel.repaint();
             
-            Timer timer = new Timer(4000, new ActionListener() {
+            Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                 	game.salirButton.doClick();
@@ -320,7 +322,7 @@ public class game extends JPanel implements ActionListener {
             ciudad.setBorderColor(borderColor);
             
             ciudad.addActionListener(e -> {
-            	if (Control_de_partida.turno == 1) {                    
+                if (Control_de_partida.turno == 1) {                    
                     System.out.println("You can't heal cities in round 1");
                     return;                    
                 }
@@ -330,32 +332,35 @@ public class game extends JPanel implements ActionListener {
                     return;                   
                 }
                     
-                    boolean vacunaUtilizada = false;
-                    int NumEn = Integer.parseInt(ciudades.getEnfermedad());
-                    if (NumEn >= 0 && NumEn < Control_de_datos.Vacuna.size()) {
-                    	
-                        Vacunas vacuna = Control_de_datos.Vacuna.get(NumEn);
+                boolean vacunaUtilizada = false;
+                int NumEn = Integer.parseInt(ciudades.getEnfermedad());
+                if (NumEn >= 0 && NumEn < Control_de_datos.Vacuna.size()) {
+                    
+                    Vacunas vacuna = Control_de_datos.Vacuna.get(NumEn);
 
-                        if (vacuna.getPorcentaje() > 99) {
-                            Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna());
-                            curar.start();
-                            System.out.println("Nombre: " + ciudades.getNombre() + " | Infección: Curada");
-                            vacunaUtilizada = true;
-                        }
+                    if (vacuna.getPorcentaje() > 99) {
+                        Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna());
+                        curar.start();
+                        System.out.println("Nombre: " + ciudades.getNombre() + " | Infección: Curada");
+                        vacunaUtilizada = true;
                     }
-                    
-                    if (!vacunaUtilizada) {
-                        ciudades.disminuirInfeccion();
-                        System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
-                    }
-                    
-                    actualizarEstadoCiudades();
-                    
-                });
+                }
                 
-                middlePanel.add(ciudad);
-            }
+                if (!vacunaUtilizada) {
+                    ciudades.disminuirInfeccion();
+                    System.out.println("Name: " + ciudades.getNombre() + " | Infection: " + ciudades.getInfeccion());
+                }
+                
+                actualizarEstadoCiudades();
+                
+            });
+            
+            middlePanel.add(ciudad);
+            String nombreCiudad = ciudades.getNombre();
+            new Thread(() -> ciudad.setToolTipText(nombreCiudad)).start();
         }
+    }
+
         
     public Double[] resoluciones() {
         Double[] resultado = new Double[2];
@@ -423,7 +428,7 @@ public class game extends JPanel implements ActionListener {
                     texto.setCaretPosition(texto.getDocument().getLength());
                 });
                 try {
-                    Thread.sleep(15);
+                    Thread.sleep(5);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -581,7 +586,7 @@ public class game extends JPanel implements ActionListener {
             iteraciones++;
         }
     }
-    
+
     private void MenuPopup() {
         JPopupMenu popupMenu = new JPopupMenu();
         
@@ -603,7 +608,7 @@ public class game extends JPanel implements ActionListener {
 
         infoMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	info informacion = info.getInstance();
+                info informacion = info.getInstance();
                 informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
                 informacion.setVisible(true);
@@ -615,16 +620,32 @@ public class game extends JPanel implements ActionListener {
         
         saveMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Control_de_datos.insertarPartida();
+                Control_de_datos.disconnect();
+                Control_de_datos.conectarBaseDatos();
+                
+                if (partidaInsertada == true) {
+                    Control_de_datos.actualizarPartida();
+                } else {
+                    Control_de_datos.insertarPartida();
+                    partidaInsertada = true;
+                }
+                
                 popupMenu.setVisible(false);
-                System.out.println("");
-                System.out.println("GAME SAVED");
             }
         });
         
         savequitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Control_de_datos.insertarPartida();
+                Control_de_datos.disconnect();
+                Control_de_datos.conectarBaseDatos();
+                
+                if (partidaInsertada == true) {
+                    Control_de_datos.actualizarPartida();
+                } else {
+                    Control_de_datos.insertarPartida();
+                    partidaInsertada = true;
+                }
+                
                 game.salirButton.doClick();
             }
         });
@@ -639,6 +660,23 @@ public class game extends JPanel implements ActionListener {
         popupMenu.add(saveMenuItem);
         popupMenu.add(savequitMenuItem);
         popupMenu.add(exitMenuItem);
+        
+        infoMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                info informacion = info.getInstance();
+                informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+                setVisible(false);
+
+                Container parent = getParent();
+                parent.add(informacion);
+                parent.setComponentZOrder(informacion, 0);
+                informacion.setVisible(true);
+                parent.revalidate();
+                parent.repaint();
+            }
+        });
+
         
         popupMenu.show(SubMenuButton, -55, 0);
     }
