@@ -16,6 +16,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.Serial;
 
+import javax.print.attribute.AttributeSet;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -28,6 +29,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.UIManager;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter.FilterBypass;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
@@ -482,7 +485,7 @@ public class menu extends JPanel implements ActionListener {
     }
 
 
-    private void showPlayerNamePopup() {
+    public void showPlayerNamePopup() {
         playerNamePopup = new JPopupMenu();
         playerNamePopup.setLayout(new BorderLayout());
         playerNamePopup.setBackground(Color.BLUE);
@@ -495,7 +498,26 @@ public class menu extends JPanel implements ActionListener {
 
         playerNameTextField = new JTextField(12);
         playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
-        playerNameTextField.addActionListener(this);
+
+        // Limitar el texto a 10 caracteres
+        ((AbstractDocument) playerNameTextField.getDocument()).setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+                if ((fb.getDocument().getLength() + string.length()) <= 10) {
+                    super.insertString(fb, offset, string, attr);
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+                if ((fb.getDocument().getLength() - length + text.length()) <= 10) {
+                    super.replace(fb, offset, length, text, attrs);
+                }
+            }
+        });
+
+        playerNameTextField.addActionListener(e -> okButton.doClick());
+
         playerNameTextField.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -515,17 +537,16 @@ public class menu extends JPanel implements ActionListener {
 
             @Override
             public void keyTyped(KeyEvent e) {
-                if (playerNameTextField.getText().length() >= 10) {
-                    e.consume();
-                }
             }
         });
+
         playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
         playerNameTextField.requestFocusInWindow();
 
         okButton = new JButton("OK");
         okButton.setFont(new Font("Arial", Font.PLAIN, 20));
-        okButton.addActionListener(this);
+        okButton.addActionListener(e -> {
+        });
         okButton.setEnabled(false);
         playerNamePopup.add(okButton, BorderLayout.SOUTH);
 

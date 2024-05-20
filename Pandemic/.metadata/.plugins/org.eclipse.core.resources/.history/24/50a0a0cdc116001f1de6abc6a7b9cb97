@@ -496,29 +496,23 @@ public class menu extends JPanel implements ActionListener {
         playerNameTextField = new JTextField(12);
         playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
         playerNameTextField.addActionListener(this);
-        playerNameTextField.addKeyListener(new KeyListener() {
+        playerNameTextField.addKeyListener(new KeyListener(){
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getKeyCode()==KeyEvent.VK_ENTER){
                     okButton.doClick();
                 }
             }
-
             @Override
             public void keyReleased(KeyEvent e) {
-                if (playerNameTextField.getText().isEmpty()) {
+                if(playerNameTextField.getText().isEmpty()) {
                     okButton.setEnabled(false);
                 } else {
                     okButton.setEnabled(true);
                 }
             }
-
             @Override
-            public void keyTyped(KeyEvent e) {
-                if (playerNameTextField.getText().length() >= 10) {
-                    e.consume();
-                }
-            }
+            public void keyTyped(KeyEvent e) {}
         });
         playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
         playerNameTextField.requestFocusInWindow();
@@ -529,9 +523,10 @@ public class menu extends JPanel implements ActionListener {
         okButton.setEnabled(false);
         playerNamePopup.add(okButton, BorderLayout.SOUTH);
 
+
         int x = (getWidth() - playerNamePopup.getPreferredSize().width) / 2;
         int y = (getHeight() - playerNamePopup.getPreferredSize().height) / 2;
-
+        
         playerNamePopup.show(this, x, y);
     }
 

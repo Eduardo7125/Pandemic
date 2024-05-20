@@ -516,7 +516,7 @@ public class menu extends JPanel implements ActionListener {
             @Override
             public void keyTyped(KeyEvent e) {
                 if (playerNameTextField.getText().length() >= 10) {
-                    e.consume();
+                    e.consume(); // Impide escribir más de 10 caracteres
                 }
             }
         });
@@ -534,6 +534,7 @@ public class menu extends JPanel implements ActionListener {
 
         playerNamePopup.show(this, x, y);
     }
+
 
     private void hidePlayerNamePopup() {
         playerNamePopup.setVisible(false);
