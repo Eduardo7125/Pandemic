@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="Curada"/>
+		<item key="selection" value="reject"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="curada"/>
-			<item value="partidaInsertada"/>
-			<item value="public static void insertarPartida() {"/>
-			<item value="item"/>
-			<item value="save"/>
-			<item value="insert"/>
-			<item value="victory"/>
-			<item value="RankingRounds"/>
-			<item value="ranki"/>
-			<item value="terminal"/>
-			<item value="gameover"/>
-			<item value="info"/>
-			<item value="thr"/>
-			<item value="ciudades"/>
-			<item value="ciudades()"/>
+			<item value="reject"/>
+			<item value="continueOP"/>
+			<item value="okButton2"/>
+			<item value="continueop`"/>
+			<item value="continueop"/>
+			<item value="Control_de_partida.playername ="/>
+			<item value="delete"/>
+			<item value="okbutton2"/>
+			<item value="continue"/>
+			<item value="2"/>
+			<item value="loadgame"/>
+			<item value="showPlayerNamePopup2"/>
+			<item value="DELETE"/>
+			<item value="continueOP();"/>
+			<item value="eop"/>
 		</list>
 		<list key="replacehistory">
 		</list>
