@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="reject"/>
+		<item key="selection" value="initializePopupMenu"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="initializePopupMenu"/>
+			<item value="dificultad."/>
+			<item value="&quot;"/>
+			<item value="supr"/>
+			<item value="sup"/>
+			<item value="su"/>
 			<item value="reject"/>
 			<item value="continueOP"/>
 			<item value="okButton2"/>
@@ -17,12 +23,6 @@
 			<item value="delete"/>
 			<item value="okbutton2"/>
 			<item value="continue"/>
-			<item value="2"/>
-			<item value="loadgame"/>
-			<item value="showPlayerNamePopup2"/>
-			<item value="DELETE"/>
-			<item value="continueOP();"/>
-			<item value="eop"/>
 		</list>
 		<list key="replacehistory">
 		</list>
