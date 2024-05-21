@@ -10,9 +10,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
@@ -38,8 +36,12 @@ public class game extends JPanel implements ActionListener {
     private static JLabel RoundNumber;
     private static JLabel ActionNumber;
     private static JLabel infectedCitiesLabel;
+    private static JLabel infectedValueLabel;
     private static JLabel infectedCitiesGameOverLabel;
-
+    private static JLabel infectedCitiesGameOverLabelnum;
+    private static JLabel actionsValueLabel;
+    
+    
     public static int brotesvalor;
 
     game() {
@@ -84,8 +86,8 @@ public class game extends JPanel implements ActionListener {
         bottomPanel.add(nextRoundButton);
         
         RoundNumber = new JLabel("Round: " + Control_de_partida.turno);
-        RoundNumber.setForeground(Color.WHITE);
-        topPanel.add(RoundNumber);
+        RoundNumber.setForeground(Color.BLACK);
+        topPanel.add(RoundNumber, SwingUtilities.CENTER);
         
 
         datosPartida();
@@ -104,33 +106,54 @@ public class game extends JPanel implements ActionListener {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.BLACK); 
     	
-        JLabel ActionNumberlabel = new JLabel("" + Control_de_partida.acciones);
-        ActionNumberlabel.setBorder(new CompoundBorder(
-                new LineBorder(Color.RED, 2),  // Primer borde rojo
-                new LineBorder(Color.white, 10)  // Segundo borde vacío para el espacio interior
-        ));
-        ActionNumberlabel.setOpaque(true);
-        ActionNumberlabel.setForeground(Color.WHITE);
-        ActionNumberlabel.setFont(info.fuentecargar2(20));
+        JPanel panelRondas = new JPanel();
+        panelRondas.setBackground(Color.BLACK);
+        panelRondas.setBorder(new EmptyBorder(10, 0, 10, 0));
         
-        ActionNumber = new JLabel("Actions left: " + ActionNumberlabel);
+        ActionNumber = new JLabel("Actions left: ");
         ActionNumber.setForeground(Color.WHITE);
         ActionNumber.setFont(info.fuentecargar2(20));
-        ActionNumber.setBorder(new EmptyBorder(10, 0, 10, 0));
         
-        infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
+        actionsValueLabel = new JLabel(Integer.toString(Control_de_partida.acciones));
+        actionsValueLabel.setForeground(Color.GREEN); 
+        actionsValueLabel.setFont(info.fuentecargar2(20));
+        
+        panelRondas.add(ActionNumber);
+        panelRondas.add(actionsValueLabel);
+        
+        JPanel panelCiudades = new JPanel();
+        panelCiudades.setBackground(Color.BLACK);
+        panelCiudades.setBorder(new EmptyBorder(10, 0, 10, 0));
+        
+        infectedCitiesLabel = new JLabel("Infected Cities: ");
         infectedCitiesLabel.setForeground(Color.WHITE);
         infectedCitiesLabel.setFont(info.fuentecargar2(20));
-        infectedCitiesLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
         
-        infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
+        infectedValueLabel = new JLabel(Integer.toString(Control_de_partida.infectedcities));
+        infectedValueLabel.setForeground(Color.RED); 
+        infectedValueLabel.setFont(info.fuentecargar2(20));
+        
+        panelCiudades.add(infectedCitiesLabel);
+        panelCiudades.add(infectedValueLabel);
+        
+        JPanel panelGameover = new JPanel();
+        panelGameover.setBackground(Color.BLACK);
+        panelGameover.setBorder(new EmptyBorder(10, 0, 10, 0));
+        
+        infectedCitiesGameOverLabel = new JLabel("Cities left: ");
         infectedCitiesGameOverLabel.setForeground(Color.WHITE);
         infectedCitiesGameOverLabel.setFont(info.fuentecargar2(20));
-        infectedCitiesGameOverLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
         
-        panel.add(ActionNumber, BorderLayout.NORTH);
-        panel.add(infectedCitiesLabel, BorderLayout.CENTER);
-        panel.add(infectedCitiesGameOverLabel, BorderLayout.SOUTH);
+        infectedCitiesGameOverLabelnum = new JLabel(Integer.toString(Control_de_partida.citiesleft));
+        infectedCitiesGameOverLabelnum.setForeground(Color.YELLOW);
+        infectedCitiesGameOverLabelnum.setFont(info.fuentecargar2(20));
+        
+        panelGameover.add(infectedCitiesGameOverLabel);
+        panelGameover.add(infectedCitiesGameOverLabelnum);
+        
+        panel.add(panelRondas, BorderLayout.NORTH);
+        panel.add(panelCiudades, BorderLayout.CENTER);
+        panel.add(panelGameover, BorderLayout.SOUTH);
 
         bottomPanel.add(panel);
     	
@@ -168,15 +191,15 @@ public class game extends JPanel implements ActionListener {
                     }
                     
                     Color colorBorde = obtenerColorBorde(ciudad.getEnfermedad());
-                    button.setBorder(BorderFactory.createLineBorder(colorBorde, 2));
+                    button.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),BorderFactory.createLineBorder(colorBorde, 2)));
                 }
             }
         }
         Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Control_de_partida.infectedcities;
         RoundNumber.setText("Round: " + Control_de_partida.turno);
-        ActionNumber.setText("Actions left: " + Control_de_partida.acciones);
-        infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
-        infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
+        actionsValueLabel.setText(Integer.toString(Control_de_partida.acciones));
+        infectedValueLabel.setText(Integer.toString(Control_de_partida.infectedcities));
+        infectedCitiesGameOverLabelnum.setText(Integer.toString(Control_de_partida.citiesleft));
 
         Victory();
         GameOver();
@@ -513,7 +536,7 @@ public class game extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 if (Control_de_partida.acciones == 4) {
                     Control_de_partida.acciones = 0;
-                    ActionNumber.setText("Actions left: " + Control_de_partida.acciones);
+                    actionsValueLabel.setText(Integer.toString(Control_de_partida.acciones));
                     switch (nombre) {
                         case "Alfa":
                             Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0), vacunaFinal));
@@ -549,8 +572,7 @@ public class game extends JPanel implements ActionListener {
         rightPanel.add(label, gbc);
         rightPanel.add(vacunaFinal, gbc);
     }
-
-
+    
     public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
 
         int counter = (int) vacuna.getPorcentaje();
