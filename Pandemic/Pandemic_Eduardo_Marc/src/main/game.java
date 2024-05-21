@@ -10,6 +10,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
 import objects.Vacunas;
@@ -28,7 +32,7 @@ public class game extends JPanel implements ActionListener {
     private JPanel topPanel;
     private static JPanel leftPanel;
     private JPanel rightPanel;
-    private JPanel bottomPanel;
+    private static JPanel bottomPanel;
     private static JPanel middlePanel;
 
     private static JLabel RoundNumber;
@@ -57,7 +61,6 @@ public class game extends JPanel implements ActionListener {
         topPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 30));
         topPanel.setBackground(Color.white);
 
-        terminal();
         bottomPanel.setBackground(Color.black);
 
         vacunasCompletas();
@@ -75,72 +78,62 @@ public class game extends JPanel implements ActionListener {
         add(rightPanel, BorderLayout.EAST);
         add(leftPanel, BorderLayout.WEST);
         add(middlePanel, BorderLayout.CENTER);
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(-740, 45, 5, 5);
         
         nextRoundButton = new JButton("NEXT ROUND");
         nextRoundButton.addActionListener(this);
-        rightPanel.add(nextRoundButton, gbc);
+        bottomPanel.add(nextRoundButton);
         
         RoundNumber = new JLabel("Round: " + Control_de_partida.turno);
         RoundNumber.setForeground(Color.WHITE);
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-690, 45, 5, 5);
-        rightPanel.add(RoundNumber, gbc);
+        topPanel.add(RoundNumber);
         
-        ActionNumber = new JLabel("Actions left: " + Control_de_partida.acciones);
-        ActionNumber.setForeground(Color.WHITE);
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-660, 45, 5, 5);
-        rightPanel.add(ActionNumber, gbc);
+
+        datosPartida();
         
-        infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
-        infectedCitiesLabel.setForeground(Color.WHITE);
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-630, 45, 5, 5);
-        rightPanel.add(infectedCitiesLabel, gbc);
-        
-        infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
-        infectedCitiesGameOverLabel.setForeground(Color.WHITE);
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-600, 45, 5, 5);
-        rightPanel.add(infectedCitiesGameOverLabel, gbc);
-        RoundNumber.setText("Round: " + Control_de_partida.turno);
-        
-        JLabel labelAlfa = new JLabel("ALFA");
-        labelAlfa.setForeground(new Color(0, 128, 255));
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-455, 71, 5, 5);
-        rightPanel.add(labelAlfa, gbc);
-
-        JLabel labelBeta = new JLabel("BETA");
-        labelBeta.setForeground(Color.RED);
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-340, 72, 5, 5);
-        rightPanel.add(labelBeta, gbc);
-
-        JLabel labelGama = new JLabel("GAMMA");
-        labelGama.setForeground(Color.GREEN);
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-220, 67, 5, 5);
-        rightPanel.add(labelGama, gbc);
-
-        JLabel labelDelta = new JLabel("DELTA");
-        labelDelta.setForeground(Color.YELLOW);
-        gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.insets = new Insets(-105, 70, 5, 5);
-        rightPanel.add(labelDelta, gbc);
-
+        terminal();
         
         Thread infection = new Thread(() -> startinfection());
         infection.start();
         ciudades();
         actualizarEstadoCiudades();
         
+    }
+    
+    public static void datosPartida() {
+    	
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(Color.BLACK); 
+    	
+        JLabel ActionNumberlabel = new JLabel("" + Control_de_partida.acciones);
+        ActionNumberlabel.setBorder(new CompoundBorder(
+                new LineBorder(Color.RED, 2),  // Primer borde rojo
+                new LineBorder(Color.white, 10)  // Segundo borde vacío para el espacio interior
+        ));
+        ActionNumberlabel.setOpaque(true);
+        ActionNumberlabel.setForeground(Color.WHITE);
+        ActionNumberlabel.setFont(info.fuentecargar2(20));
+        
+        ActionNumber = new JLabel("Actions left: " + ActionNumberlabel);
+        ActionNumber.setForeground(Color.WHITE);
+        ActionNumber.setFont(info.fuentecargar2(20));
+        ActionNumber.setBorder(new EmptyBorder(10, 0, 10, 0));
+        
+        infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
+        infectedCitiesLabel.setForeground(Color.WHITE);
+        infectedCitiesLabel.setFont(info.fuentecargar2(20));
+        infectedCitiesLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
+        
+        infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
+        infectedCitiesGameOverLabel.setForeground(Color.WHITE);
+        infectedCitiesGameOverLabel.setFont(info.fuentecargar2(20));
+        infectedCitiesGameOverLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
+        
+        panel.add(ActionNumber, BorderLayout.NORTH);
+        panel.add(infectedCitiesLabel, BorderLayout.CENTER);
+        panel.add(infectedCitiesGameOverLabel, BorderLayout.SOUTH);
+
+        bottomPanel.add(panel);
+    	
     }
 
     public static void actualizarEstadoCiudades() {
@@ -352,8 +345,7 @@ public class game extends JPanel implements ActionListener {
             new Thread(() -> ciudad.setToolTipText(nombreCiudad)).start();
         }
     }
-
-        
+    
     public Double[] resoluciones() {
         Double[] resultado = new Double[2];
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -483,22 +475,22 @@ public class game extends JPanel implements ActionListener {
 
 
     public void vacunasCompletas() {
-        vacunas("Alfa", new Color(118, 189, 248));
-        vacunas("Beta", new Color(248, 118, 118));
-        vacunas("Gama", new Color(118, 248, 150));
-        vacunas("Delta", new Color(236, 248, 118));
+        vacunas("Alfa", new Color(118, 189, 248), "ALFA");
+        vacunas("Beta", new Color(248, 118, 118), "BETA");
+        vacunas("Gama", new Color(118, 248, 150), "GAMMA");
+        vacunas("Delta", new Color(236, 248, 118), "DELTA");
     }
 
     public static float valorFloat = (float) 25;
 
-    public void vacunas(String nombre, Color color) {
+    public void vacunas(String nombre, Color color, String labelText) {
         final JProgressBar vacunaFinal = new JProgressBar();
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = GridBagConstraints.RELATIVE;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.insets = new Insets(0, -25, 0, 5);
 
         ImageIcon icono = new ImageIcon("src//img//contenedor_vacunas.png");
         Image imagen = icono.getImage().getScaledInstance(75, 39, Image.SCALE_SMOOTH);
@@ -524,40 +516,40 @@ public class game extends JPanel implements ActionListener {
                     ActionNumber.setText("Actions left: " + Control_de_partida.acciones);
                     switch (nombre) {
                         case "Alfa":
-                            Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0),
-                                    vacunaFinal));
+                            Thread VacunaAlfa = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(0), vacunaFinal));
                             VacunaAlfa.start();
                             break;
                         case "Beta":
-                            Thread VacunaBeta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(1),
-                                    vacunaFinal));
+                            Thread VacunaBeta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(1), vacunaFinal));
                             VacunaBeta.start();
                             break;
                         case "Gama":
-                            Thread VacunaGamma = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(2),
-                                    vacunaFinal));
+                            Thread VacunaGamma = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(2), vacunaFinal));
                             VacunaGamma.start();
                             break;
                         case "Delta":
-                            Thread VacunaDelta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(3),
-                                    vacunaFinal));
+                            Thread VacunaDelta = new Thread(() -> desarrolloVacunas(Control_de_datos.Vacuna.get(3), vacunaFinal));
                             VacunaDelta.start();
                             break;
                     }
                 } else {
-                    Thread respuesta = new Thread(() -> System.out
-                            .println("You don't have enough actions to perform this action."));
+                    Thread respuesta = new Thread(() -> System.out.println("You don't have enough actions to perform this action."));
                     respuesta.start();
                 }
-
             }
         });
 
         vacunaFinal.setForeground(color);
         vacunaFinal.setName(nombre);
-        rightPanel.add(vacunaFinal, gbc);
 
+        JLabel label = new JLabel(labelText);
+        label.setForeground(color);
+        label.setFont(info.fuentecargar2(20));
+
+        rightPanel.add(label, gbc);
+        rightPanel.add(vacunaFinal, gbc);
     }
+
 
     public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
 
