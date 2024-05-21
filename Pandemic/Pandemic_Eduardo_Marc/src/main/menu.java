@@ -495,6 +495,7 @@ public class menu extends JPanel implements ActionListener {
 
         playerNameTextField = new JTextField(12);
         playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
+        playerNameTextField.setHorizontalAlignment(JTextField.CENTER);
         playerNameTextField.addActionListener(this);
         playerNameTextField.addKeyListener(new KeyListener() {
             @Override
@@ -552,6 +553,8 @@ public class menu extends JPanel implements ActionListener {
 
         playerNameTextField = new JTextField(12);
         playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
+        playerNameTextField.setHorizontalAlignment(JTextField.CENTER);
+        
         playerNameTextField.addActionListener(this);
         
         playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
@@ -584,7 +587,11 @@ public class menu extends JPanel implements ActionListener {
                 }
             }
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+                if (playerNameTextField.getText().length() >= 10) {
+                    e.consume();
+                }
+            }
         });
     }
     

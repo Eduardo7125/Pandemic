@@ -27,6 +27,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
@@ -218,6 +219,16 @@ public class menu extends JPanel implements ActionListener {
         	showPlayerNamePopup2();
         } else if (e.getSource() == searchButton) {
             setVisible(false);
+            Control_de_datos.disconnect();
+            Control_de_datos.conectarBaseDatos();
+
+            Control_de_datos.selectRanking();
+
+            loadgame loadgame = new loadgame();
+            loadgame.setVisible(true);
+            getParent().add(loadgame);
+            getParent().revalidate();
+            getParent().repaint();
         } else if (e.getSource() == informacionButton) {
             setVisible(false);
 
@@ -263,7 +274,7 @@ public class menu extends JPanel implements ActionListener {
             dificultad.setVisible(false);
         } else if (e.getSource() == okButton) {
             String playerName = playerNameTextField.getText();
-            Control_de_partida.playername = playerName;	
+            Control_de_partida.playername = playerName;
             hidePlayerNamePopup();
             if (atrasButton == null) {
                 atrasButton = createButton(new ImageIcon("src//img//atras.png"), new ImageIcon("src//img//atras2.png"));
@@ -281,6 +292,7 @@ public class menu extends JPanel implements ActionListener {
             y += nuevaPartidaButton.getLocationOnScreen().y;
             dificultad.show(menu.this, x, y);
         } else if (e.getSource() == okButton2) {
+        	loadgame.resetLeaderboardData();
             String playerName = playerNameTextField.getText();
             Control_de_partida.playername = playerName;
             hidePlayerNamePopup();
@@ -322,15 +334,29 @@ public class menu extends JPanel implements ActionListener {
         deleteButton.setPreferredSize(new Dimension(140, 60));
         continueButton.setPreferredSize(new Dimension(140, 60));
 
+        buttonPanel.add(deleteButton);
+        buttonPanel.add(continueButton);
+
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.add(buttonPanel);
+        popupMenu.show(cargarPartidaButton, 0, cargarPartidaButton.getHeight());
+        
+        int x = (getWidth() - popupMenu.getPreferredSize().width) / 2;
+        int y = (getHeight() - popupMenu.getPreferredSize().height) / 2;
+        
+        popupMenu.show(this, x, y);
+        
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadgame.cargarP = false;
-                loadgame.resetLeaderboardData();
+                setVisible(false);
+                buttonPanel.setVisible(false);
+                popupMenu.setVisible(false);
                 Control_de_datos.disconnect();
                 Control_de_datos.conectarBaseDatos();
 
-                Control_de_datos.selectRanking();
+                Control_de_datos.selectParidas();
 
                 loadgame loadgame = new loadgame();
                 loadgame.setVisible(true);
@@ -344,12 +370,13 @@ public class menu extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loadgame.cargarP = true;
-                loadgame.resetLeaderboardData();
                 setVisible(false);
+                buttonPanel.setVisible(false);
+                popupMenu.setVisible(false);
                 Control_de_datos.disconnect();
                 Control_de_datos.conectarBaseDatos();
 
-                Control_de_datos.selectRanking();
+                Control_de_datos.selectParidas();
 
                 loadgame loadgame = new loadgame();
                 loadgame.setVisible(true);
@@ -358,22 +385,13 @@ public class menu extends JPanel implements ActionListener {
                 getParent().repaint();
             }
         });
-
-        buttonPanel.add(deleteButton);
-        buttonPanel.add(continueButton);
-
-        JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu.add(buttonPanel);
-        popupMenu.show(cargarPartidaButton, 0, cargarPartidaButton.getHeight());
-        
-        int x = (getWidth() - popupMenu.getPreferredSize().width) / 2;
-        int y = (getHeight() - popupMenu.getPreferredSize().height) / 2;
-        
-        popupMenu.show(this, x, y);
     }
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
+        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
+        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
+
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {
@@ -397,6 +415,7 @@ public class menu extends JPanel implements ActionListener {
         facilItem.setOpaque(false);
         facilItem.setForeground(Color.WHITE);
         facilItem.setFont(font);
+        addMouseListenerToMenuItem(facilItem);
         dificultad.add(facilItem);
 
         ImageIcon medioIcon1 = new ImageIcon(
@@ -409,6 +428,7 @@ public class menu extends JPanel implements ActionListener {
         medioItem.setOpaque(false);
         medioItem.setForeground(Color.WHITE);
         medioItem.setFont(font);
+        addMouseListenerToMenuItem(medioItem);
         dificultad.add(medioItem);
 
         ImageIcon dificilIcon1 = new ImageIcon(
@@ -421,6 +441,7 @@ public class menu extends JPanel implements ActionListener {
         dificilItem.setOpaque(false);
         dificilItem.setForeground(Color.WHITE);
         dificilItem.setFont(font);
+        addMouseListenerToMenuItem(dificilItem);
         dificultad.add(dificilItem);
 
         Timer timer = new Timer(1000, new ActionListener() {
@@ -446,6 +467,21 @@ public class menu extends JPanel implements ActionListener {
         dificultad.setPreferredSize(new Dimension(1000, 550));
     }
 
+    private void addMouseListenerToMenuItem(JMenuItem item) {
+        item.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                item.setForeground(Color.YELLOW);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                item.setForeground(Color.WHITE);
+            }
+        });
+    }
+
+
     private void showPlayerNamePopup() {
         playerNamePopup = new JPopupMenu();
         playerNamePopup.setLayout(new BorderLayout());
@@ -460,23 +496,29 @@ public class menu extends JPanel implements ActionListener {
         playerNameTextField = new JTextField(12);
         playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
         playerNameTextField.addActionListener(this);
-        playerNameTextField.addKeyListener(new KeyListener(){
+        playerNameTextField.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     okButton.doClick();
                 }
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
-                if(playerNameTextField.getText().isEmpty()) {
+                if (playerNameTextField.getText().isEmpty()) {
                     okButton.setEnabled(false);
                 } else {
                     okButton.setEnabled(true);
                 }
             }
+
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+                if (playerNameTextField.getText().length() >= 10) {
+                    e.consume();
+                }
+            }
         });
         playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
         playerNameTextField.requestFocusInWindow();
@@ -487,10 +529,9 @@ public class menu extends JPanel implements ActionListener {
         okButton.setEnabled(false);
         playerNamePopup.add(okButton, BorderLayout.SOUTH);
 
-
         int x = (getWidth() - playerNamePopup.getPreferredSize().width) / 2;
         int y = (getHeight() - playerNamePopup.getPreferredSize().height) / 2;
-        
+
         playerNamePopup.show(this, x, y);
     }
 
@@ -512,6 +553,21 @@ public class menu extends JPanel implements ActionListener {
         playerNameTextField = new JTextField(12);
         playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
         playerNameTextField.addActionListener(this);
+        
+        playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
+        playerNameTextField.requestFocusInWindow();
+
+        okButton2 = new JButton("OK");
+        okButton2.setFont(new Font("Arial", Font.PLAIN, 20));
+        okButton2.addActionListener(this);
+        okButton2.setEnabled(false);
+        playerNamePopup.add(okButton2, BorderLayout.SOUTH);
+
+
+        int x = (getWidth() - playerNamePopup.getPreferredSize().width) / 2;
+        int y = (getHeight() - playerNamePopup.getPreferredSize().height) / 2;
+        
+        playerNamePopup.show(this, x, y);
         playerNameTextField.addKeyListener(new KeyListener(){
             @Override
             public void keyPressed(KeyEvent e) {
@@ -530,20 +586,6 @@ public class menu extends JPanel implements ActionListener {
             @Override
             public void keyTyped(KeyEvent e) {}
         });
-        playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
-        playerNameTextField.requestFocusInWindow();
-
-        okButton2 = new JButton("OK");
-        okButton2.setFont(new Font("Arial", Font.PLAIN, 20));
-        okButton2.addActionListener(this);
-        okButton2.setEnabled(false);
-        playerNamePopup.add(okButton2, BorderLayout.SOUTH);
-
-
-        int x = (getWidth() - playerNamePopup.getPreferredSize().width) / 2;
-        int y = (getHeight() - playerNamePopup.getPreferredSize().height) / 2;
-        
-        playerNamePopup.show(this, x, y);
     }
     
     private static menu instance;
