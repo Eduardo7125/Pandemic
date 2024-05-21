@@ -19,15 +19,11 @@ import objects.Vacunas;
 public class game extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 7725219079694206212L;
-
-    private ImageIcon background;
     
-    private JPanel popupPanel;
-    
+    public static boolean partidaInsertada = false;
     private JButton SubMenuButton;
     private static JButton salirButton;
     private static JButton nextRoundButton;
-    private static JDialog popupDialog;
     
     private JPanel topPanel;
     private static JPanel leftPanel;
@@ -35,23 +31,21 @@ public class game extends JPanel implements ActionListener {
     private JPanel bottomPanel;
     private static JPanel middlePanel;
 
-    private JLabel LabelImagen;
-    private JLabel brotes;    
     private static JLabel RoundNumber;
     private static JLabel ActionNumber;
     private static JLabel infectedCitiesLabel;
     private static JLabel infectedCitiesGameOverLabel;
 
-    private JProgressBar vacunas;
-
     public static int brotesvalor;
+	public static int numvaccom = 0;
 
     game() {
         setLayout(new BorderLayout());
 
         topPanel = new JPanel(new BorderLayout());
         bottomPanel = new JPanel();
-        leftPanel = new JPanel(new GridLayout(brotesvalor, 0, 10, 10));
+        leftPanel = new JPanel(new GridLayout(brotesvalor, 1, 10, 10));
+
         rightPanel = new JPanel(new GridBagLayout());
         middlePanel = new JPanel();
         
@@ -192,8 +186,21 @@ public class game extends JPanel implements ActionListener {
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
 
+        perfectwin();
         Victory();
         GameOver();
+    }
+    
+    public static void perfectwin() {
+    	numvaccom = 0;
+        for (objects.Vacunas vacuna : Control_de_datos.Vacuna) {
+        	if (vacuna.getPorcentaje() > 99) {
+            	numvaccom++;
+            }
+            }
+        if (numvaccom == 4) {
+        	Victory();
+        }
     }
     
     public static void Victory() {
@@ -202,7 +209,7 @@ public class game extends JPanel implements ActionListener {
         	
         	Control_de_datos.insertarRanking();
         	
-        	JLabel victoryLabel = new JLabel("YOU HAVE WON");
+        	JLabel victoryLabel = new JLabel("VICTORY");
             victoryLabel.setForeground(Color.GREEN);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 150));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -244,7 +251,7 @@ public class game extends JPanel implements ActionListener {
         	
         	Control_de_datos.insertarRanking();
         	
-        	JLabel victoryLabel = new JLabel("GAME OVER");
+        	JLabel victoryLabel = new JLabel("DEFEAT");
             victoryLabel.setForeground(Color.RED);
             victoryLabel.setFont(new Font("Arial", Font.BOLD, 150));
             victoryLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -340,7 +347,7 @@ public class game extends JPanel implements ActionListener {
                     if (vacuna.getPorcentaje() > 99) {
                         Thread curar = new Thread(() -> ciudades.disminuirInfeccionConVacuna());
                         curar.start();
-                        System.out.println("Nombre: " + ciudades.getNombre() + " | Infección: Curada");
+                        System.out.println("Name: " + ciudades.getNombre() + " | Infection: Healed");
                         vacunaUtilizada = true;
                     }
                 }
@@ -585,7 +592,7 @@ public class game extends JPanel implements ActionListener {
             iteraciones++;
         }
     }
-    
+
     private void MenuPopup() {
         JPopupMenu popupMenu = new JPopupMenu();
         
@@ -607,7 +614,7 @@ public class game extends JPanel implements ActionListener {
 
         infoMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	info informacion = info.getInstance();
+                info informacion = info.getInstance();
                 informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
                 informacion.setVisible(true);
@@ -619,16 +626,32 @@ public class game extends JPanel implements ActionListener {
         
         saveMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Control_de_datos.insertarPartida();
+                Control_de_datos.disconnect();
+                Control_de_datos.conectarBaseDatos();
+                
+                if (partidaInsertada == true) {
+                    Control_de_datos.actualizarPartida();
+                } else {
+                    Control_de_datos.insertarPartida();
+                    partidaInsertada = true;
+                }
+                
                 popupMenu.setVisible(false);
-                System.out.println("");
-                System.out.println("GAME SAVED");
             }
         });
         
         savequitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Control_de_datos.insertarPartida();
+                Control_de_datos.disconnect();
+                Control_de_datos.conectarBaseDatos();
+                
+                if (partidaInsertada == true) {
+                    Control_de_datos.actualizarPartida();
+                } else {
+                    Control_de_datos.insertarPartida();
+                    partidaInsertada = true;
+                }
+                
                 game.salirButton.doClick();
             }
         });

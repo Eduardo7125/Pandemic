@@ -193,17 +193,11 @@ public class game extends JPanel implements ActionListener {
     
     public static void perfectwin() {
     	numvaccom = 0;
-        for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
-                int NumEn = Integer.parseInt(ciudades.getEnfermedad());
-                if (NumEn >= 0 && NumEn < Control_de_datos.Vacuna.size()) {
-                    
-                    Vacunas vacuna = Control_de_datos.Vacuna.get(NumEn);
-
-                    if (vacuna.getPorcentaje() > 99) {
-                    	numvaccom++;
-                    }
-                }
+        for (objects.Vacunas vacuna : Control_de_datos.Vacuna) {
+        	if (vacuna.getPorcentaje() > 99) {
+            	numvaccom++;
             }
+        }
         if (numvaccom == 4) {
         	Victory();
         }
