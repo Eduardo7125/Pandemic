@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="showPlayerNamePopup2"/>
+		<item key="selection" value="Victory"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
-			<item value="showPlayerNamePopup2"/>
-			<item value="showPlayerNamePopup"/>
-			<item value="show"/>
-			<item value="CustomProgressBarUI"/>
-			<item value="bar"/>
 			<item value="victory"/>
-			<item value="initializePopupMenu"/>
-			<item value="dificultad."/>
-			<item value="&quot;"/>
-			<item value="supr"/>
-			<item value="sup"/>
-			<item value="su"/>
-			<item value="reject"/>
-			<item value="continueOP"/>
-			<item value="okButton2"/>
+			<item value="99"/>
+			<item value="9"/>
+			<item value="victoru"/>
+			<item value="UIManager"/>
+			<item value="initialize"/>
+			<item value="uimanager"/>
+			<item value="ui"/>
+			<item value="facilItem"/>
+			<item value="ITEM"/>
+			<item value="JPopupMenu"/>
+			<item value="addHoverEffect"/>
+			<item value="initiali"/>
+			<item value="popup"/>
+			<item value="addMouseListenerToMenuItem"/>
 		</list>
 		<list key="replacehistory">
 			<item value=""/>
