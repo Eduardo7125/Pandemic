@@ -388,7 +388,7 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
-    	
+
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {
@@ -463,6 +463,8 @@ public class menu extends JPanel implements ActionListener {
         dificultad.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         dificultad.setPreferredSize(new Dimension(1000, 550));
     }
+
+
 
     private void showPlayerNamePopup() {
         playerNamePopup = new JPopupMenu();

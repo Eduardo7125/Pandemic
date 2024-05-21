@@ -388,7 +388,7 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
-    	
+
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {

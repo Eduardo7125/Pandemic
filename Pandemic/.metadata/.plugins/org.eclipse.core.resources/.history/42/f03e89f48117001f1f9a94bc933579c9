@@ -388,7 +388,6 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
-    	
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {
@@ -399,6 +398,7 @@ public class menu extends JPanel implements ActionListener {
                 g2d.dispose();
             }
         };
+        dificultad.setBackground(new Color(0, 0, 0, 0));
 
         Font font = new Font("Arial", Font.PLAIN, 30);
 

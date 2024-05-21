@@ -27,6 +27,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
@@ -388,7 +389,7 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
-    	
+
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {
@@ -463,6 +464,8 @@ public class menu extends JPanel implements ActionListener {
         dificultad.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         dificultad.setPreferredSize(new Dimension(1000, 550));
     }
+
+
 
     private void showPlayerNamePopup() {
         playerNamePopup = new JPopupMenu();
