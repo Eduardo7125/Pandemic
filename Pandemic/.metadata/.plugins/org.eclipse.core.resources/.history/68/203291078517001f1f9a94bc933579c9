@@ -391,8 +391,6 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
-        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
-        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
 
         dificultad = new JPopupMenu() {
             @Override
@@ -416,6 +414,8 @@ public class menu extends JPanel implements ActionListener {
         facilItem.addActionListener(this);
         facilItem.setOpaque(false);
         facilItem.setForeground(Color.WHITE);
+        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
+        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
         facilItem.setFont(font);
         addMouseListenerToMenuItem(facilItem);
         dificultad.add(facilItem);
@@ -429,6 +429,8 @@ public class menu extends JPanel implements ActionListener {
         medioItem.addActionListener(this);
         medioItem.setOpaque(false);
         medioItem.setForeground(Color.WHITE);
+        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
+        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
         medioItem.setFont(font);
         addMouseListenerToMenuItem(medioItem);
         dificultad.add(medioItem);
@@ -442,6 +444,8 @@ public class menu extends JPanel implements ActionListener {
         dificilItem.addActionListener(this);
         dificilItem.setOpaque(false);
         dificilItem.setForeground(Color.WHITE);
+        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
+        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
         dificilItem.setFont(font);
         addMouseListenerToMenuItem(dificilItem);
         dificultad.add(dificilItem);

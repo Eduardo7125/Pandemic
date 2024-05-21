@@ -391,6 +391,7 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
+        facilItem.setForeground(Color.WHITE);
         UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
         UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
 
@@ -415,7 +416,6 @@ public class menu extends JPanel implements ActionListener {
         facilItem.setBorder(BorderFactory.createEmptyBorder(15, 140, -40, 0));
         facilItem.addActionListener(this);
         facilItem.setOpaque(false);
-        facilItem.setForeground(Color.WHITE);
         facilItem.setFont(font);
         addMouseListenerToMenuItem(facilItem);
         dificultad.add(facilItem);

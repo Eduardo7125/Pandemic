@@ -262,12 +262,16 @@ public class menu extends JPanel implements ActionListener {
             Control_de_datos.ficheroXML = "src//files//parametrosMedio.xml";
             Control_de_datos.cargarPartida();
             resetvalores();
+        	UIManager.put("MenuItem.selectionBackground", null);
+        	UIManager.put("MenuItem.selectionForeground", null);
             iniciarNuevaPartida();
         } else if (e.getSource() == dificilItem) {
             Control_de_datos.ficheroXML = "src//files//parametrosDificil.xml";
             Control_de_datos.cargarPartida();
             resetvalores();
             iniciarNuevaPartida();
+        	UIManager.put("MenuItem.selectionBackground", null);
+        	UIManager.put("MenuItem.selectionForeground", null);
         } else if (e.getSource() == atrasButton) {
             dificultad.remove(atrasButton);
             atrasButton = null;
@@ -301,8 +305,6 @@ public class menu extends JPanel implements ActionListener {
     }
 
     private void resetvalores() {
-    	UIManager.put("MenuItem.selectionBackground", null);
-    	UIManager.put("MenuItem.selectionForeground", null);
     	game.partidaInsertada = false;
         Control_de_partida.resultado = null;
         Control_de_partida.turno = 1;

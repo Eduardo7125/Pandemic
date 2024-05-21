@@ -27,7 +27,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
@@ -301,8 +300,6 @@ public class menu extends JPanel implements ActionListener {
     }
 
     private void resetvalores() {
-    	UIManager.put("MenuItem.selectionBackground", null);
-    	UIManager.put("MenuItem.selectionForeground", null);
     	game.partidaInsertada = false;
         Control_de_partida.resultado = null;
         Control_de_partida.turno = 1;
@@ -391,9 +388,6 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
-        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
-        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
-
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {
@@ -417,7 +411,20 @@ public class menu extends JPanel implements ActionListener {
         facilItem.setOpaque(false);
         facilItem.setForeground(Color.WHITE);
         facilItem.setFont(font);
-        addMouseListenerToMenuItem(facilItem);
+
+        // Añadir MouseListener para cambiar el color al pasar el ratón por encima
+        facilItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                facilItem.setBackground(new Color(70, 130, 180)); // Color al pasar el ratón
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                facilItem.setBackground(new Color(0, 0, 0, 0)); // Color original
+            }
+        });
+
         dificultad.add(facilItem);
 
         ImageIcon medioIcon1 = new ImageIcon(
@@ -430,7 +437,20 @@ public class menu extends JPanel implements ActionListener {
         medioItem.setOpaque(false);
         medioItem.setForeground(Color.WHITE);
         medioItem.setFont(font);
-        addMouseListenerToMenuItem(medioItem);
+
+        // Añadir MouseListener para cambiar el color al pasar el ratón por encima
+        medioItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                medioItem.setBackground(new Color(70, 130, 180)); // Color al pasar el ratón
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                medioItem.setBackground(new Color(0, 0, 0, 0)); // Color original
+            }
+        });
+
         dificultad.add(medioItem);
 
         ImageIcon dificilIcon1 = new ImageIcon(
@@ -443,7 +463,20 @@ public class menu extends JPanel implements ActionListener {
         dificilItem.setOpaque(false);
         dificilItem.setForeground(Color.WHITE);
         dificilItem.setFont(font);
-        addMouseListenerToMenuItem(dificilItem);
+
+        // Añadir MouseListener para cambiar el color al pasar el ratón por encima
+        dificilItem.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                dificilItem.setBackground(new Color(70, 130, 180)); // Color al pasar el ratón
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                dificilItem.setBackground(new Color(0, 0, 0, 0)); // Color original
+            }
+        });
+
         dificultad.add(dificilItem);
 
         Timer timer = new Timer(1000, new ActionListener() {
@@ -467,20 +500,6 @@ public class menu extends JPanel implements ActionListener {
         dificultad.setOpaque(false);
         dificultad.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         dificultad.setPreferredSize(new Dimension(1000, 550));
-    }
-
-    private void addMouseListenerToMenuItem(JMenuItem item) {
-        item.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                item.setForeground(Color.YELLOW);
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                item.setForeground(Color.WHITE);
-            }
-        });
     }
 
 

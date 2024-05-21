@@ -391,9 +391,6 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
-        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
-        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
-
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {
@@ -445,6 +442,8 @@ public class menu extends JPanel implements ActionListener {
         dificilItem.setFont(font);
         addMouseListenerToMenuItem(dificilItem);
         dificultad.add(dificilItem);
+        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
+        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
 
         Timer timer = new Timer(1000, new ActionListener() {
             boolean alternate = false;

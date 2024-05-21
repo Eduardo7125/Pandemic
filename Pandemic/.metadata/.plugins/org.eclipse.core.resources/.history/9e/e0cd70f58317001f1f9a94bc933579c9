@@ -301,8 +301,6 @@ public class menu extends JPanel implements ActionListener {
     }
 
     private void resetvalores() {
-    	UIManager.put("MenuItem.selectionBackground", null);
-    	UIManager.put("MenuItem.selectionForeground", null);
     	game.partidaInsertada = false;
         Control_de_partida.resultado = null;
         Control_de_partida.turno = 1;

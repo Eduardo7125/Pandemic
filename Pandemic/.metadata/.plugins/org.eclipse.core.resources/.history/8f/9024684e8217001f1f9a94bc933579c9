@@ -27,7 +27,6 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
-import javax.swing.UIManager;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
@@ -301,8 +300,6 @@ public class menu extends JPanel implements ActionListener {
     }
 
     private void resetvalores() {
-    	UIManager.put("MenuItem.selectionBackground", null);
-    	UIManager.put("MenuItem.selectionForeground", null);
     	game.partidaInsertada = false;
         Control_de_partida.resultado = null;
         Control_de_partida.turno = 1;
@@ -391,9 +388,7 @@ public class menu extends JPanel implements ActionListener {
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
-        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
-        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
-
+    	
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {
@@ -415,9 +410,9 @@ public class menu extends JPanel implements ActionListener {
         facilItem.setBorder(BorderFactory.createEmptyBorder(15, 140, -40, 0));
         facilItem.addActionListener(this);
         facilItem.setOpaque(false);
-        facilItem.setForeground(Color.WHITE);
+        facilItem.setForeground(Color.GREEN);
         facilItem.setFont(font);
-        addMouseListenerToMenuItem(facilItem);
+
         dificultad.add(facilItem);
 
         ImageIcon medioIcon1 = new ImageIcon(
@@ -430,7 +425,7 @@ public class menu extends JPanel implements ActionListener {
         medioItem.setOpaque(false);
         medioItem.setForeground(Color.WHITE);
         medioItem.setFont(font);
-        addMouseListenerToMenuItem(medioItem);
+  
         dificultad.add(medioItem);
 
         ImageIcon dificilIcon1 = new ImageIcon(
@@ -443,7 +438,7 @@ public class menu extends JPanel implements ActionListener {
         dificilItem.setOpaque(false);
         dificilItem.setForeground(Color.WHITE);
         dificilItem.setFont(font);
-        addMouseListenerToMenuItem(dificilItem);
+
         dificultad.add(dificilItem);
 
         Timer timer = new Timer(1000, new ActionListener() {
@@ -468,21 +463,6 @@ public class menu extends JPanel implements ActionListener {
         dificultad.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         dificultad.setPreferredSize(new Dimension(1000, 550));
     }
-
-    private void addMouseListenerToMenuItem(JMenuItem item) {
-        item.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                item.setForeground(Color.YELLOW);
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                item.setForeground(Color.WHITE);
-            }
-        });
-    }
-
 
     private void showPlayerNamePopup() {
         playerNamePopup = new JPopupMenu();
