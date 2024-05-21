@@ -12,12 +12,11 @@ import java.util.concurrent.Executors;
 import javax.swing.*;
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
-import objects.Ciudad;
 import objects.Vacunas;
 /**
  * @author Eduardo y Marc
  */
-public class gameSAVE extends JPanel implements ActionListener {
+public class game extends JPanel implements ActionListener {
 
     private static final long serialVersionUID = 7725219079694206212L;
     
@@ -37,11 +36,9 @@ public class gameSAVE extends JPanel implements ActionListener {
     private static JLabel infectedCitiesLabel;
     private static JLabel infectedCitiesGameOverLabel;
 
-    public static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
-    public static int numvaccom = 0;
-    private static int[] valoresVacunas = new int[4];
+    public static int brotesvalor;
 
-    public gameSAVE() {
+    game() {
         setLayout(new BorderLayout());
 
         topPanel = new JPanel(new BorderLayout());
@@ -68,8 +65,6 @@ public class gameSAVE extends JPanel implements ActionListener {
         rightPanel.setBackground(Color.blue.darker().darker().darker());
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         
-        
-        brotesStart();
 		brotes();
 
         leftPanel.setBackground(Color.gray);
@@ -103,15 +98,11 @@ public class gameSAVE extends JPanel implements ActionListener {
         gbc.insets = new Insets(-660, 45, 5, 5);
         rightPanel.add(ActionNumber, gbc);
         
-        ciudadesInfect();
-        
         infectedCitiesLabel = new JLabel("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesLabel.setForeground(Color.WHITE);
         gbc.gridy = GridBagConstraints.RELATIVE;
         gbc.insets = new Insets(-630, 45, 5, 5);
         rightPanel.add(infectedCitiesLabel, gbc);
-        
-        Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Control_de_partida.infectedcities;
         
         infectedCitiesGameOverLabel = new JLabel("Cities left: " + Control_de_partida.citiesleft);
         infectedCitiesGameOverLabel.setForeground(Color.WHITE);
@@ -151,13 +142,7 @@ public class gameSAVE extends JPanel implements ActionListener {
         actualizarEstadoCiudades();
         
     }
-    
-    public static void ciudadesInfect() {
-    	for (Ciudad ciudad : Control_de_datos.Ciudades) {
-    		Control_de_partida.infectedcities += ciudad.getInfeccion();
-		}
-    }
-    
+
     public static void actualizarEstadoCiudades() {
         Color verdeSuave = new Color(144, 238, 144);
 
@@ -200,13 +185,12 @@ public class gameSAVE extends JPanel implements ActionListener {
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
 
-        perfectwin();
         Victory();
         GameOver();
     }
     
-    public static void perfectwin() {
-    	numvaccom = 0;
+    public void perfectwin() {
+    	public int numvaccom = 0;
         for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
                 int NumEn = Integer.parseInt(ciudades.getEnfermedad());
                 if (NumEn >= 0 && NumEn < Control_de_datos.Vacuna.size()) {
@@ -218,10 +202,7 @@ public class gameSAVE extends JPanel implements ActionListener {
                     }
                 }
             }
-        if (numvaccom == 4) {
-        	Victory();
         }
-    }
     
     public static void Victory() {
     	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1) {
@@ -256,7 +237,7 @@ public class gameSAVE extends JPanel implements ActionListener {
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	salirButton.doClick();
+                	game.salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -298,7 +279,7 @@ public class gameSAVE extends JPanel implements ActionListener {
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	salirButton.doClick();
+                	game.salirButton.doClick();
                 }
             });
             timer.setRepeats(false);
@@ -418,15 +399,13 @@ public class gameSAVE extends JPanel implements ActionListener {
     public void printInfection() {
         nextRoundButton.setEnabled(false);
 
-        Thread printInfection = new Thread(() -> {
-            Control_de_partida.gestionarInfeccion2();
+        Runnable printInfection = () -> {
+            Control_de_partida.gestionarInfeccion();
 
             SwingUtilities.invokeLater(() -> {
                 nextRoundButton.setEnabled(true);
             });
-        });
-
-        printInfection.start();
+        };
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.submit(printInfection);
@@ -470,28 +449,10 @@ public class gameSAVE extends JPanel implements ActionListener {
     
     static void startinfection() {
         nextRoundButton.setEnabled(false);
+        Control_de_partida.InfeccionInicial();
         nextRoundButton.setEnabled(true);
     } 
 
-    public static void brotesStart() {
-        leftPanel.removeAll();
-
-        String imagePath = "src/img/brote_inactivo.png";
-
-        ImageIcon icon = new ImageIcon(imagePath);
-        Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(image);
-
-        for (int i = 0; i < brotesvalor; i++) {
-            JLabel brote = new JLabel(scaledIcon);
-            brote.setPreferredSize(new Dimension(75, 75));
-            leftPanel.add(brote);
-        }
-
-        leftPanel.revalidate();
-        leftPanel.repaint();
-    }
-    
     public static void brotes() {
         leftPanel.removeAll();
 
@@ -515,13 +476,28 @@ public class gameSAVE extends JPanel implements ActionListener {
         leftPanel.revalidate();
         leftPanel.repaint();
     }
+    
+    public static void brotesStart() {
+        leftPanel.removeAll();
+
+        String imagePath = "src/img/brote_inactivo.png";
+
+        ImageIcon icon = new ImageIcon(imagePath);
+        Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(image);
+
+        for (int i = 0; i < brotesvalor; i++) {
+            JLabel brote = new JLabel(scaledIcon);
+            brote.setPreferredSize(new Dimension(75, 75));
+            leftPanel.add(brote);
+        }
+
+        leftPanel.revalidate();
+        leftPanel.repaint();
+    }
+
 
     public void vacunasCompletas() {
-    	int i = 0;
-    	for (Vacunas vacunas : Control_de_datos.Vacuna) {
-    		valoresVacunas[i] = (int) vacunas.getPorcentaje();
-    		i++;
-		}
         vacunas("Alfa", new Color(118, 189, 248));
         vacunas("Beta", new Color(248, 118, 118));
         vacunas("Gama", new Color(118, 248, 150));
@@ -551,17 +527,6 @@ public class gameSAVE extends JPanel implements ActionListener {
 
         vacunaFinal.setMinimum(0);
         vacunaFinal.setMaximum(100);
-        
-        if (nombre.equalsIgnoreCase("Alfa")) {
-        	vacunaFinal.setValue(valoresVacunas[0]);
-		}else if (nombre.equalsIgnoreCase("Beta")) {
-			vacunaFinal.setValue(valoresVacunas[1]);
-		}else if (nombre.equalsIgnoreCase("Gama")) {
-			vacunaFinal.setValue(valoresVacunas[2]);
-		}else {
-			vacunaFinal.setValue(valoresVacunas[3]);
-		}
-        
         vacunaFinal.setStringPainted(true);
         vacunaFinal.setOpaque(false);
         vacunaFinal.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
@@ -688,13 +653,13 @@ public class gameSAVE extends JPanel implements ActionListener {
                     partidaInsertada = true;
                 }
                 
-                salirButton.doClick();
+                game.salirButton.doClick();
             }
         });
         
         exitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                salirButton.doClick();
+                game.salirButton.doClick();
             }
         });
         

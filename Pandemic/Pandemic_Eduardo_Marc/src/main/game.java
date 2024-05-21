@@ -37,6 +37,7 @@ public class game extends JPanel implements ActionListener {
     private static JLabel infectedCitiesGameOverLabel;
 
     public static int brotesvalor;
+	public static int numvaccom = 0;
 
     game() {
         setLayout(new BorderLayout());
@@ -185,8 +186,27 @@ public class game extends JPanel implements ActionListener {
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
 
+        perfectwin();
         Victory();
         GameOver();
+    }
+    
+    public static void perfectwin() {
+    	numvaccom = 0;
+        for (objects.Ciudad ciudades : Control_de_datos.Ciudades) {
+                int NumEn = Integer.parseInt(ciudades.getEnfermedad());
+                if (NumEn >= 0 && NumEn < Control_de_datos.Vacuna.size()) {
+                    
+                    Vacunas vacuna = Control_de_datos.Vacuna.get(NumEn);
+
+                    if (vacuna.getPorcentaje() > 99) {
+                    	numvaccom++;
+                    }
+                }
+            }
+        if (numvaccom == 4) {
+        	Victory();
+        }
     }
     
     public static void Victory() {
