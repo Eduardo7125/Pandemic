@@ -654,15 +654,8 @@ public class gameSAVE extends JPanel implements ActionListener {
         
         saveMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Control_de_datos.disconnect();
-                Control_de_datos.conectarBaseDatos();
                 
-                if (partidaInsertada == true) {
-                    Control_de_datos.actualizarPartida();
-                } else {
-                    Control_de_datos.insertarPartida();
-                    partidaInsertada = true;
-                }
+                Control_de_datos.actualizarPartida();
                 
                 popupMenu.setVisible(false);
             }
@@ -670,15 +663,8 @@ public class gameSAVE extends JPanel implements ActionListener {
         
         savequitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Control_de_datos.disconnect();
-                Control_de_datos.conectarBaseDatos();
                 
-                if (partidaInsertada == true) {
-                    Control_de_datos.actualizarPartida();
-                } else {
-                    Control_de_datos.insertarPartida();
-                    partidaInsertada = true;
-                }
+                Control_de_datos.actualizarPartida();
                 
                 salirButton.doClick();
             }

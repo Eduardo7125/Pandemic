@@ -28,6 +28,15 @@ public class loadgame extends JPanel {
         leaderboardDataEasy = new ArrayList<>();
         leaderboardDataMedium = new ArrayList<>();
         leaderboardDataHard = new ArrayList<>();
+        
+        if (saveFiles != null) {
+            leaderboardDataEasy.clear();
+            leaderboardDataMedium.clear();
+            leaderboardDataHard.clear();;
+            
+            saveFiles.clear();
+		}
+        
         saveFiles = Control_de_datos.saveFiles;
 
         leaderboardTableEasy = createLeaderboardTable();
