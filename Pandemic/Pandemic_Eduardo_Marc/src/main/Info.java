@@ -45,7 +45,8 @@ class info extends JPanel implements ActionListener {
     Map<JButton, Timer> underlineTimers = new HashMap<>();
     Set<JButton> clickedButtons = new HashSet<>();
     
-    info() {
+    @SuppressWarnings("serial")
+	info() {
         setLayout(new BorderLayout());
         
         buttonPanel = new JPanel(new GridLayout(0, 1));
@@ -144,7 +145,8 @@ class info extends JPanel implements ActionListener {
     }
 
     private JButton createTransparentButton(String text) {
-        JButton button = new JButton(text) {
+        @SuppressWarnings("serial")
+		JButton button = new JButton(text) {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);

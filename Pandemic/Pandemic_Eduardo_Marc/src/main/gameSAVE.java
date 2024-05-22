@@ -204,8 +204,18 @@ public class gameSAVE extends JPanel implements ActionListener {
         GameOver();
     }
     
+    public static void perfectwin() {
+    	Control_de_partida.numvaccom = 0;
+        for (objects.Vacunas vacuna : Control_de_datos.Vacuna) {
+        	if (vacuna.getPorcentaje() > 99) {
+        		Control_de_partida.numvaccom++;
+            }
+        }
+        Victory();
+    }
+    
     public static void Victory() {
-    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1) {
+    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1 || Control_de_partida.numvaccom == 4) {
         	Control_de_partida.resultado = "Victory";
         	
         	Control_de_datos.insertarRanking();
@@ -608,6 +618,7 @@ public class gameSAVE extends JPanel implements ActionListener {
             counter += 1;
             iteraciones++;
         }
+        perfectwin();
     }
 
     private void MenuPopup() {

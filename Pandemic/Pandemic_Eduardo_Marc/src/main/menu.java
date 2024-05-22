@@ -27,6 +27,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.UIManager;
 
 import data_managment.Control_de_datos;
 import data_managment.Control_de_partida;
@@ -97,8 +98,7 @@ public class menu extends JPanel implements ActionListener {
 
         menuLabel1 = new JLabel(
                 "<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
-        menuLabel1.setFont(info.fuentecargar2(35));
-        
+
         menuLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         add(menuLabel1, BorderLayout.NORTH);
 
@@ -114,8 +114,7 @@ public class menu extends JPanel implements ActionListener {
         bottomPanel = new JPanel();
         version = new JLabel(
                 "<html><font color='white'><p>Eduardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
-        version.setFont(info.fuentecargar2(20));
-        
+
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
@@ -217,7 +216,7 @@ public class menu extends JPanel implements ActionListener {
             showPlayerNamePopup();
         } else if (e.getSource() == cargarPartidaButton) {
         	Control_de_partida.playername = null;
-        	continueOP();
+        	showPlayerNamePopup2();
         } else if (e.getSource() == searchButton) {
             setVisible(false);
             Control_de_datos.disconnect();
@@ -293,24 +292,17 @@ public class menu extends JPanel implements ActionListener {
             y += nuevaPartidaButton.getLocationOnScreen().y;
             dificultad.show(menu.this, x, y);
         } else if (e.getSource() == okButton2) {
+        	loadgame.resetLeaderboardData();
             String playerName = playerNameTextField.getText();
             Control_de_partida.playername = playerName;
             hidePlayerNamePopup();
-            setVisible(false);
-            Control_de_datos.disconnect();
-            Control_de_datos.conectarBaseDatos();
-
-            Control_de_datos.selectParidas();
-
-            loadgame loadgame = new loadgame();
-            loadgame.setVisible(true);
-            getParent().add(loadgame);
-            getParent().revalidate();
-            getParent().repaint();
+            continueOP();
         }
     }
 
     private void resetvalores() {
+    	UIManager.put("MenuItem.selectionBackground", null);
+    	UIManager.put("MenuItem.selectionForeground", null);
     	game.partidaInsertada = false;
         Control_de_partida.resultado = null;
         Control_de_partida.turno = 1;
@@ -344,24 +336,6 @@ public class menu extends JPanel implements ActionListener {
         deleteButton.setPreferredSize(new Dimension(140, 60));
         continueButton.setPreferredSize(new Dimension(140, 60));
 
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadgame.cargarP = false;
-                loadgame.resetLeaderboardData();
-                showPlayerNamePopup2();
-            }
-        });
-
-        continueButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                loadgame.cargarP = true;
-                loadgame.resetLeaderboardData();
-                showPlayerNamePopup2();
-            }
-        });
-
         buttonPanel.add(deleteButton);
         buttonPanel.add(continueButton);
 
@@ -373,10 +347,53 @@ public class menu extends JPanel implements ActionListener {
         int y = (getHeight() - popupMenu.getPreferredSize().height) / 2;
         
         popupMenu.show(this, x, y);
+        
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadgame.cargarP = false;
+                setVisible(false);
+                buttonPanel.setVisible(false);
+                popupMenu.setVisible(false);
+                Control_de_datos.disconnect();
+                Control_de_datos.conectarBaseDatos();
+
+                Control_de_datos.selectParidas();
+
+                loadgame loadgame = new loadgame();
+                loadgame.setVisible(true);
+                getParent().add(loadgame);
+                getParent().revalidate();
+                getParent().repaint();
+            }
+        });
+
+        continueButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadgame.cargarP = true;
+                setVisible(false);
+                buttonPanel.setVisible(false);
+                popupMenu.setVisible(false);
+                Control_de_datos.disconnect();
+                Control_de_datos.conectarBaseDatos();
+
+                Control_de_datos.selectParidas();
+
+                loadgame loadgame = new loadgame();
+                loadgame.setVisible(true);
+                getParent().add(loadgame);
+                getParent().revalidate();
+                getParent().repaint();
+            }
+        });
     }
 
     @SuppressWarnings("serial")
     private void initializePopupMenu() {
+        UIManager.put("MenuItem.selectionBackground", new Color(0, 0, 0, 0));
+        UIManager.put("MenuItem.selectionForeground", Color.YELLOW);
+
         dificultad = new JPopupMenu() {
             @Override
             public void paintComponent(Graphics g) {
@@ -400,6 +417,7 @@ public class menu extends JPanel implements ActionListener {
         facilItem.setOpaque(false);
         facilItem.setForeground(Color.WHITE);
         facilItem.setFont(font);
+        addMouseListenerToMenuItem(facilItem);
         dificultad.add(facilItem);
 
         ImageIcon medioIcon1 = new ImageIcon(
@@ -412,6 +430,7 @@ public class menu extends JPanel implements ActionListener {
         medioItem.setOpaque(false);
         medioItem.setForeground(Color.WHITE);
         medioItem.setFont(font);
+        addMouseListenerToMenuItem(medioItem);
         dificultad.add(medioItem);
 
         ImageIcon dificilIcon1 = new ImageIcon(
@@ -424,6 +443,7 @@ public class menu extends JPanel implements ActionListener {
         dificilItem.setOpaque(false);
         dificilItem.setForeground(Color.WHITE);
         dificilItem.setFont(font);
+        addMouseListenerToMenuItem(dificilItem);
         dificultad.add(dificilItem);
 
         Timer timer = new Timer(1000, new ActionListener() {
@@ -449,6 +469,21 @@ public class menu extends JPanel implements ActionListener {
         dificultad.setPreferredSize(new Dimension(1000, 550));
     }
 
+    private void addMouseListenerToMenuItem(JMenuItem item) {
+        item.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                item.setForeground(Color.YELLOW);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                item.setForeground(Color.WHITE);
+            }
+        });
+    }
+
+
     private void showPlayerNamePopup() {
         playerNamePopup = new JPopupMenu();
         playerNamePopup.setLayout(new BorderLayout());
@@ -462,24 +497,31 @@ public class menu extends JPanel implements ActionListener {
 
         playerNameTextField = new JTextField(12);
         playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
+        playerNameTextField.setHorizontalAlignment(JTextField.CENTER);
         playerNameTextField.addActionListener(this);
-        playerNameTextField.addKeyListener(new KeyListener(){
+        playerNameTextField.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode()==KeyEvent.VK_ENTER){
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     okButton.doClick();
                 }
             }
+
             @Override
             public void keyReleased(KeyEvent e) {
-                if(playerNameTextField.getText().isEmpty()) {
+                if (playerNameTextField.getText().isEmpty()) {
                     okButton.setEnabled(false);
                 } else {
                     okButton.setEnabled(true);
                 }
             }
+
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+                if (playerNameTextField.getText().length() >= 10) {
+                    e.consume();
+                }
+            }
         });
         playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
         playerNameTextField.requestFocusInWindow();
@@ -490,10 +532,9 @@ public class menu extends JPanel implements ActionListener {
         okButton.setEnabled(false);
         playerNamePopup.add(okButton, BorderLayout.SOUTH);
 
-
         int x = (getWidth() - playerNamePopup.getPreferredSize().width) / 2;
         int y = (getHeight() - playerNamePopup.getPreferredSize().height) / 2;
-        
+
         playerNamePopup.show(this, x, y);
     }
 
@@ -514,7 +555,24 @@ public class menu extends JPanel implements ActionListener {
 
         playerNameTextField = new JTextField(12);
         playerNameTextField.setFont(new Font("Arial", Font.PLAIN, 25));
+        playerNameTextField.setHorizontalAlignment(JTextField.CENTER);
+        
         playerNameTextField.addActionListener(this);
+        
+        playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
+        playerNameTextField.requestFocusInWindow();
+
+        okButton2 = new JButton("OK");
+        okButton2.setFont(new Font("Arial", Font.PLAIN, 20));
+        okButton2.addActionListener(this);
+        okButton2.setEnabled(false);
+        playerNamePopup.add(okButton2, BorderLayout.SOUTH);
+
+
+        int x = (getWidth() - playerNamePopup.getPreferredSize().width) / 2;
+        int y = (getHeight() - playerNamePopup.getPreferredSize().height) / 2;
+        
+        playerNamePopup.show(this, x, y);
         playerNameTextField.addKeyListener(new KeyListener(){
             @Override
             public void keyPressed(KeyEvent e) {
@@ -531,22 +589,12 @@ public class menu extends JPanel implements ActionListener {
                 }
             }
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+                if (playerNameTextField.getText().length() >= 10) {
+                    e.consume();
+                }
+            }
         });
-        playerNamePopup.add(playerNameTextField, BorderLayout.CENTER);
-        playerNameTextField.requestFocusInWindow();
-
-        okButton2 = new JButton("OK");
-        okButton2.setFont(new Font("Arial", Font.PLAIN, 20));
-        okButton2.addActionListener(this);
-        okButton2.setEnabled(false);
-        playerNamePopup.add(okButton2, BorderLayout.SOUTH);
-
-
-        int x = (getWidth() - playerNamePopup.getPreferredSize().width) / 2;
-        int y = (getHeight() - playerNamePopup.getPreferredSize().height) / 2;
-        
-        playerNamePopup.show(this, x, y);
     }
     
     private static menu instance;
