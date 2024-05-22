@@ -181,8 +181,8 @@ public class loadgame extends JPanel {
                 confirmItem.setPreferredSize(new Dimension(140, 60));
                 rejectItem.setPreferredSize(new Dimension(140, 60));
 
+		buttonPanel.add(rejectItem);
                 buttonPanel.add(confirmItem);
-                buttonPanel.add(rejectItem);
 
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(buttonPanel);
@@ -199,6 +199,7 @@ public class loadgame extends JPanel {
                 rejectItem.addActionListener(e -> {
                 	buttonPanel.setVisible(false);
                 	popupMenu.setVisible(false);
+			closeButton.doClick();
                 });
                 
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
