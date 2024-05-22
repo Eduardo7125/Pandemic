@@ -200,7 +200,7 @@ public class gameSAVE extends JPanel implements ActionListener {
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
 
-        Victory();
+        perfectwin();
         GameOver();
     }
     

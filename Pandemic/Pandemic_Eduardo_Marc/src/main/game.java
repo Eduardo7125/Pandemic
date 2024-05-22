@@ -186,7 +186,7 @@ public class game extends JPanel implements ActionListener {
         infectedCitiesLabel.setText("Infected Cities: " + Control_de_partida.infectedcities);
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
 
-        perfectwin();
+        Victory();
         GameOver();
     }
     
@@ -588,6 +588,7 @@ public class game extends JPanel implements ActionListener {
             counter += 1;
             iteraciones++;
         }
+        perfectwin();
     }
 
     private void MenuPopup() {
