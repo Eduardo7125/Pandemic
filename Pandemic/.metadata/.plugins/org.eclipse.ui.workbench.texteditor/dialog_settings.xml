@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="perfect"/>
+		<item key="selection" value="desarrollo"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="desarrollo"/>
+			<item value="perfectwin"/>
 			<item value="perfect"/>
+			<item value="gameover"/>
+			<item value="gameov"/>
 			<item value="victory"/>
-			<item value="99"/>
-			<item value="9"/>
-			<item value="victoru"/>
-			<item value="UIManager"/>
-			<item value="initialize"/>
-			<item value="uimanager"/>
-			<item value="ui"/>
-			<item value="facilItem"/>
-			<item value="ITEM"/>
-			<item value="JPopupMenu"/>
-			<item value="addHoverEffect"/>
-			<item value="initiali"/>
-			<item value="popup"/>
+			<item value="perf"/>
+			<item value="curada"/>
+			<item value="partidaInsertada"/>
+			<item value="public static void insertarPartida() {"/>
+			<item value="item"/>
+			<item value="save"/>
+			<item value="insert"/>
+			<item value="RankingRounds"/>
+			<item value="ranki"/>
 		</list>
 		<list key="replacehistory">
-			<item value=""/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

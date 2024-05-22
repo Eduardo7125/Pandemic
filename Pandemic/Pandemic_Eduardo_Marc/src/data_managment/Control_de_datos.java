@@ -374,6 +374,7 @@ public class Control_de_datos {
 		}
 	}
 	
+	
 	public static void selectParidas() {
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT identificador, player, brotes, rondas, acciones, dificultad FROM PANDEMIC_SAVEFILES WHERE player LIKE ?");

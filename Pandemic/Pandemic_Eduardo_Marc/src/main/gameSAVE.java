@@ -38,7 +38,7 @@ public class gameSAVE extends JPanel implements ActionListener {
     private static JLabel infectedCitiesGameOverLabel;
 
     public static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
-    public static int numvaccom = 0;
+    
     private static int[] valoresVacunas = new int[4];
 
     public gameSAVE() {
@@ -205,17 +205,17 @@ public class gameSAVE extends JPanel implements ActionListener {
     }
     
     public static void perfectwin() {
-    	numvaccom = 0;
+    	Control_de_partida.numvaccom = 0;
         for (objects.Vacunas vacuna : Control_de_datos.Vacuna) {
         	if (vacuna.getPorcentaje() > 99) {
-            	numvaccom++;
+        		Control_de_partida.numvaccom++;
             }
         }
         Victory();
     }
     
     public static void Victory() {
-    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1  || numvaccom == 4) {
+    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1 || Control_de_partida.numvaccom == 4) {
         	Control_de_partida.resultado = "Victory";
         	
         	Control_de_datos.insertarRanking();

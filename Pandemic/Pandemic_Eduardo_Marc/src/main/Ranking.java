@@ -125,8 +125,8 @@ public class Ranking extends JPanel {
                 return false;
             }
         };
-        tableModel.addColumn("RANK");
-        tableModel.addColumn("PLAYER");
+        tableModel.addColumn("PLACEMENT");
+        tableModel.addColumn("PLAYER NAME");
         tableModel.addColumn("ROUNDS");
         tableModel.addColumn("DATE");
         tableModel.addColumn("RESULT");

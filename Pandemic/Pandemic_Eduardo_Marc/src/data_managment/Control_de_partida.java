@@ -18,6 +18,7 @@ public class Control_de_partida {
 	public static int infectedcities = 0;
 	public static int citiesleft;
 	public static String resultado;
+	public static int numvaccom = 0;
 	
 	public static void gestionarTurno() {
 		turno++;
