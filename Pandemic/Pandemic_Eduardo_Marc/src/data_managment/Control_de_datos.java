@@ -367,13 +367,13 @@ public class Control_de_datos {
 	            Control_de_partida.acciones = rs.getInt(7);
 	            
 	            Control_de_partida.playername= rs.getString(8);
-	            if (rs.getString(9) == "Facil") {
+	            if (rs.getString(9).equalsIgnoreCase("Facil")) {
 	            	ficheroXML = "src//files//parametrosFacil.xml";
 	            	cargarXML();
-				} else if (rs.getString(9) == "Medio") {
+				} else if (rs.getString(9).equalsIgnoreCase("Medio")) {
 					ficheroXML = "src//files//parametrosMedio.xml";
 					cargarXML();
-				} else if (rs.getString(9) == "Dificil"){
+				} else {
 					ficheroXML = "src//files//parametrosDificil.xml";
 					cargarXML();
 				}
@@ -392,9 +392,9 @@ public class Control_de_datos {
             pstmt.setString(3, Control_de_partida.playername);
             pstmt.setString(4, Control_de_partida.resultado);
 
-            if (ficheroXML == "src//files//parametrosFacil.xml") {
+            if (ficheroXML.equalsIgnoreCase("src//files//parametrosFacil.xml")) {
             	pstmt.setString(5, "Facil");
-			} else if (ficheroXML == "src//files//parametrosMedio.xml") {
+			} else if (ficheroXML.equalsIgnoreCase("src//files//parametrosMedio.xml")) {
 				pstmt.setString(5, "Medio");
 			} else {
 				pstmt.setString(5, "Dificil");
