@@ -654,6 +654,7 @@ public class gameSAVE extends JPanel implements ActionListener {
         
         saveMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
                 Control_de_datos.disconnect();
                 Control_de_datos.conectarBaseDatos();
                 
@@ -663,6 +664,10 @@ public class gameSAVE extends JPanel implements ActionListener {
                     Control_de_datos.insertarPartida();
                     partidaInsertada = true;
                 }
+=======
+                
+                Control_de_datos.actualizarPartida();
+>>>>>>> main
                 
                 popupMenu.setVisible(false);
             }
@@ -670,6 +675,7 @@ public class gameSAVE extends JPanel implements ActionListener {
         
         savequitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+<<<<<<< HEAD
                 Control_de_datos.disconnect();
                 Control_de_datos.conectarBaseDatos();
                 
@@ -679,6 +685,10 @@ public class gameSAVE extends JPanel implements ActionListener {
                     Control_de_datos.insertarPartida();
                     partidaInsertada = true;
                 }
+=======
+                
+                Control_de_datos.actualizarPartida();
+>>>>>>> main
                 
                 salirButton.doClick();
             }

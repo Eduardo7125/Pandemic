@@ -355,8 +355,11 @@ public class menu extends JPanel implements ActionListener {
                 setVisible(false);
                 buttonPanel.setVisible(false);
                 popupMenu.setVisible(false);
+<<<<<<< HEAD
                 Control_de_datos.disconnect();
                 Control_de_datos.conectarBaseDatos();
+=======
+>>>>>>> main
 
                 Control_de_datos.selectParidas();
 
@@ -375,8 +378,11 @@ public class menu extends JPanel implements ActionListener {
                 setVisible(false);
                 buttonPanel.setVisible(false);
                 popupMenu.setVisible(false);
+<<<<<<< HEAD
                 Control_de_datos.disconnect();
                 Control_de_datos.conectarBaseDatos();
+=======
+>>>>>>> main
 
                 Control_de_datos.selectParidas();
 

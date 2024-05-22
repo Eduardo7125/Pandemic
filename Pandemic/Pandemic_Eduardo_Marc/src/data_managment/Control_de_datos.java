@@ -38,8 +38,13 @@ import java.math.BigDecimal;
  */
 public class Control_de_datos {
 
+<<<<<<< HEAD
 //	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
 	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
+=======
+	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
+//	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
+>>>>>>> main
 	private static final String user = "DAM1_2324_PET_EDU";
 	private static final String password = "edu";
 	public static Connection con;
@@ -110,6 +115,8 @@ public class Control_de_datos {
     }
     
     public static void insertarPartida() {
+    	disconnect();
+        conectarBaseDatos();
 		try {
 			OracleConnection oracleConn = (OracleConnection) con;
             Struct[] ciudadStructs = new Struct[Ciudades.size()];
@@ -180,6 +187,8 @@ public class Control_de_datos {
 	}
     
     public static void actualizarPartida() {
+    	disconnect();
+        conectarBaseDatos();
 	    try {
 	    	OracleConnection oracleConn = (OracleConnection) con;
 	        PreparedStatement pstmt = con.prepareStatement(
@@ -261,6 +270,11 @@ public class Control_de_datos {
     
     
     public static void borrarPartida(int identificador) {
+<<<<<<< HEAD
+=======
+    	disconnect();
+        conectarBaseDatos();
+>>>>>>> main
 	    try {
 	    	OracleConnection oracleConn = (OracleConnection) con;
 	    	PreparedStatement pstmt = con.prepareStatement(
@@ -290,6 +304,11 @@ public class Control_de_datos {
     
 
 	public static void selectDatos(int identificador) {
+<<<<<<< HEAD
+=======
+    	disconnect();
+        conectarBaseDatos();
+>>>>>>> main
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player, dificultad FROM PANDEMIC_SAVEFILES WHERE player = ? AND identificador = ?");
 	        
@@ -376,6 +395,8 @@ public class Control_de_datos {
 	
 	
 	public static void selectParidas() {
+    	disconnect();
+        conectarBaseDatos();
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT identificador, player, brotes, rondas, acciones, dificultad FROM PANDEMIC_SAVEFILES WHERE player LIKE ?");
 	        
@@ -402,6 +423,8 @@ public class Control_de_datos {
 	}
 	
 	public static void insertarRanking(){
+    	disconnect();
+        conectarBaseDatos();
         try{
             PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado, dificultad) VALUES (?, ?, ?, SYSDATE, ?, ?)");
             pstmt.setObject(1, null);
@@ -424,6 +447,8 @@ public class Control_de_datos {
 	}
 	
 	public static int obtenerNumeroFilasPartidas() {
+    	disconnect();
+        conectarBaseDatos();
 	    int numberOfRows = 0;
 	    try (PreparedStatement pstmt = con.prepareStatement("SELECT COUNT(*) AS total FROM PANDEMIC_SAVEFILES where player LIKE ?")) {
 	        pstmt.setObject(1, Control_de_partida.playername);
@@ -439,6 +464,8 @@ public class Control_de_datos {
 	}
 	
 	public static int obtenerNumeroFilasRanking() {
+    	disconnect();
+        conectarBaseDatos();
 	    int numeroFilas = 0;
 	    try {
 	        Statement stmt = con.createStatement();
@@ -454,6 +481,8 @@ public class Control_de_datos {
 	}
 	
 	public static void selectRanking(){
+    	disconnect();
+        conectarBaseDatos();
 		inicializarRanking();
 	    try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT rondas, nombre, fecha, resultado, dificultad FROM PANDEMIC_RANKING");

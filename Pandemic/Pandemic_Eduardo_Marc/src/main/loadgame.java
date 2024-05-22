@@ -28,6 +28,18 @@ public class loadgame extends JPanel {
         leaderboardDataEasy = new ArrayList<>();
         leaderboardDataMedium = new ArrayList<>();
         leaderboardDataHard = new ArrayList<>();
+<<<<<<< HEAD
+=======
+        
+        if (saveFiles != null) {
+            leaderboardDataEasy.clear();
+            leaderboardDataMedium.clear();
+            leaderboardDataHard.clear();;
+            
+            saveFiles.clear();
+		}
+        
+>>>>>>> main
         saveFiles = Control_de_datos.saveFiles;
 
         leaderboardTableEasy = createLeaderboardTable();
@@ -181,8 +193,13 @@ public class loadgame extends JPanel {
                 confirmItem.setPreferredSize(new Dimension(140, 60));
                 rejectItem.setPreferredSize(new Dimension(140, 60));
 
+<<<<<<< HEAD
                 buttonPanel.add(confirmItem);
                 buttonPanel.add(rejectItem);
+=======
+		buttonPanel.add(rejectItem);
+                buttonPanel.add(confirmItem);
+>>>>>>> main
 
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(buttonPanel);
@@ -199,6 +216,10 @@ public class loadgame extends JPanel {
                 rejectItem.addActionListener(e -> {
                 	buttonPanel.setVisible(false);
                 	popupMenu.setVisible(false);
+<<<<<<< HEAD
+=======
+			closeButton.doClick();
+>>>>>>> main
                 });
                 
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
