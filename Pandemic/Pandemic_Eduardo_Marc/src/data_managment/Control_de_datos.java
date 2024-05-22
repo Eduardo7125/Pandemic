@@ -38,13 +38,8 @@ import java.math.BigDecimal;
  */
 public class Control_de_datos {
 
-<<<<<<< HEAD
-//	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
-	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
-=======
 	private static final String url = "jdbc:oracle:thin:@oracle.ilerna.com:1521:xe";
 //	private static final String url = "jdbc:oracle:thin:@192.168.3.26:1521:xe";
->>>>>>> main
 	private static final String user = "DAM1_2324_PET_EDU";
 	private static final String password = "edu";
 	public static Connection con;
@@ -270,11 +265,8 @@ public class Control_de_datos {
     
     
     public static void borrarPartida(int identificador) {
-<<<<<<< HEAD
-=======
     	disconnect();
         conectarBaseDatos();
->>>>>>> main
 	    try {
 	    	OracleConnection oracleConn = (OracleConnection) con;
 	    	PreparedStatement pstmt = con.prepareStatement(
@@ -304,11 +296,8 @@ public class Control_de_datos {
     
 
 	public static void selectDatos(int identificador) {
-<<<<<<< HEAD
-=======
     	disconnect();
         conectarBaseDatos();
->>>>>>> main
 		try {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player, dificultad FROM PANDEMIC_SAVEFILES WHERE player = ? AND identificador = ?");
 	        
@@ -384,7 +373,7 @@ public class Control_de_datos {
 				} else if (rs.getString(9) == "Medio") {
 					ficheroXML = "src//files//parametrosMedio.xml";
 					cargarXML();
-				} else {
+				} else if (rs.getString(9) == "Dificil"){
 					ficheroXML = "src//files//parametrosDificil.xml";
 					cargarXML();
 				}
@@ -393,6 +382,29 @@ public class Control_de_datos {
 		}
 	}
 	
+	public static void insertarRanking(){
+    	disconnect();
+        conectarBaseDatos();
+        try{
+            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado, dificultad) VALUES (?, ?, ?, SYSDATE, ?, ?)");
+            pstmt.setObject(1, null);
+            pstmt.setInt(2, Control_de_partida.turno);
+            pstmt.setString(3, Control_de_partida.playername);
+            pstmt.setString(4, Control_de_partida.resultado);
+
+            if (ficheroXML == "src//files//parametrosFacil.xml") {
+            	pstmt.setString(5, "Facil");
+			} else if (ficheroXML == "src//files//parametrosMedio.xml") {
+				pstmt.setString(5, "Medio");
+			} else {
+				pstmt.setString(5, "Dificil");
+			}
+            
+            pstmt.executeUpdate();
+            con.close();
+		}catch (Exception e) {
+		}
+	}
 	
 	public static void selectParidas() {
     	disconnect();
@@ -418,30 +430,6 @@ public class Control_de_datos {
                 saveFiles.add(saveFile);
 	        }
 	        
-		}catch (Exception e) {
-		}
-	}
-	
-	public static void insertarRanking(){
-    	disconnect();
-        conectarBaseDatos();
-        try{
-            PreparedStatement pstmt = con.prepareStatement("INSERT INTO PANDEMIC_RANKING (identificador, rondas, nombre, fecha, resultado, dificultad) VALUES (?, ?, ?, SYSDATE, ?, ?)");
-            pstmt.setObject(1, null);
-            pstmt.setInt(2, Control_de_partida.turno);
-            pstmt.setString(3, Control_de_partida.playername);
-            pstmt.setString(4, Control_de_partida.resultado);
-
-            if (ficheroXML == "src//files//parametrosFacil.xml") {
-            	pstmt.setString(5, "Facil");
-			} else if (ficheroXML == "src//files//parametrosMedio.xml") {
-				pstmt.setString(5, "Medio");
-			} else {
-				pstmt.setString(5, "Dificil");
-			}
-            
-            pstmt.executeUpdate();
-            con.close();
 		}catch (Exception e) {
 		}
 	}

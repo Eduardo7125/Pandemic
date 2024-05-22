@@ -28,8 +28,6 @@ public class loadgame extends JPanel {
         leaderboardDataEasy = new ArrayList<>();
         leaderboardDataMedium = new ArrayList<>();
         leaderboardDataHard = new ArrayList<>();
-<<<<<<< HEAD
-=======
         
         if (saveFiles != null) {
             leaderboardDataEasy.clear();
@@ -39,7 +37,6 @@ public class loadgame extends JPanel {
             saveFiles.clear();
 		}
         
->>>>>>> main
         saveFiles = Control_de_datos.saveFiles;
 
         leaderboardTableEasy = createLeaderboardTable();
@@ -182,58 +179,49 @@ public class loadgame extends JPanel {
     private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData, JComponent invoker) {
         if (row >= 0 && row < leaderboardData.size()) {
             @SuppressWarnings("unused")
-			LeaderboardEntry entry = leaderboardData.get(row);
-            
-            if(cargarP == false) {
-            	JPanel buttonPanel = new JPanel();
+            LeaderboardEntry entry = leaderboardData.get(row);
 
-            	JButton confirmItem = new JButton("CONFIRM");
-            	JButton rejectItem = new JButton("REJECT");
+            if(cargarP == false) {
+                JPanel buttonPanel = new JPanel();
+
+                JButton confirmItem = new JButton("CONFIRM");
+                JButton rejectItem = new JButton("REJECT");
 
                 confirmItem.setPreferredSize(new Dimension(140, 60));
                 rejectItem.setPreferredSize(new Dimension(140, 60));
 
-<<<<<<< HEAD
-                buttonPanel.add(confirmItem);
                 buttonPanel.add(rejectItem);
-=======
-		buttonPanel.add(rejectItem);
                 buttonPanel.add(confirmItem);
->>>>>>> main
 
                 JPopupMenu popupMenu = new JPopupMenu();
                 popupMenu.add(buttonPanel);
-                
+
                 confirmItem.addActionListener(e -> {
                     Control_de_datos.borrarPartida(row);
                     buttonPanel.setVisible(false);
                     popupMenu.setVisible(false);
-                    
+
                     Control_de_datos.saveFiles.clear();
                     Control_de_datos.selectParidas();
+                    closeButton.doClick();
                 });
 
                 rejectItem.addActionListener(e -> {
-                	buttonPanel.setVisible(false);
-                	popupMenu.setVisible(false);
-<<<<<<< HEAD
-=======
-			closeButton.doClick();
->>>>>>> main
+                    buttonPanel.setVisible(false);
+                    popupMenu.setVisible(false);
                 });
-                
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                 int screenWidth = screenSize.width;
                 int screenHeight = screenSize.height;
-                
+
                 int x = (screenWidth - popupMenu.getPreferredSize().width) / 2;
                 int y = (screenHeight - popupMenu.getPreferredSize().height) / 2;
 
                 popupMenu.show(this, x, y);
             } else {
-            	setVisible(false);
-            	Control_de_datos.selectDatos(row);
-            	iniciarSavePartida();
+                setVisible(false);
+                Control_de_datos.selectDatos(row);
+                iniciarSavePartida();
             }
         } else {
             JOptionPane.showMessageDialog(null, "Out of range: " + row);
@@ -250,9 +238,9 @@ public class loadgame extends JPanel {
         getParent().repaint();
     }
         
-        static void resetLeaderboardData() {
-        	Control_de_datos.saveFiles.clear();
-        }
+    static void resetLeaderboardData() {
+    	Control_de_datos.saveFiles.clear();
+    }
 
     private static class LeaderboardEntry {
         private String playerName;
