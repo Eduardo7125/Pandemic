@@ -187,7 +187,6 @@ public class game extends JPanel implements ActionListener {
         infectedCitiesGameOverLabel.setText("Cities left: " + Control_de_partida.citiesleft);
 
         perfectwin();
-        Victory();
         GameOver();
     }
     
@@ -198,13 +197,11 @@ public class game extends JPanel implements ActionListener {
             	numvaccom++;
             }
         }
-        if (numvaccom == 4) {
-        	Victory();
-        }
+        Victory();
     }
     
     public static void Victory() {
-    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1) {
+    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1 || numvaccom == 4) {
         	Control_de_partida.resultado = "Victory";
         	
         	Control_de_datos.insertarRanking();

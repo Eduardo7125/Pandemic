@@ -212,7 +212,9 @@ public class gameSAVE extends JPanel implements ActionListener {
             	numvaccom++;
             }
         }
-        Victory();
+        if (numvaccom == 4) {
+        	Victory();
+        }
     }
     
     public static void Victory() {

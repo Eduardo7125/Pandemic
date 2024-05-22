@@ -212,11 +212,13 @@ public class gameSAVE extends JPanel implements ActionListener {
             	numvaccom++;
             }
         }
-        Victory();
+        if (numvaccom == 4) {
+        	Victory();
+        }
     }
     
     public static void Victory() {
-    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1  || numvaccom == 4) {
+    	if (Control_de_partida.infectedcities == 0 && Control_de_partida.turno != 1) {
         	Control_de_partida.resultado = "Victory";
         	
         	Control_de_datos.insertarRanking();
