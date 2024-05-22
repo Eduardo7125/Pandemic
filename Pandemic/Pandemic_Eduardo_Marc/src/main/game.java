@@ -27,13 +27,14 @@ public class game extends JPanel implements ActionListener {
     private static JButton salirButton;
     private static JButton nextRoundButton;
     
-    private JPanel topPanel;
+    private static JPanel topPanel;
     private static JPanel leftPanel;
     private JPanel rightPanel;
     private static JPanel bottomPanel;
     private static JPanel middlePanel;
 
     private static JLabel RoundNumber;
+    private static JLabel RoundNumberlabel;
     private static JLabel ActionNumber;
     private static JLabel infectedCitiesLabel;
     private static JLabel infectedValueLabel;
@@ -53,6 +54,7 @@ public class game extends JPanel implements ActionListener {
 
         rightPanel = new JPanel(new GridBagLayout());
         middlePanel = new JPanel();
+        middlePanel.setOpaque(false);
         
         SubMenuButton = new JButton("MENU");
         SubMenuButton.addActionListener(this);
@@ -67,32 +69,28 @@ public class game extends JPanel implements ActionListener {
 
         vacunasCompletas();
 
-        rightPanel.setBackground(Color.blue.darker().darker().darker());
+        rightPanel.setBackground(Color.DARK_GRAY.darker());
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         
 		brotes();
 
-        leftPanel.setBackground(Color.gray);
+        leftPanel.setBackground(Color.DARK_GRAY.darker());
 
-        middlePanel.setOpaque(false);
+
         add(topPanel, BorderLayout.NORTH);
         add(bottomPanel, BorderLayout.SOUTH);
         add(rightPanel, BorderLayout.EAST);
         add(leftPanel, BorderLayout.WEST);
         add(middlePanel, BorderLayout.CENTER);
         
-        nextRoundButton = new JButton("NEXT ROUND");
-        nextRoundButton.addActionListener(this);
-        bottomPanel.add(nextRoundButton);
         
-        RoundNumber = new JLabel("Round: " + Control_de_partida.turno);
-        RoundNumber.setForeground(Color.BLACK);
-        topPanel.add(RoundNumber, SwingUtilities.CENTER);
-        
-
         datosPartida();
         
         terminal();
+        
+        nextRoundButton = new JButton("NEXT ROUND");
+        nextRoundButton.addActionListener(this);
+        bottomPanel.add(nextRoundButton);
         
         Thread infection = new Thread(() -> startinfection());
         infection.start();
@@ -103,8 +101,13 @@ public class game extends JPanel implements ActionListener {
     
     public static void datosPartida() {
     	
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.BLACK); 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = GridBagConstraints.RELATIVE;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
     	
         JPanel panelRondas = new JPanel();
         panelRondas.setBackground(Color.BLACK);
@@ -151,11 +154,28 @@ public class game extends JPanel implements ActionListener {
         panelGameover.add(infectedCitiesGameOverLabel);
         panelGameover.add(infectedCitiesGameOverLabelnum);
         
-        panel.add(panelRondas, BorderLayout.NORTH);
-        panel.add(panelCiudades, BorderLayout.CENTER);
-        panel.add(panelGameover, BorderLayout.SOUTH);
-
-        bottomPanel.add(panel);
+        panel.add(panelRondas, gbc);
+        panel.add(panelCiudades, gbc);
+        panel.add(panelGameover, gbc);
+        
+        bottomPanel.add(panel, BorderLayout.WEST);
+        
+        RoundNumberlabel = new JLabel("Round: ");
+        RoundNumberlabel.setForeground(Color.BLACK);
+        RoundNumberlabel.setFont(info.fuentecargar2(20));
+        
+        RoundNumber = new JLabel(Integer.toString(Control_de_partida.turno));
+        RoundNumberlabel.setForeground(Color.WHITE.darker().darker());
+        RoundNumber.setFont(info.fuentecargar2(20));
+        
+        JPanel panelRounds = new JPanel();
+        panelRounds.setBackground(Color.DARK_GRAY);
+        
+        panelRounds.add(RoundNumberlabel);
+        panelRounds.add(RoundNumber);
+        
+        topPanel.add(panelRounds, SwingUtilities.VERTICAL);
+        topPanel.setBackground(Color.DARK_GRAY);
     	
     }
 
@@ -196,7 +216,7 @@ public class game extends JPanel implements ActionListener {
             }
         }
         Control_de_partida.citiesleft = Integer.parseInt(Control_de_datos.EnfermedadesActivasDerrota) - Control_de_partida.infectedcities;
-        RoundNumber.setText("Round: " + Control_de_partida.turno);
+        RoundNumber.setText(Integer.toString(Control_de_partida.turno));
         actionsValueLabel.setText(Integer.toString(Control_de_partida.acciones));
         infectedValueLabel.setText(Integer.toString(Control_de_partida.infectedcities));
         infectedCitiesGameOverLabelnum.setText(Integer.toString(Control_de_partida.citiesleft));
