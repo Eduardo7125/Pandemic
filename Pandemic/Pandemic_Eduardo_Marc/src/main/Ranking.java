@@ -45,7 +45,7 @@ public class Ranking extends JPanel {
         add(tablesPanel, BorderLayout.CENTER);
 
         JLabel titleLabel = new JLabel("<html><div style='padding-left: 20%'>LEADERBOARD</div></html>");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        titleLabel.setFont(info.fuentecargar2(30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         closeButton = new JButton("MENU");
@@ -86,35 +86,6 @@ public class Ranking extends JPanel {
             }
         }
     }
-
-//    public static void main(String [] args) {
-//        Control_de_datos.disconnect();
-//        Control_de_datos.conectarBaseDatos();
-//
-//        Control_de_datos.selectRanking();
-//        for (int i = 0; i < Control_de_datos.RankingDificulty.length; i++) {
-//            if (Control_de_datos.RankingDificulty[i].equals("Facil")) {
-//            	System.out.println(Control_de_datos.RankingNames[i]);
-//            	System.out.println(Control_de_datos.RankingRounds[i]);
-//            	System.out.println(Control_de_datos.RankingResult[i]);
-//            	System.out.println(Control_de_datos.RankingDificulty[i]);
-//            	
-//            	System.out.println();
-//            } else if (Control_de_datos.RankingDificulty[i].equals("Medio")) {
-//            	System.out.println(Control_de_datos.RankingNames[i]);
-//            	System.out.println(Control_de_datos.RankingRounds[i]);
-//            	System.out.println(Control_de_datos.RankingResult[i]);
-//            	System.out.println(Control_de_datos.RankingDificulty[i]);
-//             	System.out.println();
-//            } else {
-//            	System.out.println(Control_de_datos.RankingNames[i]);
-//            	System.out.println(Control_de_datos.RankingRounds[i]);
-//            	System.out.println(Control_de_datos.RankingResult[i]);
-//            	System.out.println(Control_de_datos.RankingDificulty[i]);
-//             	System.out.println();
-//            }
-//        }
-//    }
     
     private JTable createLeaderboardTable() {
         DefaultTableModel tableModel = new DefaultTableModel() {
@@ -132,19 +103,46 @@ public class Ranking extends JPanel {
         tableModel.addColumn("RESULT");
 
         JTable table = new JTable(tableModel){
-			private static final long serialVersionUID = -719725885547750342L;
+            private static final long serialVersionUID = -719725885547750342L;
 
-			@Override
-			protected void paintComponent(Graphics g) {
-				super.paintComponent(g);
-				Graphics2D g2d = (Graphics2D) g.create();
-				g2d.setColor(new Color(0, 0, 0, 0));
-				g2d.fillRect(0, 0, getWidth(), getHeight());
-				g2d.dispose();
-			}
+            @Override
+            public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+                Component c = super.prepareRenderer(renderer, row, column);
+
+                Color backgroundColor = null;
+                Color foregroundColor = Color.BLACK;
+                Font font = c.getFont().deriveFont(Font.BOLD);
+
+                if (row == 0) {
+                    backgroundColor = new Color(255, 215, 0);
+                } else if (row == 1) {
+                    backgroundColor = new Color(192, 192, 192);
+                } else if (row == 2) {
+                    backgroundColor = new Color(205, 127, 50);
+                } else {
+                    String result = (String) getModel().getValueAt(row, 4);
+                    if ("Defeat".equals(result)) {
+                        backgroundColor = Color.RED.darker();
+                        foregroundColor = Color.WHITE;
+                    } else {
+                        backgroundColor = Color.GREEN.darker();
+                    }
+                    font = c.getFont();
+                }
+
+                if (isRowSelected(row)) {
+                    backgroundColor = backgroundColor.darker();
+                }
+
+                c.setBackground(backgroundColor);
+                c.setForeground(foregroundColor);
+                c.setFont(font);
+
+                return c;
+            }
 		};
-        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        table.setFont(new Font("Arial", Font.PLAIN, 12));
+        table.getTableHeader().setFont(info.fuentecargar(14));
+        table.setFont(info.fuentecargar2(12));
         table.setRowHeight(20);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -167,7 +165,7 @@ public class Ranking extends JPanel {
         scrollPane.setPreferredSize(new Dimension(600, 200));
 
         JLabel label = new JLabel(difficulty.toUpperCase());
-        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setFont(info.fuentecargar2(20));
         label.setHorizontalAlignment(SwingConstants.CENTER);
 
         JPanel panel = new JPanel(new BorderLayout());
@@ -178,36 +176,37 @@ public class Ranking extends JPanel {
     }
 
     private String formatDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.format(date);
     }
 
     public void updateLeaderboard(String name, int rounds, Date date, String result,
             ArrayList<LeaderboardEntry> leaderboardData, JTable leaderboardTable) {
-    	LeaderboardEntry entry = new LeaderboardEntry(name, rounds, date, result);
-    	leaderboardData.add(entry);
+        LeaderboardEntry entry = new LeaderboardEntry(name, rounds, date, result);
+        leaderboardData.add(entry);
 
-		leaderboardData.sort(new Comparator<LeaderboardEntry>() {
-			@Override
-			public int compare(LeaderboardEntry entry1, LeaderboardEntry entry2) {
-				if (entry1.getResult().equals("Victory") && entry2.getResult().equals("Defeat")) {
-					return -1;
-				} else if (entry1.getResult().equals("Defeat") && entry2.getResult().equals("Victory")) {
-					return 1;
-				} else {
-					return Integer.compare(entry1.getRounds(), entry2.getRounds());
-				}
-			}
-		});
-		
-		DefaultTableModel tableModel = (DefaultTableModel) leaderboardTable.getModel();
-		tableModel.setRowCount(0);
-		for (int i = 0; i < leaderboardData.size(); i++) {
-			LeaderboardEntry entry2 = leaderboardData.get(i);
-			tableModel.addRow(new Object[]{i + 1, entry2.getPlayerName(), entry2.getRounds(), formatDate(entry2.getDate()),
-					entry2.getResult()});
-		}
-	}
+        leaderboardData.sort(new Comparator<LeaderboardEntry>() {
+            @Override
+            public int compare(LeaderboardEntry entry1, LeaderboardEntry entry2) {
+                if (entry1.getResult().equals("Victory") && entry2.getResult().equals("Defeat")) {
+                    return -1;
+                } else if (entry1.getResult().equals("Defeat") && entry2.getResult().equals("Victory")) {
+                    return 1;
+                } else {
+                    return Integer.compare(entry1.getRounds(), entry2.getRounds());
+                }
+            }
+        });
+
+        DefaultTableModel tableModel = (DefaultTableModel) leaderboardTable.getModel();
+        tableModel.setRowCount(0);
+        for (int i = 0; i < leaderboardData.size(); i++) {
+            LeaderboardEntry entry2 = leaderboardData.get(i);
+            tableModel.addRow(new Object[]{i + 1, entry2.getPlayerName(), entry2.getRounds(), formatDate(entry2.getDate()),
+                    entry2.getResult()});
+        }
+        leaderboardTable.repaint();
+    }
 
     private static class LeaderboardEntry {
         private String playerName;

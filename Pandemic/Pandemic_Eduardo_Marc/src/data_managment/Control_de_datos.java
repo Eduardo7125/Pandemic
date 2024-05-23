@@ -265,34 +265,46 @@ public class Control_de_datos {
     
     
     public static void borrarPartida(int identificador) {
-    	disconnect();
+        disconnect();
         conectarBaseDatos();
-	    try {
-	    	OracleConnection oracleConn = (OracleConnection) con;
-	    	PreparedStatement pstmt = con.prepareStatement(
-	    		    "DELETE FROM PANDEMIC_SAVEFILES " +
-	    		    "WHERE identificador = ? AND player = ?"
-	    		);
+        try {
+            OracleConnection oracleConn = (OracleConnection) con;
 
-    		pstmt.setInt(1, saveFiles.get(identificador).getIdentificador());
-    		pstmt.setString(2, Control_de_partida.playername);
+            // Buscar el índice correspondiente al identificador en saveFiles
+            int index = -1;
+            for (int i = 0; i < saveFiles.size(); i++) {
+                if (saveFiles.get(i).getIdentificador() == identificador) {
+                    index = i;
+                    break;
+                }
+            }
 
-    		int rowsAffected = pstmt.executeUpdate();
+            if (index != -1) {
+                // Se encontró el identificador en saveFiles
+                PreparedStatement pstmt = con.prepareStatement(
+                    "DELETE FROM PANDEMIC_SAVEFILES " +
+                    "WHERE identificador = ? AND player = ?"
+                );
 
-    		if (rowsAffected > 0) {
-    		    System.out.println("Successfully deleted " + rowsAffected + " savefile(s).");
-    		} else {
-    		    System.out.println("No savefiles were found with the given identificador and player.");
-    		}
-	    		
-	        pstmt.executeUpdate();
-	        oracleConn.close();
-	        System.out.println("GAME SAVE UPDATED");
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	    
-	}
+                pstmt.setInt(1, saveFiles.get(index).getIdentificador());
+                pstmt.setString(2, Control_de_partida.playername);
+
+                pstmt.executeUpdate();
+
+                // Eliminar la partida de saveFiles usando el índice obtenido
+                saveFiles.remove(index);
+
+                oracleConn.close();
+                System.out.println("GAME SAVE UPDATED");
+            } else {
+                // Manejo de error: no se encontró el identificador en la lista
+                System.out.println("Identificador no encontrado en la lista de partidas guardadas.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     
 
 	public static void selectDatos(int identificador) {
