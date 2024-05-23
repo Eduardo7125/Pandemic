@@ -79,7 +79,8 @@ public class menu extends JPanel implements ActionListener {
 
     menu() {
         Control_de_datos.conectarBaseDatos();
-
+    	
+        
         setLayout(new BorderLayout());
 
         dificultad = new JPopupMenu();
@@ -230,6 +231,8 @@ public class menu extends JPanel implements ActionListener {
             getParent().revalidate();
             getParent().repaint();
         } else if (e.getSource() == informacionButton) {
+            StateManager.setPreviousClass(menu.class);
+        	
             setVisible(false);
 
             info informacion = info.getInstance();
@@ -317,7 +320,7 @@ public class menu extends JPanel implements ActionListener {
         setVisible(false);
         dificultad.setVisible(false);
         Ciudad.resetValues();
-        game juego = new game();
+        game juego = game.getInstance();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
         game.actualizarEstadoCiudades();

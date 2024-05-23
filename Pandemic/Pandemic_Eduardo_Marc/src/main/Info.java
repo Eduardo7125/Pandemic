@@ -283,13 +283,42 @@ class info extends JPanel implements ActionListener {
                 break;
             case "MENU":
                 setVisible(false);
-                menu menu = main.menu.getInstance();
-                menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-                menu.setVisible(true);
-                getParent().add(menu);
 
-                getParent().revalidate();
-                getParent().repaint();
+                Class<?> previousClass = StateManager.getPreviousClass();
+                if (previousClass != null) {
+                    if (previousClass == menu.class) {
+                    	
+                        menu menu = main.menu.getInstance();
+                        menu.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                        menu.setVisible(true);
+                        getParent().add(menu);
+
+                        getParent().revalidate();
+                        getParent().repaint();
+
+                    } else if (previousClass == game.class){
+
+                        game juego = game.getInstance();
+                        juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                        juego.setVisible(true);
+                        game.actualizarEstadoCiudades();
+                        getParent().add(juego);
+                        getParent().revalidate();
+                        getParent().repaint();
+                        game.brotesStart();
+                        
+                    } else {
+                    	
+                        gameSAVE juego = gameSAVE.getInstance();
+                        juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+                        juego.setVisible(true);
+                        gameSAVE.actualizarEstadoCiudades();
+                        getParent().add(juego);
+                        getParent().revalidate();
+                        getParent().repaint();
+                    	
+                    }
+                }
                 break;
         }
 
@@ -325,5 +354,16 @@ class info extends JPanel implements ActionListener {
             instance = new info();
         }
         return instance;
+    }
+}
+class StateManager {
+    private static Class<?> previousClass;
+
+    public static void setPreviousClass(Class<?> clazz) {
+        previousClass = clazz;
+    }
+
+    public static Class<?> getPreviousClass() {
+        return previousClass;
     }
 }

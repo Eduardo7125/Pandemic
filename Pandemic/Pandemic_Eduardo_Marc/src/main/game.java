@@ -47,7 +47,7 @@ public class game extends JPanel implements ActionListener {
 
     game() {
         setLayout(new BorderLayout());
-
+        
         topPanel = new JPanel(new BorderLayout());
         bottomPanel = new JPanel();
         leftPanel = new JPanel(new GridLayout(brotesvalor, 1, 10, 10));
@@ -645,6 +645,8 @@ public class game extends JPanel implements ActionListener {
 
         infoMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	StateManager.setPreviousClass(gameSAVE.class);
+            	
                 info informacion = info.getInstance();
                 informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
@@ -745,6 +747,15 @@ public class game extends JPanel implements ActionListener {
         } else if (e.getSource() == SubMenuButton) {
         	MenuPopup();
         }
+    }
+    
+    private static game instance;
+
+    public static game getInstance() {
+        if (instance == null) {
+            instance = new game();
+        }
+        return instance;
     }
     
     public class RoundButton extends JButton {

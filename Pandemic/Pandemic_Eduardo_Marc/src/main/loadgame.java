@@ -24,7 +24,7 @@ public class loadgame extends JPanel {
 
     public loadgame() {
         setLayout(new BorderLayout());
-
+        
         leaderboardDataEasy = new ArrayList<>();
         leaderboardDataMedium = new ArrayList<>();
         leaderboardDataHard = new ArrayList<>();
@@ -229,7 +229,7 @@ public class loadgame extends JPanel {
     }
     
     public void iniciarSavePartida() {
-        gameSAVE juego = new gameSAVE();
+        gameSAVE juego = gameSAVE.getInstance();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
         gameSAVE.actualizarEstadoCiudades();

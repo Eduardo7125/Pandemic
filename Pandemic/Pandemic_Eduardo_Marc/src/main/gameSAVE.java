@@ -642,6 +642,8 @@ public class gameSAVE extends JPanel implements ActionListener {
 
         infoMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                StateManager.setPreviousClass(gameSAVE.class);
+            	
                 info informacion = info.getInstance();
                 informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
@@ -701,6 +703,15 @@ public class gameSAVE extends JPanel implements ActionListener {
         popupMenu.show(SubMenuButton, -55, 0);
     }
 
+    private static gameSAVE instance;
+
+    public static gameSAVE getInstance() {
+        if (instance == null) {
+            instance = new gameSAVE();
+        }
+        return instance;
+    }
+    
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g.create();
