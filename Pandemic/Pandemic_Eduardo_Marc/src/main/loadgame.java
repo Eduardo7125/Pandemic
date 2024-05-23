@@ -229,6 +229,7 @@ public class loadgame extends JPanel {
     }
     
     public void iniciarSavePartida() {
+    	gameSAVE.instance = null;
         gameSAVE juego = gameSAVE.getInstance();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);

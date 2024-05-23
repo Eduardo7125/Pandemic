@@ -645,7 +645,7 @@ public class game extends JPanel implements ActionListener {
 
         infoMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	StateManager.setPreviousClass(gameSAVE.class);
+            	StateManager.setPreviousClass(game.class);
             	
                 info informacion = info.getInstance();
                 informacion.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
@@ -749,7 +749,7 @@ public class game extends JPanel implements ActionListener {
         }
     }
     
-    private static game instance;
+    public static game instance;
 
     public static game getInstance() {
         if (instance == null) {

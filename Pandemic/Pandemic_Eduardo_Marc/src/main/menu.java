@@ -320,6 +320,8 @@ public class menu extends JPanel implements ActionListener {
         setVisible(false);
         dificultad.setVisible(false);
         Ciudad.resetValues();
+        
+        game.instance = null;
         game juego = game.getInstance();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);

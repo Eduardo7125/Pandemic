@@ -347,7 +347,7 @@ class info extends JPanel implements ActionListener {
         timer.start();
     }
 
-    private static info instance;
+    public static info instance;
 
     public static info getInstance() {
         if (instance == null) {

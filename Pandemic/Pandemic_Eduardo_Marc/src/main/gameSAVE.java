@@ -703,7 +703,7 @@ public class gameSAVE extends JPanel implements ActionListener {
         popupMenu.show(SubMenuButton, -55, 0);
     }
 
-    private static gameSAVE instance;
+    public static gameSAVE instance;
 
     public static gameSAVE getInstance() {
         if (instance == null) {
