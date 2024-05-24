@@ -270,7 +270,6 @@ public class Control_de_datos {
         try {
             OracleConnection oracleConn = (OracleConnection) con;
 
-            // Buscar el índice correspondiente al identificador en saveFiles
             int index = -1;
             for (int i = 0; i < saveFiles.size(); i++) {
                 if (saveFiles.get(i).getIdentificador() == identificador) {
@@ -280,7 +279,7 @@ public class Control_de_datos {
             }
 
             if (index != -1) {
-                // Se encontró el identificador en saveFiles
+
                 PreparedStatement pstmt = con.prepareStatement(
                     "DELETE FROM PANDEMIC_SAVEFILES " +
                     "WHERE identificador = ? AND player = ?"
@@ -291,14 +290,11 @@ public class Control_de_datos {
 
                 pstmt.executeUpdate();
 
-                // Eliminar la partida de saveFiles usando el índice obtenido
                 saveFiles.remove(index);
 
                 oracleConn.close();
-                System.out.println("GAME SAVE UPDATED");
             } else {
-                // Manejo de error: no se encontró el identificador en la lista
-                System.out.println("Identificador no encontrado en la lista de partidas guardadas.");
+            	
             }
         } catch (Exception e) {
             e.printStackTrace();
