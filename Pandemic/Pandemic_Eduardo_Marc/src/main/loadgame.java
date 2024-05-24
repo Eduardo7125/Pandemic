@@ -24,7 +24,7 @@ public class loadgame extends JPanel {
 
     public loadgame() {
         setLayout(new BorderLayout());
-
+        
         leaderboardDataEasy = new ArrayList<>();
         leaderboardDataMedium = new ArrayList<>();
         leaderboardDataHard = new ArrayList<>();
@@ -105,7 +105,9 @@ public class loadgame extends JPanel {
         tableModel.addColumn("ROUNDS");
         tableModel.addColumn("TURNS");
         tableModel.addColumn("OUTBREAKS");
-
+        tableModel.addColumn("MODE");
+        tableModel.addColumn("ID"); 
+        
         JTable table = new JTable(tableModel) {
             private static final long serialVersionUID = -4964336313599035200L;
 
@@ -147,7 +149,7 @@ public class loadgame extends JPanel {
     }
 
     public void updateLeaderboard(Datos_partida files, ArrayList<LeaderboardEntry> leaderboardData, JTable leaderboardTable) {
-        LeaderboardEntry entry = new LeaderboardEntry(files.getPlayer(), files.getRondas(), files.getAcciones(), files.getBrotes(), files.getIdentificador());
+        LeaderboardEntry entry = new LeaderboardEntry(files.getPlayer(), files.getRondas(), files.getAcciones(), files.getBrotes(), files.getIdentificador(), files.getDificultad());
         leaderboardData.add(entry);
 
         leaderboardData.sort(new Comparator<LeaderboardEntry>() {
@@ -160,7 +162,8 @@ public class loadgame extends JPanel {
         DefaultTableModel tableModel = (DefaultTableModel) leaderboardTable.getModel();
         tableModel.setRowCount(0);
         for (LeaderboardEntry entry2 : leaderboardData) {
-            tableModel.addRow(new Object[]{entry2.getPlayerName(), entry2.getRounds(), entry2.getArrTurno(), entry2.getArrOutreak()});
+            // Agregar una nueva fila con todos los datos, incluido el identificador
+            tableModel.addRow(new Object[]{entry2.getPlayerName(), entry2.getRounds(), entry2.getArrTurno(), entry2.getArrOutreak(), entry2.getDifficulty(), entry2.getIdentificador()});
         }
     }
 
@@ -175,62 +178,110 @@ public class loadgame extends JPanel {
             }
         });
     }
+    
+    private void updateLeaderboards() {
+        leaderboardDataEasy.clear();
+        leaderboardDataMedium.clear();
+        leaderboardDataHard.clear();
 
-    private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData, JComponent invoker) {
-        if (row >= 0 && row < leaderboardData.size()) {
-            @SuppressWarnings("unused")
-			LeaderboardEntry entry = leaderboardData.get(row);
-            
-            if(cargarP == false) {
-            	JPanel buttonPanel = new JPanel();
-
-            	JButton confirmItem = new JButton("CONFIRM");
-            	JButton rejectItem = new JButton("REJECT");
-
-                confirmItem.setPreferredSize(new Dimension(140, 60));
-                rejectItem.setPreferredSize(new Dimension(140, 60));
-
-		buttonPanel.add(rejectItem);
-                buttonPanel.add(confirmItem);
-
-                JPopupMenu popupMenu = new JPopupMenu();
-                popupMenu.add(buttonPanel);
-                
-                confirmItem.addActionListener(e -> {
-                    Control_de_datos.borrarPartida(row);
-                    buttonPanel.setVisible(false);
-                    popupMenu.setVisible(false);
-                    
-                    Control_de_datos.saveFiles.clear();
-                    Control_de_datos.selectParidas();
-                });
-
-                rejectItem.addActionListener(e -> {
-                	buttonPanel.setVisible(false);
-                	popupMenu.setVisible(false);
-			closeButton.doClick();
-                });
-                
-                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-                int screenWidth = screenSize.width;
-                int screenHeight = screenSize.height;
-                
-                int x = (screenWidth - popupMenu.getPreferredSize().width) / 2;
-                int y = (screenHeight - popupMenu.getPreferredSize().height) / 2;
-
-                popupMenu.show(this, x, y);
+        for (Datos_partida files : saveFiles) {
+            if (files.getDificultad().equals("Facil")) {
+                updateLeaderboard(files, leaderboardDataEasy, leaderboardTableEasy);
+            } else if (files.getDificultad().equals("Medio")) {
+                updateLeaderboard(files, leaderboardDataMedium, leaderboardTableMedium);
             } else {
-            	setVisible(false);
-            	Control_de_datos.selectDatos(row);
-            	iniciarSavePartida();
+                updateLeaderboard(files, leaderboardDataHard, leaderboardTableHard);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Out of range: " + row);
         }
     }
     
+    private void performCellAction(int row, ArrayList<LeaderboardEntry> leaderboardData, JTable leaderboardTable) {
+        if (row >= 0 && row < leaderboardData.size()) {
+            LeaderboardEntry entry = leaderboardData.get(row);
+            
+            // Identificar la tabla seleccionada
+            JTable selectedTable = null;
+            if (leaderboardTable == leaderboardTableEasy) {
+                selectedTable = leaderboardTableEasy;
+            } else if (leaderboardTable == leaderboardTableMedium) {
+                selectedTable = leaderboardTableMedium;
+            } else if (leaderboardTable == leaderboardTableHard) {
+                selectedTable = leaderboardTableHard;
+            }
+            
+            if (selectedTable != null) {
+                // Obtener el modelo de tabla correspondiente
+                TableModel model = selectedTable.getModel();
+                // Mapear la fila seleccionada en el contexto de ese modelo específico
+                int selectedRow = selectedTable.convertRowIndexToModel(row);
+                
+                // Obtener la partida correspondiente del modelo de tabla
+                int identificadorPartida = (int) model.getValueAt(selectedRow, 5);
+
+
+                if (cargarP == false) {
+                    JPanel buttonPanel = new JPanel();
+
+                    JButton confirmItem = new JButton("CONFIRM");
+                    JButton rejectItem = new JButton("REJECT");
+
+                    confirmItem.setPreferredSize(new Dimension(140, 60));
+                    rejectItem.setPreferredSize(new Dimension(140, 60));
+
+                    buttonPanel.add(rejectItem);
+                    buttonPanel.add(confirmItem);
+
+                    JPopupMenu popupMenu = new JPopupMenu();
+                    popupMenu.add(buttonPanel);
+
+                    confirmItem.addActionListener(e -> {
+                        // Eliminar la partida de saveFiles
+                        Control_de_datos.borrarPartida(identificadorPartida);
+
+                        // Eliminar la partida de la lista de clasificación correspondiente
+                        if (entry.getDifficulty().equals("Facil")) {
+                            leaderboardDataEasy.removeIf(item -> item.getIdentificador() == identificadorPartida);
+                        } else if (entry.getDifficulty().equals("Medio")) {
+                            leaderboardDataMedium.removeIf(item -> item.getIdentificador() == identificadorPartida);
+                        } else {
+                            leaderboardDataHard.removeIf(item -> item.getIdentificador() == identificadorPartida);
+                        }
+
+                        // Actualizar la tabla
+                        updateLeaderboards();
+
+                        // Cerrar el menú
+                        closeButton.doClick();
+                    });
+
+                    rejectItem.addActionListener(e -> {
+                        buttonPanel.setVisible(false);
+                        popupMenu.setVisible(false);
+                    });
+                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                    int screenWidth = screenSize.width;
+                    int screenHeight = screenSize.height;
+
+                    int x = (screenWidth - popupMenu.getPreferredSize().width) / 2;
+                    int y = (screenHeight - popupMenu.getPreferredSize().height) / 2;
+
+                    popupMenu.show(this, x, y);
+                } else {
+                    setVisible(false);
+                    Control_de_datos.selectDatos(identificadorPartida);
+                    iniciarSavePartida();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Out of range: " + row);
+            }
+        }
+    }
+
+
+    
     public void iniciarSavePartida() {
-        gameSAVE juego = new gameSAVE();
+    	gameSAVE.instance = null;
+        gameSAVE juego = gameSAVE.getInstance();
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
         gameSAVE.actualizarEstadoCiudades();
@@ -239,9 +290,9 @@ public class loadgame extends JPanel {
         getParent().repaint();
     }
         
-        static void resetLeaderboardData() {
-        	Control_de_datos.saveFiles.clear();
-        }
+    static void resetLeaderboardData() {
+    	Control_de_datos.saveFiles.clear();
+    }
 
     private static class LeaderboardEntry {
         private String playerName;
@@ -249,13 +300,15 @@ public class loadgame extends JPanel {
         private int arrTurno;
         private int arrOutreak;
         private int identificador;
+        private String difficulty; // Movido al final
 
-        public LeaderboardEntry(String playerName, int rounds, int arrTurno, int arrOutreak, int identificador) {
+        public LeaderboardEntry(String playerName, int rounds, int arrTurno, int arrOutreak, int identificador, String difficulty) {
             this.playerName = playerName;
             this.rounds = rounds;
             this.arrTurno = arrTurno;
             this.arrOutreak = arrOutreak;
             this.identificador = identificador;
+            this.difficulty = difficulty; // Movido al final
         }
 
         public String getPlayerName() {
@@ -274,11 +327,15 @@ public class loadgame extends JPanel {
             return arrOutreak;
         }
 
-        @SuppressWarnings("unused")
-		public int getIdentificador() {
+        public int getIdentificador() {
             return identificador;
         }
+
+        public String getDifficulty() {
+            return difficulty;
+        }
     }
+
 
     @SuppressWarnings("unused")
 	private class ResultCellRenderer extends DefaultTableCellRenderer {

@@ -65,6 +65,7 @@ class info extends JPanel implements ActionListener {
         tituloLabel = new JLabel("INFORMATION");
         tituloLabel.setFont(fuentecargar(40));
         tituloLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        tituloLabel.setForeground(Color.WHITE);
 
         informacionLabel = new JLabel();
         informacionLabel.setVerticalAlignment(JLabel.TOP);
@@ -219,36 +220,42 @@ class info extends JPanel implements ActionListener {
         switch (boton.getText()) {
             case "START":
                 tituloLabel.setText("START");
-                informacion = "<html><center>At the beginning of each game, vaccines are initialized.\n"
+                informacion = "<html>At the beginning of each game, vaccines are initialized.\n"
                         + "At the beginning of each game, cities are initialized.\n"
                         + "Each city can only be infected with 1 type of infection based on its ID.\n"
-                        + "If there is an outbreak in the adjacent city and both cities have different types of infection, the corresponding infection type will \n"
-                        + "be added.\n"
-                        + "If a city has 3 infections and 1 is added, it is an outbreak. If there is an outbreak, 1 infection is added to the neighboring cities.\n"
-                        + "If there are 3 connected cities, an outbreak occurs in the first city, it jumps to the second, there is also an outbreak, in the third,\n"
-                        + "2 infections are added. 1 is not added to the connected cities that have had an outbreak in this chain of outbreaks.\n"
+                        + "If there is an outbreak in the adjacent city and both cities have different \n"
+                        + "types of infection, the corresponding infection type will be added.\n"
+                        + "If a city has 3 infections and 1 is added, it is an outbreak. If there is an \n"
+                        + "outbreak, 1 infection is added to the neighboring cities.\n"
+                        + "If there are 3 connected cities, an outbreak occurs in the first city, it jumps \n"
+                        + "to the second, there is also an outbreak, in the third,\n"
+                        + "2 infections are added. 1 is not added to the connected cities that have had an \n"
+                        + "outbreak in this chain of outbreaks.\n"
                         + "The number of infected cities at the beginning of the game is a configuration parameter.\n"
                         + "The number of infected cities each round is a configuration parameter.\n"
                         + "The number of diseases is a configuration parameter.";
                 break;
             case "CITY":
                 tituloLabel.setText("CITY");
-                informacion = "<html><center>Each city has a name, X coordinate, Y coordinate, and type of disease.\n"
+                informacion = "<html>Each city has a name, X coordinate, Y coordinate, and type of disease.\n"
                         + "Each city has different infection levels.\n"
                         + "Each city stores its adjacent cities.\n"
                         + "Each city increases the infection level by +1 when it becomes infected again.\n"
-                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent cities and (+1 is added to the outbreak counter).";
+                        + "In each city, if the infection level exceeds 3, the infection spreads to its \n"
+                        + "adjacent cities and (+1 is added to the outbreak counter).";
                 break;
             case "GAMES":
                 tituloLabel.setText("GAMES");
-                informacion = "<html><center>Round number.\n"
+                informacion = "<html>Round number.\n"
                         + "It will have a list with all the cities and actions that can be performed on them.\n"
-                        + "It will have a list with all the vaccines and actions that can be performed on them (generate vaccine, increase%, ...).";
+                        + "It will have a list with all the vaccines and actions that can be performed on \n"
+                        + "them (generate vaccine, increase%, ...).";
                 break;
             case "PLAYER":
                 tituloLabel.setText("PLAYER");
-                informacion = "<html><center>The player will have 4 actions per round.\n"
-                        + "Each turn, the player can create the vaccine (conduct research) or cure cities. Both cannot be done in the same turn.\n"
+                informacion = "<html>The player will have 4 actions per round.\n"
+                        + "Each turn, the player can create the vaccine (conduct research) or cure cities. \n"
+                        + "Both cannot be done in the same turn.\n"
                         + "Curing costs 1 action and only affects one city.\n"
                         + "When conducting research, all 4 actions are spent.\n"
                         + "The disease of the chosen city can be treated.\n"
@@ -256,15 +263,17 @@ class info extends JPanel implements ActionListener {
                         + "Each city has different infection levels.\n"
                         + "Each city stores its adjacent cities.\n"
                         + "Each city increases the infection level by +1 when it becomes infected again.\n"
-                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent cities and (+1 is added to the outbreak counter).";
+                        + "In each city, if the infection level exceeds 3, the infection spreads to its adjacent \n"
+                        + "cities and (+1 is added to the outbreak counter).";
                 break;
             case "RESEARCH":
                 tituloLabel.setText("RESEARCH");
-                informacion = "<html><center>Every time research is conducted, the player spends 4 actions and the percentage of the selected vaccine will increase.";
+                informacion = "<html>Every time research is conducted, the player spends 4 actions and the percentage \n"
+                		+ "of the selected vaccine will increase.";
                 break;
             case "VACCINE":
                 tituloLabel.setText("VACCINE");
-                informacion = "<html><center>The vaccine consists of 4 parts (1 part per research).\n"
+                informacion = "<html>The vaccine consists of 4 parts (1 part per research).\n"
                         + "1 vaccine per disease type.\n"
                         + "They have a name, a color, and a development percentage.\n"
                         + "If the vaccine is developed 100%, it is indicated that the development is already complete.\n"
@@ -272,12 +281,12 @@ class info extends JPanel implements ActionListener {
                 break;
             case "HEAL":
                 tituloLabel.setText("HEAL");
-                informacion = "<html><center>If when curing 1 infected city, a vaccine developed 100% is not available, only the infection level is reduced by 1.\n"
+                informacion = "<html>If when curing 1 infected city, a vaccine developed 100% is not available, only the infection level is reduced by 1.\n"
                         + "If when curing 1 infected city, a vaccine developed 100% is available, the infection is completely eliminated (infection level 0).";
                 break;
             case "END":
                 tituloLabel.setText("END");
-                informacion = "<html><center>At the end of each round, it is checked whether the player has won, lost, or it is unknown.\n"
+                informacion = "<html>At the end of each round, it is checked whether the player has won, lost, or it is unknown.\n"
                         + "You win by curing all infections.\n"
                         + "If all the outbreaks occur, the game is lost.";
                 break;
@@ -318,12 +327,23 @@ class info extends JPanel implements ActionListener {
         timer.start();
     }
 
-    private static info instance;
+    public static info instance;
 
     public static info getInstance() {
         if (instance == null) {
             instance = new info();
         }
         return instance;
+    }
+}
+class StateManager {
+    private static Class<?> previousClass;
+
+    public static void setPreviousClass(Class<?> clazz) {
+        previousClass = clazz;
+    }
+
+    public static Class<?> getPreviousClass() {
+        return previousClass;
     }
 }
