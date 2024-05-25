@@ -303,7 +303,7 @@ public class menu extends JPanel implements ActionListener {
         }
     }
 
-    private void resetvalores() {
+    public static void resetvalores() {
     	UIManager.put("MenuItem.selectionBackground", null);
     	UIManager.put("MenuItem.selectionForeground", null);
     	game.partidaInsertada = false;
@@ -320,6 +320,7 @@ public class menu extends JPanel implements ActionListener {
         setVisible(false);
         dificultad.setVisible(false);
         Ciudad.resetValues();
+        resetvalores();
         
         game.instance = null;
         game juego = game.getInstance();
