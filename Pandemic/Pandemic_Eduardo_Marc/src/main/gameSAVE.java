@@ -83,6 +83,8 @@ public class gameSAVE extends JPanel implements ActionListener {
                 stopRotation();
             }
         });
+        
+        topPanel.add(SubMenuButton, BorderLayout.EAST);
 
         salirButton = new JButton("MENU");
         salirButton.addActionListener(this);
