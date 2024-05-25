@@ -3,6 +3,7 @@ package main;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -42,6 +43,8 @@ public class game extends JPanel implements ActionListener {
     private static JLabel infectedCitiesGameOverLabelnum;
     private static JLabel actionsValueLabel;
     
+    private Timer rotationTimer;
+    private int angle = 0;
     
     public static int brotesvalor;
 
@@ -56,8 +59,30 @@ public class game extends JPanel implements ActionListener {
         middlePanel = new JPanel();
         middlePanel.setOpaque(false);
         
-        SubMenuButton = new JButton("MENU");
+        SubMenuButton = new JButton();
         SubMenuButton.addActionListener(this);
+        ImageIcon originalIcon = new ImageIcon("src/img/options.png");
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        SubMenuButton.setIcon(resizedIcon);
+        Dimension buttonSize = new Dimension(50, 50);
+        SubMenuButton.setPreferredSize(buttonSize);
+        
+        SubMenuButton.setContentAreaFilled(false);
+        SubMenuButton.setBorderPainted(false);
+        SubMenuButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                startRotation();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                stopRotation();
+            }
+        });
+        
         topPanel.add(SubMenuButton, BorderLayout.EAST);
 
         salirButton = new JButton("MENU");
@@ -97,6 +122,51 @@ public class game extends JPanel implements ActionListener {
         ciudades();
         actualizarEstadoCiudades();
         
+    }
+    
+    private void startRotation() {
+        rotationTimer = new Timer(40, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                angle += 5;
+                if (angle >= 360) {
+                    angle = 0;
+                }
+                rotateIcon();
+            }
+        });
+        rotationTimer.start();
+    }
+
+    private void stopRotation() {
+        if (rotationTimer != null) {
+            rotationTimer.stop();
+        }
+        angle = 0;
+        ImageIcon originalIcon = new ImageIcon("src/img/options.png");
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        SubMenuButton.setIcon(resizedIcon);
+    }
+
+    private void rotateIcon() {
+        ImageIcon originalIcon = new ImageIcon("src/img/options.png");
+        Image originalImage = originalIcon.getImage();
+        int w = originalImage.getWidth(null);
+        int h = originalImage.getHeight(null);
+
+        BufferedImage rotatedImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = rotatedImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+        g2d.rotate(Math.toRadians(angle), w / 2, h / 2);
+        g2d.drawImage(originalImage, 0, 0, null);
+        g2d.dispose();
+
+        ImageIcon rotatedIcon = new ImageIcon(rotatedImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        SubMenuButton.setIcon(rotatedIcon);
     }
     
     public static void datosPartida() {
@@ -826,5 +896,4 @@ public class game extends JPanel implements ActionListener {
             return new Dimension(diameter, diameter);
         }
     }
-
 }
