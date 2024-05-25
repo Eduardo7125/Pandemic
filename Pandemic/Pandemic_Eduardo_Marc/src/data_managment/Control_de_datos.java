@@ -310,7 +310,7 @@ public class Control_de_datos {
 	        PreparedStatement pstmt = con.prepareStatement("SELECT ciudades, virus, vacunas, brotes, rondas, p_desarrollo, acciones, player, dificultad FROM PANDEMIC_SAVEFILES WHERE player = ? AND identificador = ?");
 	        
 	        pstmt.setObject(1, Control_de_partida.playername);
-	        pstmt.setObject(2, saveFiles.get(identificador).getIdentificador());
+	        pstmt.setObject(2, identificador);
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        

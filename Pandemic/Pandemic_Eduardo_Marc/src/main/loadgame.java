@@ -12,6 +12,7 @@ import javax.swing.table.*;
 
 import data_managment.Control_de_datos;
 import data_managment.Datos_partida;
+import objects.Ciudad;
 
 public class loadgame extends JPanel {
 
@@ -270,7 +271,10 @@ public class loadgame extends JPanel {
     }
 
     private void iniciarSavePartida(int identificadorPartida) {
-        gameSAVE.instance = null;
+    	if (gameSAVE.instance != null) {
+    		gameSAVE.instance = null;
+		}
+    	
         gameSAVE juego = new gameSAVE(identificadorPartida);
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);

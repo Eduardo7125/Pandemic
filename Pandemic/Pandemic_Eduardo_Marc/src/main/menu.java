@@ -329,7 +329,6 @@ public class menu extends JPanel implements ActionListener {
         getParent().add(juego);
         getParent().revalidate();
         getParent().repaint();
-        game.brotesStart();
     }
 
     public void continueOP() {

@@ -576,26 +576,6 @@ public class game extends JPanel implements ActionListener {
         leftPanel.revalidate();
         leftPanel.repaint();
     }
-    
-    public static void brotesStart() {
-        leftPanel.removeAll();
-
-        String imagePath = "src/img/brote_inactivo.png";
-
-        ImageIcon icon = new ImageIcon(imagePath);
-        Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(image);
-
-        for (int i = 0; i < brotesvalor; i++) {
-            JLabel brote = new JLabel(scaledIcon);
-            brote.setPreferredSize(new Dimension(75, 75));
-            leftPanel.add(brote);
-        }
-
-        leftPanel.revalidate();
-        leftPanel.repaint();
-    }
-
 
     public void vacunasCompletas() {
         vacunas("Alfa", new Color(118, 189, 248), "ALFA");

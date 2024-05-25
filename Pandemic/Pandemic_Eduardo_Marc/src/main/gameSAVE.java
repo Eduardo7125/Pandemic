@@ -41,7 +41,7 @@ public class gameSAVE extends JPanel implements ActionListener {
     private Timer rotationTimer;
     private int angle = 0;
 
-    public static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
+    private static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
     
     private static int identificadorPartida;
     
@@ -100,7 +100,6 @@ public class gameSAVE extends JPanel implements ActionListener {
         rightPanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
         
         
-        brotesStart();
 		brotes();
 
         leftPanel.setBackground(Color.gray);
@@ -545,25 +544,6 @@ public class gameSAVE extends JPanel implements ActionListener {
         nextRoundButton.setEnabled(false);
         nextRoundButton.setEnabled(true);
     } 
-
-    public static void brotesStart() {
-        leftPanel.removeAll();
-
-        String imagePath = "src/img/brote_inactivo.png";
-
-        ImageIcon icon = new ImageIcon(imagePath);
-        Image image = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH);
-        ImageIcon scaledIcon = new ImageIcon(image);
-
-        for (int i = 0; i < brotesvalor; i++) {
-            JLabel brote = new JLabel(scaledIcon);
-            brote.setPreferredSize(new Dimension(75, 75));
-            leftPanel.add(brote);
-        }
-
-        leftPanel.revalidate();
-        leftPanel.repaint();
-    }
     
     public static void brotes() {
         leftPanel.removeAll();
@@ -789,7 +769,7 @@ public class gameSAVE extends JPanel implements ActionListener {
 
     public static gameSAVE getInstance() {
         if (instance == null) {
-            instance = new gameSAVE( identificadorPartida);
+            instance = new gameSAVE(identificadorPartida);
         }
         return instance;
     }
