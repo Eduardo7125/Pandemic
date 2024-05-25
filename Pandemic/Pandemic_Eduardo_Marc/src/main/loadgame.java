@@ -260,7 +260,7 @@ public class loadgame extends JPanel {
                 } else {
                     setVisible(false);
                     Control_de_datos.selectDatos(identificadorPartida);
-                    iniciarSavePartida();
+                    iniciarSavePartida(identificadorPartida);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Out of range: " + row);
@@ -269,10 +269,9 @@ public class loadgame extends JPanel {
     }
 
 
-    
-    public void iniciarSavePartida() {
-    	gameSAVE.instance = null;
-        gameSAVE juego = gameSAVE.getInstance();
+    private void iniciarSavePartida(int identificadorPartida) {
+        gameSAVE.instance = null;
+        gameSAVE juego = new gameSAVE(identificadorPartida);
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         juego.setVisible(true);
         gameSAVE.actualizarEstadoCiudades();
