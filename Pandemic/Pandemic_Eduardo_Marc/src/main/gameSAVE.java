@@ -47,7 +47,8 @@ public class gameSAVE extends JPanel implements ActionListener {
     
     private static int[] valoresVacunas = new int[4];
 
-    public gameSAVE(int identificadorPartida) {
+    @SuppressWarnings("static-access")
+	public gameSAVE(int identificadorPartida) {
     	this.identificadorPartida = identificadorPartida;
     	
         setLayout(new BorderLayout());
