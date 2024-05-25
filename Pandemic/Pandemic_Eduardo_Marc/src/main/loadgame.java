@@ -58,7 +58,7 @@ public class loadgame extends JPanel {
 
         add(tablesPanel, BorderLayout.CENTER);
 
-        JLabel titleLabel = new JLabel("<html><div style='padding-left: 20%'>LEADERBOARD</div></html>");
+        JLabel titleLabel = new JLabel("<html><div style='padding-left: 20%'>SAVED GAMES</div></html>");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -162,7 +162,6 @@ public class loadgame extends JPanel {
         DefaultTableModel tableModel = (DefaultTableModel) leaderboardTable.getModel();
         tableModel.setRowCount(0);
         for (LeaderboardEntry entry2 : leaderboardData) {
-            // Agregar una nueva fila con todos los datos, incluido el identificador
             tableModel.addRow(new Object[]{entry2.getPlayerName(), entry2.getRounds(), entry2.getArrTurno(), entry2.getArrOutreak(), entry2.getDifficulty(), entry2.getIdentificador()});
         }
     }
@@ -199,7 +198,6 @@ public class loadgame extends JPanel {
         if (row >= 0 && row < leaderboardData.size()) {
             LeaderboardEntry entry = leaderboardData.get(row);
             
-            // Identificar la tabla seleccionada
             JTable selectedTable = null;
             if (leaderboardTable == leaderboardTableEasy) {
                 selectedTable = leaderboardTableEasy;
@@ -210,12 +208,9 @@ public class loadgame extends JPanel {
             }
             
             if (selectedTable != null) {
-                // Obtener el modelo de tabla correspondiente
                 TableModel model = selectedTable.getModel();
-                // Mapear la fila seleccionada en el contexto de ese modelo específico
                 int selectedRow = selectedTable.convertRowIndexToModel(row);
                 
-                // Obtener la partida correspondiente del modelo de tabla
                 int identificadorPartida = (int) model.getValueAt(selectedRow, 5);
 
 
@@ -235,10 +230,8 @@ public class loadgame extends JPanel {
                     popupMenu.add(buttonPanel);
 
                     confirmItem.addActionListener(e -> {
-                        // Eliminar la partida de saveFiles
                         Control_de_datos.borrarPartida(identificadorPartida);
 
-                        // Eliminar la partida de la lista de clasificación correspondiente
                         if (entry.getDifficulty().equals("Facil")) {
                             leaderboardDataEasy.removeIf(item -> item.getIdentificador() == identificadorPartida);
                         } else if (entry.getDifficulty().equals("Medio")) {
@@ -247,10 +240,8 @@ public class loadgame extends JPanel {
                             leaderboardDataHard.removeIf(item -> item.getIdentificador() == identificadorPartida);
                         }
 
-                        // Actualizar la tabla
                         updateLeaderboards();
 
-                        // Cerrar el menú
                         closeButton.doClick();
                     });
 
@@ -300,7 +291,7 @@ public class loadgame extends JPanel {
         private int arrTurno;
         private int arrOutreak;
         private int identificador;
-        private String difficulty; // Movido al final
+        private String difficulty;
 
         public LeaderboardEntry(String playerName, int rounds, int arrTurno, int arrOutreak, int identificador, String difficulty) {
             this.playerName = playerName;
@@ -308,7 +299,7 @@ public class loadgame extends JPanel {
             this.arrTurno = arrTurno;
             this.arrOutreak = arrOutreak;
             this.identificador = identificador;
-            this.difficulty = difficulty; // Movido al final
+            this.difficulty = difficulty;
         }
 
         public String getPlayerName() {
