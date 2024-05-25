@@ -241,7 +241,8 @@ public class loadgame extends JPanel {
                         }
 
                         updateLeaderboards();
-
+                        buttonPanel.setVisible(false);
+                        popupMenu.setVisible(false);
                         closeButton.doClick();
                     });
 
@@ -267,7 +268,6 @@ public class loadgame extends JPanel {
             }
         }
     }
-
 
     private void iniciarSavePartida(int identificadorPartida) {
         gameSAVE.instance = null;
