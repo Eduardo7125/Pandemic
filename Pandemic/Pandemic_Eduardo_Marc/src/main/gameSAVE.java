@@ -3,6 +3,7 @@ package main;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -36,12 +37,19 @@ public class gameSAVE extends JPanel implements ActionListener {
     private static JLabel ActionNumber;
     private static JLabel infectedCitiesLabel;
     private static JLabel infectedCitiesGameOverLabel;
+    
+    private Timer rotationTimer;
+    private int angle = 0;
 
     public static int brotesvalor = Integer.parseInt(Control_de_datos.NumBrotesDerrota);
     
+    private static int identificadorPartida;
+    
     private static int[] valoresVacunas = new int[4];
 
-    public gameSAVE() {
+    public gameSAVE(int identificadorPartida) {
+    	this.identificadorPartida = identificadorPartida;
+    	
         setLayout(new BorderLayout());
 
         topPanel = new JPanel(new BorderLayout());
@@ -51,9 +59,29 @@ public class gameSAVE extends JPanel implements ActionListener {
         rightPanel = new JPanel(new GridBagLayout());
         middlePanel = new JPanel();
         
-        SubMenuButton = new JButton("MENU");
+        SubMenuButton = new JButton();
         SubMenuButton.addActionListener(this);
-        topPanel.add(SubMenuButton, BorderLayout.EAST);
+        ImageIcon originalIcon = new ImageIcon("src/img/options.png");
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        SubMenuButton.setIcon(resizedIcon);
+        Dimension buttonSize = new Dimension(50, 50);
+        SubMenuButton.setPreferredSize(buttonSize);
+        
+        SubMenuButton.setContentAreaFilled(false);
+        SubMenuButton.setBorderPainted(false);
+        SubMenuButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                startRotation();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                stopRotation();
+            }
+        });
 
         salirButton = new JButton("MENU");
         salirButton.addActionListener(this);
@@ -152,6 +180,51 @@ public class gameSAVE extends JPanel implements ActionListener {
         
     }
     
+    private void startRotation() {
+        rotationTimer = new Timer(40, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                angle += 5;
+                if (angle >= 360) {
+                    angle = 0;
+                }
+                rotateIcon();
+            }
+        });
+        rotationTimer.start();
+    }
+
+    private void stopRotation() {
+        if (rotationTimer != null) {
+            rotationTimer.stop();
+        }
+        angle = 0;
+        ImageIcon originalIcon = new ImageIcon("src/img/options.png");
+        Image originalImage = originalIcon.getImage();
+        Image resizedImage = originalImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+        SubMenuButton.setIcon(resizedIcon);
+    }
+
+    private void rotateIcon() {
+        ImageIcon originalIcon = new ImageIcon("src/img/options.png");
+        Image originalImage = originalIcon.getImage();
+        int w = originalImage.getWidth(null);
+        int h = originalImage.getHeight(null);
+
+        BufferedImage rotatedImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = rotatedImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+
+        g2d.rotate(Math.toRadians(angle), w / 2, h / 2);
+        g2d.drawImage(originalImage, 0, 0, null);
+        g2d.dispose();
+
+        ImageIcon rotatedIcon = new ImageIcon(rotatedImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH));
+        SubMenuButton.setIcon(rotatedIcon);
+    }
+    
     public static void ciudadesInfect() {
     	for (Ciudad ciudad : Control_de_datos.Ciudades) {
     		Control_de_partida.infectedcities += ciudad.getInfeccion();
@@ -247,13 +320,14 @@ public class gameSAVE extends JPanel implements ActionListener {
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	salirButton.doClick();
+                	borrarPartidaTerminada();
                 }
             });
             timer.setRepeats(false);
 
             timer.start();
         }
+    	
     }
     
     public static void GameOver() {
@@ -289,13 +363,18 @@ public class gameSAVE extends JPanel implements ActionListener {
             Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                	salirButton.doClick();
+                	borrarPartidaTerminada();
                 }
             });
             timer.setRepeats(false);
 
             timer.start();
         }
+    }
+    
+    private static void borrarPartidaTerminada() {
+        Control_de_datos.borrarPartida(identificadorPartida);
+        salirButton.doClick();
     }
 
     public static objects.Ciudad obtenerCiudadPorNombre(String nombreCiudad) {
@@ -707,7 +786,7 @@ public class gameSAVE extends JPanel implements ActionListener {
 
     public static gameSAVE getInstance() {
         if (instance == null) {
-            instance = new gameSAVE();
+            instance = new gameSAVE( identificadorPartida);
         }
         return instance;
     }
@@ -809,5 +888,4 @@ public class gameSAVE extends JPanel implements ActionListener {
             return new Dimension(diameter, diameter);
         }
     }
-
 }
