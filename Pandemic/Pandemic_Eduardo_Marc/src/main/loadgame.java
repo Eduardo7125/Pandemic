@@ -149,7 +149,20 @@ public class loadgame extends JPanel {
     }
 
     public void updateLeaderboard(Datos_partida files, ArrayList<LeaderboardEntry> leaderboardData, JTable leaderboardTable) {
-        LeaderboardEntry entry = new LeaderboardEntry(files.getPlayer(), files.getRondas(), files.getAcciones(), files.getBrotes(), files.getIdentificador(), files.getDificultad());
+        String difficultyText = "";
+        switch (files.getDificultad()) {
+            case "Facil":
+                difficultyText = "Easy";
+                break;
+            case "Medio":
+                difficultyText = "Medium";
+                break;
+            case "Dificil":
+                difficultyText = "Hard";
+                break;
+        }
+        
+        LeaderboardEntry entry = new LeaderboardEntry(files.getPlayer(), files.getRondas(), files.getAcciones(), files.getBrotes(), files.getIdentificador(), difficultyText);
         leaderboardData.add(entry);
 
         leaderboardData.sort(new Comparator<LeaderboardEntry>() {
