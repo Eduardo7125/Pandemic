@@ -260,6 +260,8 @@ public class loadgame extends JPanel {
                     popupMenu.show(this, x, y);
                 } else {
                     setVisible(false);
+                	UIManager.put("MenuItem.selectionBackground", null);
+                	UIManager.put("MenuItem.selectionForeground", null);
                     Control_de_datos.selectDatos(identificadorPartida);
                     iniciarSavePartida(identificadorPartida);
                 }
@@ -270,7 +272,6 @@ public class loadgame extends JPanel {
     }
 
     private void iniciarSavePartida(int identificadorPartida) {
-    	menu.resetvalores();
     	gameSAVE.instance = null;
         gameSAVE juego = new gameSAVE(identificadorPartida);
         juego.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));

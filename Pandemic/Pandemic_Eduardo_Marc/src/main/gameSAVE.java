@@ -129,7 +129,6 @@ public class gameSAVE extends JPanel implements ActionListener {
         Thread infection = new Thread(() -> startinfection());
         infection.start();
         ciudades();
-        actualizarEstadoCiudades();
         
     }
     
@@ -179,9 +178,9 @@ public class gameSAVE extends JPanel implements ActionListener {
     }
     
     public static void ciudadesInfect() {
-    	for (Ciudad ciudad : Control_de_datos.Ciudades) {
-    		Control_de_partida.infectedcities += ciudad.getInfeccion();
-	}
+        for (Ciudad ciudad : Control_de_datos.Ciudades) {
+            Control_de_partida.infectedcities += ciudad.getInfeccion();
+        }
     }
 
     public static void datosPartida() {
@@ -213,7 +212,7 @@ public class gameSAVE extends JPanel implements ActionListener {
         panelCiudades.setBackground(Color.BLACK);
         panelCiudades.setBorder(new EmptyBorder(10, 0, 10, 0));
         
-	ciudadesInfect();
+        ciudadesInfect();
 
         infectedCitiesLabel = new JLabel("Infected Cities: ");
         infectedCitiesLabel.setForeground(Color.WHITE);

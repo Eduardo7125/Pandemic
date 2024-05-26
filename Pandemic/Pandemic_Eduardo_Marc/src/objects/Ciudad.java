@@ -79,7 +79,7 @@ public class Ciudad {
                 ciudad.setOutbreakHappened(true);
                 if (ciudad.getInfeccion() > 3) {
                     ciudad.setInfeccion(3);
-                    propagarInfeccion2(ciudad);
+                    propagarInfeccion(ciudad);
                 }
             }
         }
@@ -108,15 +108,29 @@ public class Ciudad {
      * 
      * @param ciudad Ciudad desde la que ha habido el brote.
      */
+    public void propagarInfeccion(Ciudad ciudad) { 
+        for (String colindantes : ciudad.getCiudadesColindantes()) {
+            Ciudad ciudadColindante = obtenerCiudad(colindantes);
+            if (ciudadColindante.getOutbreakHappened() == false) {
+                ciudadColindante.aumentarInfeccion();
+                System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad() + " | Infection: " + ciudad.getInfeccion());
+                game.actualizarEstadoCiudades();
+                ciudadColindante.setOutbreakHappened(true);
+                if (ciudadColindante.getInfeccion() > 3) {
+                    ciudadColindante.setInfeccion(3);
+                    propagarInfeccion2(ciudadColindante);
+                }
+            }
+        }
+    }
+    
     public void propagarInfeccion2(Ciudad ciudad) { 
         for (String colindantes : ciudad.getCiudadesColindantes()) {
             Ciudad ciudadColindante = obtenerCiudad(colindantes);
-            if (!ciudadColindante.getOutbreakHappened()) {
+            if (ciudadColindante.getOutbreakHappened() == false) {
                 ciudadColindante.aumentarInfeccion();
-                System.out.println("Name: " + ciudadColindante.getNombre());
-                System.out.println("Virus: " + ciudadColindante.getNombreEnfermedad());
-                System.out.println("Infection: " + ciudadColindante.getInfeccion());
-                game.actualizarEstadoCiudades();
+                System.out.println("Name: " + ciudad.getNombre() + " | Virus: " + ciudad.getNombreEnfermedad() + " | Infection: " + ciudad.getInfeccion());
+                gameSAVE.actualizarEstadoCiudades();
                 ciudadColindante.setOutbreakHappened(true);
                 if (ciudadColindante.getInfeccion() > 3) {
                     ciudadColindante.setInfeccion(3);

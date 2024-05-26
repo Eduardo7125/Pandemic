@@ -377,14 +377,12 @@ public class Control_de_datos {
 	            Control_de_partida.playername= rs.getString(8);
 	            if (rs.getString(9).equalsIgnoreCase("Facil")) {
 	            	ficheroXML = "src//files//parametrosFacil.xml";
-	            	cargarXML();
 				} else if (rs.getString(9).equalsIgnoreCase("Medio")) {
 					ficheroXML = "src//files//parametrosMedio.xml";
-					cargarXML();
 				} else {
 					ficheroXML = "src//files//parametrosDificil.xml";
-					cargarXML();
 				}
+	            cargarXML();
 	        }
 		}catch (Exception e) {
 		}
