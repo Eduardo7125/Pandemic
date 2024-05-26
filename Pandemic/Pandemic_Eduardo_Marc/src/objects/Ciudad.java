@@ -124,6 +124,9 @@ public class Ciudad {
                 game.actualizarEstadoCiudades();
                 ciudadColindante.setOutbreakHappened(true);
                 if (ciudadColindante.getInfeccion() > 3) {
+    	            Control_de_partida.outbreak++;
+    	            game.brotes();
+    	            System.out.println("AN OUTBREAK IS HAPPENING");
                     ciudadColindante.setInfeccion(3);
                     propagarInfeccion(ciudadColindante);
                 }
@@ -141,6 +144,11 @@ public class Ciudad {
                 gameSAVE.actualizarEstadoCiudades();
                 ciudadColindante.setOutbreakHappened(true);
                 if (ciudadColindante.getInfeccion() > 3) {
+    	            Control_de_partida.outbreak++;
+    	            Thread brotesThread = new Thread(game.brotes());
+    	            brotesThread.start();
+    	            ;
+    	            System.out.println("AN OUTBREAK IS HAPPENING");
                     ciudadColindante.setInfeccion(3);
                     propagarInfeccion2(ciudadColindante);
                 }
