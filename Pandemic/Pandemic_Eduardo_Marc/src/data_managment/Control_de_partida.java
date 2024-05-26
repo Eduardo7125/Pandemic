@@ -73,7 +73,7 @@ public class Control_de_partida {
 
 	public static void gestionarInfeccion2() {
 
-	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion(Control_de_datos.Ciudades);
+	    ArrayList<Ciudad> ciudadesAleatorias = seleccionarCiudadesParaInfeccion2(Control_de_datos.Ciudades);
 
 	    for (Ciudad ciudad : ciudadesAleatorias) {
 	        ciudad.aumentarInfeccion();
@@ -92,6 +92,22 @@ public class Control_de_partida {
 	}
 	
 	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion(ArrayList<Ciudad> ciudades) {
+	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
+	    Random rand = new Random();
+	    int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasRonda);
+	    int count = 0;
+	    while (count < infect) {
+	        int index = rand.nextInt(ciudades.size());
+	        Ciudad ciudad = ciudades.get(index);
+	        if (!ciudadesAleatorias.contains(ciudad)) {
+	            ciudadesAleatorias.add(ciudad);
+	            count++;
+	        }
+	    }
+	    return ciudadesAleatorias;
+	}
+	
+	private static ArrayList<Ciudad> seleccionarCiudadesParaInfeccion2(ArrayList<Ciudad> ciudades) {
 	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
 	    Random rand = new Random();
 	    int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasRonda);
