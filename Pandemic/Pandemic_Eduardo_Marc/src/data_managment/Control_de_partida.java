@@ -111,7 +111,6 @@ public class Control_de_partida {
 	    ArrayList<Ciudad> ciudadesAleatorias = new ArrayList<>();
 	    Random rand = new Random();
 	    int infect = Integer.parseInt(Control_de_datos.CiudadesInfectadasRonda);
-	    infect = infect / 2;
 	    int count = 0;
 	    while (count < infect) {
 	        int index = rand.nextInt(ciudades.size());
