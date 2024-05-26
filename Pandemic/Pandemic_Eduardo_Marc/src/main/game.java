@@ -141,7 +141,7 @@ public class game extends JPanel implements ActionListener {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 nextRoundButton.setBackground(Color.LIGHT_GRAY);
-                nextRoundButton.setForeground(Color.CYAN);
+                nextRoundButton.setForeground(Color.GREEN.darker().darker());
                 nextRoundButton.setBorder(hoverBorder);
             }
 
@@ -550,7 +550,7 @@ public class game extends JPanel implements ActionListener {
     }
 
     public void terminal() {
-        JTextArea texto = new JTextArea(7, 50);
+        JTextArea texto = new JTextArea(7, 60);
         texto.setEditable(false);
         texto.setFont(new Font("Arial", Font.BOLD, 14));
         texto.setForeground(Color.BLUE);

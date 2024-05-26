@@ -47,7 +47,8 @@ public class Control_de_datos {
 	private static final String ficheroBin = "src//files//CCP.bin";
 	public static String ficheroXML;
 	
-    static int contador = 0;
+	public static boolean partidaCargada;
+    public static int contador = 0;
 	public static String CiudadesInfectadasInicio;
 	public static String CiudadesInfectadasRonda;
 	public static String EnfermedadesActivasDerrota;
@@ -380,6 +381,7 @@ public class Control_de_datos {
     
 
 	public static void selectDatos(int identificador) {
+		partidaCargada = true;
     	disconnect();
         conectarBaseDatos();
 		try {

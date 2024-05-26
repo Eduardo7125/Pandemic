@@ -262,6 +262,9 @@ public class loadgame extends JPanel {
                     setVisible(false);
                 	UIManager.put("MenuItem.selectionBackground", null);
                 	UIManager.put("MenuItem.selectionForeground", null);
+                    if (Control_de_datos.partidaCargada == true) {
+                    	menu.resetvalores();
+					}
                     Control_de_datos.selectDatos(identificadorPartida);
                     iniciarSavePartida(identificadorPartida);
                 }
