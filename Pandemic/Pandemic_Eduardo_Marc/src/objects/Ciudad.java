@@ -79,7 +79,8 @@ public class Ciudad {
                 ciudad.setOutbreakHappened(true);
                 if (ciudad.getInfeccion() > 3) {
     	            Control_de_partida.outbreak++;
-    	            game.brotes();
+                    Thread brotes = new Thread(() -> game.brotes());
+                    brotes.start();
     	            System.out.println("AN OUTBREAK IS HAPPENING");
                     ciudad.setInfeccion(3);
                     propagarInfeccion(ciudad);
@@ -100,7 +101,8 @@ public class Ciudad {
                 ciudad.setOutbreakHappened(true);
                 if (ciudad.getInfeccion() > 3) {
     	            Control_de_partida.outbreak++;
-    	            game.brotes();
+                    Thread brotes = new Thread(() -> game.brotes());
+                    brotes.start();
     	            System.out.println("AN OUTBREAK IS HAPPENING");
                     ciudad.setInfeccion(3);
                     propagarInfeccion2(ciudad);
@@ -125,13 +127,15 @@ public class Ciudad {
                 ciudadColindante.setOutbreakHappened(true);
                 if (ciudadColindante.getInfeccion() > 3) {
     	            Control_de_partida.outbreak++;
-    	            game.brotes();
+                    Thread brotes = new Thread(() -> game.brotes());
+                    brotes.start();
     	            System.out.println("AN OUTBREAK IS HAPPENING");
                     ciudadColindante.setInfeccion(3);
                     propagarInfeccion(ciudadColindante);
                 }
             }
         }
+        System.out.println();
     }
     
     public void propagarInfeccion2(Ciudad ciudad) { 
@@ -145,15 +149,15 @@ public class Ciudad {
                 ciudadColindante.setOutbreakHappened(true);
                 if (ciudadColindante.getInfeccion() > 3) {
     	            Control_de_partida.outbreak++;
-    	            Thread brotesThread = new Thread(game.brotes());
-    	            brotesThread.start();
-    	            ;
+                    Thread brotes = new Thread(() -> game.brotes());
+                    brotes.start();
     	            System.out.println("AN OUTBREAK IS HAPPENING");
                     ciudadColindante.setInfeccion(3);
                     propagarInfeccion2(ciudadColindante);
                 }
             }
         }
+        System.out.println();
     }
 
     /**
