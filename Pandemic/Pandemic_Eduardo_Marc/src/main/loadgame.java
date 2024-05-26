@@ -12,7 +12,6 @@ import javax.swing.table.*;
 
 import data_managment.Control_de_datos;
 import data_managment.Datos_partida;
-import objects.Ciudad;
 
 public class loadgame extends JPanel {
 
