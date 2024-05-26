@@ -786,7 +786,7 @@ public class gameSAVE extends JPanel implements ActionListener {
         saveMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                Control_de_datos.actualizarPartida();
+                Control_de_datos.actualizarPartida2(identificadorPartida);
                 
                 popupMenu.setVisible(false);
             }
@@ -795,7 +795,7 @@ public class gameSAVE extends JPanel implements ActionListener {
         savequitMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 
-                Control_de_datos.actualizarPartida();
+            	Control_de_datos.actualizarPartida2(identificadorPartida);
                 
                 salirButton.doClick();
             }
