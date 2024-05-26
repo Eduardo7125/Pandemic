@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import data_managment.Control_de_datos;
@@ -118,7 +119,42 @@ public class game extends JPanel implements ActionListener {
         
         nextRoundButton = new JButton("NEXT ROUND");
         nextRoundButton.addActionListener(this);
+        nextRoundButton.setBackground(Color.GRAY);
+        nextRoundButton.setForeground(Color.BLUE);
+        nextRoundButton.setHorizontalAlignment(SwingConstants.CENTER);
+        nextRoundButton.setVerticalAlignment(SwingConstants.CENTER);
+        nextRoundButton.setOpaque(true);
+        nextRoundButton.setFont(info.fuentecargar2(20));
+        nextRoundButton.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(0, 0, 139), 2),
+            BorderFactory.createEmptyBorder(7, 15, 0, 15)
+        ));
+
+        nextRoundButton.setFocusPainted(false);
+        
+        nextRoundButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            Border hoverBorder = BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(0, 0, 139), 2),
+                BorderFactory.createEmptyBorder(7, 15, 0, 15)
+            );
+
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                nextRoundButton.setBackground(Color.LIGHT_GRAY);
+                nextRoundButton.setForeground(Color.CYAN);
+                nextRoundButton.setBorder(hoverBorder);
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                nextRoundButton.setBackground(nextRoundButton.getBackground());
+                nextRoundButton.setForeground(Color.BLUE);
+                nextRoundButton.setBorder(nextRoundButton.getBorder());
+            }
+        });
+
         bottomPanel.add(nextRoundButton);
+
         
         Thread infection = new Thread(() -> startinfection());
         infection.start();
