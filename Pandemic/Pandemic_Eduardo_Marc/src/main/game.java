@@ -536,17 +536,20 @@ public class game extends JPanel implements ActionListener {
     public void printInfection() {
         nextRoundButton.setEnabled(false);
 
-        Runnable printInfection = () -> {
-            Control_de_partida.gestionarInfeccion();
+        SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                Control_de_partida.gestionarInfeccion();
+                return null;
+            }
 
-            SwingUtilities.invokeLater(() -> {
+            @Override
+            protected void done() {
                 nextRoundButton.setEnabled(true);
-            });
+            }
         };
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.submit(printInfection);
-        executor.shutdown();
+        worker.execute();
     }
 
     public void terminal() {
@@ -804,7 +807,7 @@ public class game extends JPanel implements ActionListener {
         });
 
         
-        popupMenu.show(SubMenuButton, -55, 0);
+        popupMenu.show(SubMenuButton, -75, (SubMenuButton.getHeight() + 20));
     }
 
     public void paintComponent(Graphics g) {
