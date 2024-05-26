@@ -291,7 +291,7 @@ public class game extends JPanel implements ActionListener {
         infectedValueLabel.setText(Integer.toString(Control_de_partida.infectedcities));
         infectedCitiesGameOverLabelnum.setText(Integer.toString(Control_de_partida.citiesleft));
 
-        Victory();
+        perfectwin();
         GameOver();
     }
     
