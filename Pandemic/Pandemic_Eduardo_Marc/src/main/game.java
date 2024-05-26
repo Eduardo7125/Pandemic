@@ -231,12 +231,12 @@ public class game extends JPanel implements ActionListener {
         bottomPanel.add(panel, BorderLayout.WEST);
         
         RoundNumberlabel = new JLabel("Round: ");
-        RoundNumberlabel.setForeground(Color.BLACK);
-        RoundNumberlabel.setFont(info.fuentecargar2(20));
+        RoundNumberlabel.setForeground(Color.WHITE);
+        RoundNumberlabel.setFont(info.fuentecargar2(50));
         
         RoundNumber = new JLabel(Integer.toString(Control_de_partida.turno));
-        RoundNumberlabel.setForeground(Color.WHITE.darker().darker());
-        RoundNumber.setFont(info.fuentecargar2(20));
+        RoundNumber.setForeground(Color.GRAY);
+        RoundNumber.setFont(info.fuentecargar2(50));
         
         JPanel panelRounds = new JPanel();
         panelRounds.setBackground(Color.DARK_GRAY);
@@ -246,7 +246,6 @@ public class game extends JPanel implements ActionListener {
         
         topPanel.add(panelRounds, SwingUtilities.VERTICAL);
         topPanel.setBackground(Color.DARK_GRAY);
-    	
     }
 
     public static void actualizarEstadoCiudades() {
