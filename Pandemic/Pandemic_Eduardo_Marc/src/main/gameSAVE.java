@@ -72,6 +72,9 @@ public class gameSAVE extends JPanel implements ActionListener {
         
         SubMenuButton.setContentAreaFilled(false);
         SubMenuButton.setBorderPainted(false);
+        SubMenuButton.setFocusPainted(false);
+        SubMenuButton.setOpaque(false);
+        
         SubMenuButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
