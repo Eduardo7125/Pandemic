@@ -71,6 +71,9 @@ public class game extends JPanel implements ActionListener {
         
         SubMenuButton.setContentAreaFilled(false);
         SubMenuButton.setBorderPainted(false);
+        SubMenuButton.setFocusPainted(false);
+        SubMenuButton.setOpaque(false);
+        
         SubMenuButton.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
@@ -121,7 +124,6 @@ public class game extends JPanel implements ActionListener {
         infection.start();
         ciudades();
         actualizarEstadoCiudades();
-        
     }
     
     private void startRotation() {
