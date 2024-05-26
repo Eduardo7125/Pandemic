@@ -260,9 +260,85 @@ public class Control_de_datos {
 	    } catch (Exception e) {
 	        e.printStackTrace();
 	    }
-	    
 	}
     
+    public static void actualizarPartida2(int identificadorPartida) {
+        disconnect();
+        conectarBaseDatos();
+        try {
+            OracleConnection oracleConn = (OracleConnection) con;
+            PreparedStatement pstmt = con.prepareStatement(
+                "UPDATE PANDEMIC_SAVEFILES " +
+                "SET ciudades = ?, virus = ?, vacunas = ?, brotes = ?, rondas = ?, p_desarrollo = ?, acciones = ?, player = ?, dificultad = ? " +
+                "WHERE identificador = ?"
+            );
+
+            Struct[] ciudadStructs = new Struct[Ciudades.size()];
+            for (int i = 0; i < Ciudades.size(); i++) {
+                Ciudad ciudad = Ciudades.get(i);
+                Object[] ciudadAttributes = new Object[] {
+                    ciudad.getNombre(),
+                    new Object[] { ciudad.getCoordenadas()[0], ciudad.getCoordenadas()[1] },
+                    ciudad.getEnfermedad(),
+                    ciudad.getInfeccion(),
+                    Arrays.toString(ciudad.getCiudadesColindantes())
+                };
+                ciudadStructs[i] = oracleConn.createStruct("CIUDAD", ciudadAttributes);
+            }
+
+            Array ciudadArray = oracleConn.createOracleArray("ARRAY_CIUDADES_OBJ", ciudadStructs);
+
+            Struct[] virusStructs = new Struct[Virus.size()];
+            for (int i = 0; i < Virus.size(); i++) {
+                Virus virus = Virus.get(i);
+                Object[] virusAttributes = new Object[] {
+                    virus.getIdentificador(),
+                    virus.getNombre(),
+                    virus.getColor()
+                };
+                virusStructs[i] = oracleConn.createStruct("VIRUS", virusAttributes);
+            }
+
+            Array virusArray = oracleConn.createOracleArray("ARRAY_VIRUS_OBJ", virusStructs);
+
+            Struct[] vacunaStructs = new Struct[Vacuna.size()];
+            for (int i = 0; i < Vacuna.size(); i++) {
+                Vacunas vacuna = Vacuna.get(i);
+                Object[] vacunaAttributes = new Object[] {
+                    vacuna.getNombre(),
+                    vacuna.getColor(),
+                    vacuna.getPorcentaje()
+                };
+                vacunaStructs[i] = oracleConn.createStruct("VACUNAS", vacunaAttributes);
+            }
+
+            Array vacunasArray = oracleConn.createOracleArray("ARRAY_VACUNAS_OBJ", vacunaStructs);
+
+            pstmt.setArray(1, ciudadArray);
+            pstmt.setArray(2, virusArray);
+            pstmt.setArray(3, vacunasArray);
+            pstmt.setInt(4, Control_de_partida.outbreak);
+            pstmt.setInt(5, Control_de_partida.turno);
+            pstmt.setInt(6, 25);
+            pstmt.setInt(7, Control_de_partida.acciones);
+            pstmt.setString(8, Control_de_partida.playername);
+
+            if (ficheroXML.equals("src//files//parametrosFacil.xml")) {
+                pstmt.setString(9, "Facil");
+            } else if (ficheroXML.equals("src//files//parametrosMedio.xml")) {
+                pstmt.setString(9, "Medio");
+            } else {
+                pstmt.setString(9, "Dificil");
+            }
+            
+            pstmt.setInt(10, identificadorPartida);
+            pstmt.executeUpdate();
+            oracleConn.close();
+            System.out.println("GAME SAVE UPDATED");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
     public static void borrarPartida(int identificador) {
         disconnect();
