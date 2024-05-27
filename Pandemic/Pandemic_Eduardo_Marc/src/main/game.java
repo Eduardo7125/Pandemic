@@ -639,6 +639,10 @@ public class game extends JPanel implements ActionListener {
         Image imagen = icono.getImage().getScaledInstance(75, 39, Image.SCALE_SMOOTH);
         ImageIcon iconoEscalado = new ImageIcon(imagen);
 
+        ImageIcon icono2 = new ImageIcon("src//img//contenedor_vacunas2.png");
+        Image imagen2 = icono2.getImage().getScaledInstance(75, 39, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado2 = new ImageIcon(imagen2);
+
         vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
             protected Color getSelectionForeground() {
                 return Color.DARK_GRAY;
@@ -680,6 +684,26 @@ public class game extends JPanel implements ActionListener {
                     respuesta.start();
                 }
             }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado2.getImage()) {
+                    protected Color getSelectionForeground() {
+                        return Color.DARK_GRAY;
+                    }
+                });
+                vacunaFinal.repaint();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
+                    protected Color getSelectionForeground() {
+                        return Color.DARK_GRAY;
+                    }
+                });
+                vacunaFinal.repaint();
+            }
         });
 
         vacunaFinal.setForeground(color);
@@ -692,7 +716,7 @@ public class game extends JPanel implements ActionListener {
         rightPanel.add(label, gbc);
         rightPanel.add(vacunaFinal, gbc);
     }
-    
+  
     public void desarrolloVacunas(Vacunas vacuna, JProgressBar vacunaFinal) {
 
         int counter = (int) vacuna.getPorcentaje();
