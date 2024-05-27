@@ -665,6 +665,10 @@ public class gameSAVE extends JPanel implements ActionListener {
         Image imagen = icono.getImage().getScaledInstance(75, 39, Image.SCALE_SMOOTH);
         ImageIcon iconoEscalado = new ImageIcon(imagen);
 
+        ImageIcon icono2 = new ImageIcon("src//img//contenedor_vacunas2.png");
+        Image imagen2 = icono2.getImage().getScaledInstance(75, 39, Image.SCALE_SMOOTH);
+        ImageIcon iconoEscalado2 = new ImageIcon(imagen2);
+
         vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
             protected Color getSelectionForeground() {
                 return Color.DARK_GRAY;
@@ -673,17 +677,17 @@ public class gameSAVE extends JPanel implements ActionListener {
 
         vacunaFinal.setMinimum(0);
         vacunaFinal.setMaximum(100);
-        
+
         if (nombre.equalsIgnoreCase("Alfa")) {
-        	vacunaFinal.setValue(valoresVacunas[0]);
-		}else if (nombre.equalsIgnoreCase("Beta")) {
-			vacunaFinal.setValue(valoresVacunas[1]);
-		}else if (nombre.equalsIgnoreCase("Gama")) {
-			vacunaFinal.setValue(valoresVacunas[2]);
-		}else {
-			vacunaFinal.setValue(valoresVacunas[3]);
-		}
-        
+            vacunaFinal.setValue(valoresVacunas[0]);
+        } else if (nombre.equalsIgnoreCase("Beta")) {
+            vacunaFinal.setValue(valoresVacunas[1]);
+        } else if (nombre.equalsIgnoreCase("Gama")) {
+            vacunaFinal.setValue(valoresVacunas[2]);
+        } else {
+            vacunaFinal.setValue(valoresVacunas[3]);
+        }
+
         vacunaFinal.setStringPainted(true);
         vacunaFinal.setOpaque(false);
         vacunaFinal.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 30));
@@ -716,6 +720,26 @@ public class gameSAVE extends JPanel implements ActionListener {
                     Thread respuesta = new Thread(() -> System.out.println("You don't have enough actions to perform this action."));
                     respuesta.start();
                 }
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado2.getImage()) {
+                    protected Color getSelectionForeground() {
+                        return Color.DARK_GRAY;
+                    }
+                });
+                vacunaFinal.repaint();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                vacunaFinal.setUI(new CustomProgressBarUI(iconoEscalado.getImage()) {
+                    protected Color getSelectionForeground() {
+                        return Color.DARK_GRAY;
+                    }
+                });
+                vacunaFinal.repaint();
             }
         });
 
