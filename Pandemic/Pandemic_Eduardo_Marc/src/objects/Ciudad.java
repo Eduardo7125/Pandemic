@@ -149,7 +149,7 @@ public class Ciudad {
                 if (ciudadColindante.getInfeccion() > 3) {
                 	ciudadColindante.setOutbreakHappened(true);
     	            Control_de_partida.outbreak++;
-                    Thread brotes = new Thread(() -> game.brotes());
+                    Thread brotes = new Thread(() -> gameSAVE.brotes());
                     brotes.start();
     	            System.out.println("AN OUTBREAK IS HAPPENING");
                     ciudadColindante.setInfeccion(3);
