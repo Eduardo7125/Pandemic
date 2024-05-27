@@ -101,7 +101,7 @@ public class Ciudad {
                 if (ciudad.getInfeccion() > 3) {
                 	ciudad.setOutbreakHappened(true);
     	            Control_de_partida.outbreak++;
-                    Thread brotes = new Thread(() -> game.brotes());
+                    Thread brotes = new Thread(() -> gameSAVE.brotes());
                     brotes.start();
     	            System.out.println("AN OUTBREAK IS HAPPENING");
                     ciudad.setInfeccion(3);
