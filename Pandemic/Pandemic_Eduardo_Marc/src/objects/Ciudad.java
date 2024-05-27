@@ -69,8 +69,8 @@ public class Ciudad {
      * Propagar la infeccion a las ciudades colindantes debido a un brote.
      */
     public void propagarInfeccion() {
-        System.out.println("INFECTED CITIES BY THE OUTBREAK:");
         for (String colindantes : this.ciudadesColindantes) {
+        	colindantes = colindantes.replaceAll("\\[|\\]", "");
             Ciudad ciudad = obtenerCiudad(colindantes);
             if (!ciudad.getOutbreakHappened()) {
                 ciudad.aumentarInfeccion();
@@ -91,7 +91,6 @@ public class Ciudad {
     }
 
     public void propagarInfeccion2() {
-        System.out.println("INFECTED CITIES BY THE OUTBREAK:");
         for (String colindantes : this.ciudadesColindantes) {
         	colindantes = colindantes.replaceAll("\\[|\\]", "");
             Ciudad ciudad = obtenerCiudad(colindantes);
@@ -115,8 +114,7 @@ public class Ciudad {
      * 
      * @param ciudad Ciudad desde la que ha habido el brote.
      */
-    public void propagarInfeccion(Ciudad ciudad) { 
-        System.out.println("INFECTED CITIES BY THE OUTBREAK:");
+    public void propagarInfeccion(Ciudad ciudad) {
         for (String colindantes : ciudad.getCiudadesColindantes()) {
         	colindantes = colindantes.replaceAll("\\[|\\]", "");
             Ciudad ciudadColindante = obtenerCiudad(colindantes);
@@ -138,11 +136,11 @@ public class Ciudad {
         System.out.println();
     }
     
-    public void propagarInfeccion2(Ciudad ciudad) { 
-        System.out.println("INFECTED CITIES BY THE OUTBREAK:");
+    public void propagarInfeccion2(Ciudad ciudad) {
         for (String colindantes : ciudad.getCiudadesColindantes()) {
+        	colindantes = colindantes.replaceAll("\\[|\\]", "");
             Ciudad ciudadColindante = obtenerCiudad(colindantes);
-            if (ciudadColindante.getOutbreakHappened() == false) {
+            if (!ciudadColindante.getOutbreakHappened()) {
                 ciudadColindante.aumentarInfeccion();
                 System.out.println("Name: " + ciudadColindante.getNombre() + " | Virus: " + ciudadColindante.getNombreEnfermedad() + " | Infection: " + ciudadColindante.getInfeccion());
                 gameSAVE.actualizarEstadoCiudades();
