@@ -58,8 +58,8 @@ public class loadgame extends JPanel {
 
         add(tablesPanel, BorderLayout.CENTER);
 
-        JLabel titleLabel = new JLabel("<html><div style='padding-left: 20%'>SAVED GAMES</div></html>");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        JLabel titleLabel = new JLabel("      SAVED GAMES");
+        titleLabel.setFont(info.fuentecargar2(30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         closeButton = new JButton("MENU");
@@ -79,6 +79,7 @@ public class loadgame extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(titleLabel, BorderLayout.CENTER);
         topPanel.add(closeButton, BorderLayout.EAST);
+
         add(topPanel, BorderLayout.NORTH);
 
         for (Datos_partida files : saveFiles) {
@@ -120,8 +121,9 @@ public class loadgame extends JPanel {
                 g2d.dispose();
             }
         };
-        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        table.setFont(new Font("Arial", Font.PLAIN, 12));
+        table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setFont(info.fuentecargar(14));
+        table.setFont(info.fuentecargar(12));
         table.setRowHeight(20);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -138,7 +140,7 @@ public class loadgame extends JPanel {
         scrollPane.setPreferredSize(new Dimension(600, 200));
 
         JLabel label = new JLabel(difficulty.toUpperCase());
-        label.setFont(new Font("Arial", Font.BOLD, 20));
+        label.setFont(info.fuentecargar2(20));
         label.setHorizontalAlignment(SwingConstants.CENTER);
 
         JPanel panel = new JPanel(new BorderLayout());

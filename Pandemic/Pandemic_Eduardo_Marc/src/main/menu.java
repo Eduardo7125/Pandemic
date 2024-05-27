@@ -100,6 +100,7 @@ public class menu extends JPanel implements ActionListener {
         menuLabel1 = new JLabel(
                 "<html><div style='text-align:center;'><h1 style='font-size: 35px;'>PANDEMIC</h1><h2 style='font-size: 24px;'>MENÚ PRINCIPAL</h2><img src='file:src//img//icono_escalado.png'></div>");
 
+        menuLabel1.setFont(info.fuentecargar2(24));
         menuLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         add(menuLabel1, BorderLayout.NORTH);
 
@@ -115,7 +116,8 @@ public class menu extends JPanel implements ActionListener {
         bottomPanel = new JPanel();
         version = new JLabel(
                 "<html><font color='white'><p>Eduardo/Marc</p><div style='text-align:center;'><font color='white'><p>Version 1.0</p></div></font></html>");
-
+        version.setFont(info.fuentecargar2(24));
+        
         bottomPanel.add(version);
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 10, 10));
@@ -406,13 +408,13 @@ public class menu extends JPanel implements ActionListener {
             }
         };
 
-        Font font = new Font("Arial", Font.PLAIN, 30);
+        Font font = info.fuentecargar2(50);
 
         ImageIcon facilIcon1 = new ImageIcon(
                 new ImageIcon("src//img//easy.png").getImage().getScaledInstance(84, 67, Image.SCALE_SMOOTH));
         ImageIcon facilIcon2 = new ImageIcon(
                 new ImageIcon("src//img//easy2.png").getImage().getScaledInstance(84, 67, Image.SCALE_SMOOTH));
-        facilItem = new JMenuItemMenuItemPersonalizado("        EASY", facilIcon1);
+        facilItem = new JMenuItemMenuItemPersonalizado("           EASY", facilIcon1);
         facilItem.setBorder(BorderFactory.createEmptyBorder(15, 140, -40, 0));
         facilItem.addActionListener(this);
         facilItem.setOpaque(false);
@@ -438,7 +440,7 @@ public class menu extends JPanel implements ActionListener {
                 new ImageIcon("src//img//hard.png").getImage().getScaledInstance(190, 140, Image.SCALE_SMOOTH));
         ImageIcon dificilIcon2 = new ImageIcon(
                 new ImageIcon("src//img//hard2.png").getImage().getScaledInstance(190, 140, Image.SCALE_SMOOTH));
-        dificilItem = new JMenuItemMenuItemPersonalizado("              HARD", dificilIcon1);
+        dificilItem = new JMenuItemMenuItemPersonalizado("             HARD", dificilIcon1);
         dificilItem.setBorder(BorderFactory.createEmptyBorder(-20, 97, -20, 0));
         dificilItem.addActionListener(this);
         dificilItem.setOpaque(false);

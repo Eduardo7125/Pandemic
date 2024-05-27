@@ -281,8 +281,8 @@ class info extends JPanel implements ActionListener {
 	            break;
 	        case "HEAL":
 	            tituloLabel.setText("HEAL");
-	            informacion = "<html>If when curing 1 infected city, a vaccine developed 100% is not available, only the infection level is reduced by 1.\n"
-	                    + "If when curing 1 infected city, a vaccine developed 100% is available, the infection is completely eliminated (infection level 0).";
+	            informacion = "<html>When curing without a 100% vaccine, infection reduces by 1.\n"
+	                    + "If 100% vaccine, infection level becomes 0.";
 	            break;
 	        case "END":
 	            tituloLabel.setText("END");

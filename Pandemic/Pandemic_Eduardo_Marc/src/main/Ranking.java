@@ -44,7 +44,7 @@ public class Ranking extends JPanel {
 
         add(tablesPanel, BorderLayout.CENTER);
 
-        JLabel titleLabel = new JLabel("<html><div style='padding-left: 20%'>LEADERBOARD</div></html>");
+        JLabel titleLabel = new JLabel("      LEADERBOARD");
         titleLabel.setFont(info.fuentecargar2(30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -65,6 +65,7 @@ public class Ranking extends JPanel {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.add(titleLabel, BorderLayout.CENTER);
         topPanel.add(closeButton, BorderLayout.EAST);
+
         add(topPanel, BorderLayout.NORTH);
 
         java.util.Date[] utilDates = Control_de_datos.RankingDates;
@@ -141,6 +142,8 @@ public class Ranking extends JPanel {
                 return c;
             }
 		};
+	    table.getTableHeader().setReorderingAllowed(false);
+	    
         table.getTableHeader().setFont(info.fuentecargar(14));
         table.setFont(info.fuentecargar2(12));
         table.setRowHeight(20);
