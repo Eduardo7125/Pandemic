@@ -60,7 +60,8 @@ public class Ciudad {
      * 
      * @param identificador Identificador de la enfermedad.
      */
-    public void disminuirInfeccionConVacuna() {
+    public void disminuirInfeccionConVacuna(int infeccion) {
+    	Control_de_partida.infectedcities = Control_de_partida.infectedcities - infeccion;
         Control_de_partida.acciones--;
         this.setInfeccion(0);
     }
