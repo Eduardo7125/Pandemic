@@ -144,7 +144,7 @@ public class Ranking extends JPanel {
 		};
 	    table.getTableHeader().setReorderingAllowed(false);
 	    
-        table.getTableHeader().setFont(info.fuentecargar(14));
+        table.getTableHeader().setFont(info.fuentecargar(13));
         table.setFont(info.fuentecargar2(12));
         table.setRowHeight(20);
 
