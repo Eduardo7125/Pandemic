@@ -58,7 +58,7 @@ public class loadgame extends JPanel {
 
         add(tablesPanel, BorderLayout.CENTER);
 
-        JLabel titleLabel = new JLabel("      SAVED GAMES");
+        JLabel titleLabel = new JLabel("        SAVED GAMES");
         titleLabel.setFont(info.fuentecargar2(30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
