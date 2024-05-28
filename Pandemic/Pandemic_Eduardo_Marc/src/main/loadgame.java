@@ -102,10 +102,10 @@ public class loadgame extends JPanel {
                 return false;
             }
         };
-        tableModel.addColumn("PLAYER NAME");
+        tableModel.addColumn("PLAYER");
         tableModel.addColumn("ROUNDS");
         tableModel.addColumn("TURNS");
-        tableModel.addColumn("OUTBREAKS");
+        tableModel.addColumn("OUTBREAK");
         tableModel.addColumn("MODE");
         tableModel.addColumn("ID"); 
         
@@ -122,7 +122,7 @@ public class loadgame extends JPanel {
             }
         };
         table.getTableHeader().setReorderingAllowed(false);
-        table.getTableHeader().setFont(info.fuentecargar(14));
+        table.getTableHeader().setFont(info.fuentecargar(10));
         table.setFont(info.fuentecargar(12));
         table.setRowHeight(20);
 
