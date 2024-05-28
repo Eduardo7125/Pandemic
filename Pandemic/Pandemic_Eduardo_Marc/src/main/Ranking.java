@@ -44,7 +44,7 @@ public class Ranking extends JPanel {
 
         add(tablesPanel, BorderLayout.CENTER);
 
-        JLabel titleLabel = new JLabel("      LEADERBOARD");
+        JLabel titleLabel = new JLabel("        LEADERBOARD");
         titleLabel.setFont(info.fuentecargar2(30));
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
